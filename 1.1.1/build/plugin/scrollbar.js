@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.0/plugin/scrollbar
+kg/xscroll/1.1.1/plugin/scrollbar
 
 */
 /**
@@ -10,7 +10,7 @@ kg/xscroll/1.1.0/plugin/scrollbar
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.0/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -91,11 +91,15 @@ KISSY.add('kg/xscroll/1.1.0/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 			self._update();
 		},
-		_update: function() {
+		_update: function(offset,duration,easing) {
 			var self = this;
-			var barInfo = self.computeScrollBar(self.get("offset"));
-			self.moveTo(barInfo.offset);
+			var barInfo = self.computeScrollBar(offset);
 			self.isY ? self.$indicate.height(barInfo.size):self.$indicate.width(barInfo.size);
+			if(duration && easing){
+				self.scrollTo(barInfo.offset,duration,easing);
+			}else{
+				self.moveTo(barInfo.offset);
+			}
 		},
 		//计算边界碰撞时的弹性
 		computeScrollBar: function(offset) {
@@ -142,11 +146,8 @@ KISSY.add('kg/xscroll/1.1.0/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 		scrollTo: function(offset, duration, easing) {
 			var self = this;
-			// self.show();
-			setTimeout(function(){
-				self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset + "px)"
-				self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
-			},0)
+			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
+			self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
 		},
 		moveTo: function(offset) {
 			var self = this;
@@ -158,20 +159,41 @@ KISSY.add('kg/xscroll/1.1.0/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			var self = this;
 			if (self.__isEvtBind) return;
 			self.__isEvtBind = true;
+			var type = self.isY ? "y" : "x";
+			self.xscroll.on("pan",function(e){
+				self._update(e.offset);
+			})
 
-			self.xscroll.on("scroll", function(e) {
-				var offset = self.xscroll.getOffset();
-				self.set("offset",offset);
-				self._update();
+			self.xscroll.on("scrollAnimate",function(e){
+				self._update(e.offset,e.duration,e.easing);
+			})
+
+			self.xscroll.on("scrollEnd",function(e){
+				self._update(e.offset);
 			})
 
 			self.xscroll.on("scaleAnimate",function(e){
-				self.set("offset",e.offset);
-				self._update()
+				self._update(e.offset);
 			})
 
 			self.xscroll.on("scale", function(e) {
 				self._update()
+			})
+
+			self.xscroll.on("afterContainerHeightChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterContainerWidthChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterWidthChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterHeightChange",function(e){
+				self._update();
 			})
 
 			self.xscroll.on("refresh",function(e){
@@ -220,5 +242,5 @@ KISSY.add('kg/xscroll/1.1.0/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.0.0/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.1/util']
 })

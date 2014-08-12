@@ -1,14 +1,14 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.0/pan
+kg/xscroll/1.1.1/pan
 
 */
 /*
 	Pan Event for KISSY MINI 
 	@author xiaoqi.huxq@alibaba-inc.com
 */
-;KISSY.add('kg/xscroll/1.1.0/pan',function(S, Node,Event) {
+;KISSY.add('kg/xscroll/1.1.1/pan',function(S, Node,Event) {
 	var doc = window.document;
 	var PAN_START = 'gesturePanStart',
 		PAN_END = 'gesturePanEnd',
@@ -42,10 +42,8 @@ kg/xscroll/1.1.0/pan
 			e.deltaX = touch.deltaX;
 			e.deltaY = touch.deltaY;
 			this.gestureType = "pan";
-			console.log(PAN_START)
 			$(e.target).fire(PAN_START, e);
 		} else {
-			// console.log("this.gestureType",this.gestureType)
 			if(this.gestureType != "pan") return;
 			touch.deltaX = e.touches[0].clientX - touch.startX;
 			touch.deltaY = e.touches[0].clientY - touch.startY;
@@ -135,7 +133,6 @@ kg/xscroll/1.1.0/pan
 		touch = {};
 		record = [];
 		if(this.gestureType == "pan"){
-			console.log(PAN_END)
 			$(e.target).fire(PAN_END, e);
 			this.gestureType = ""
 		}

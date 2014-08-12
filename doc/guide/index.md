@@ -23,6 +23,7 @@ XScroll
 * [垂直方向滚动](../demo/scroll-y.html)
 * [2D滚动](../demo/2d-scroll.html)
 * [支持缩放+滚动条](../demo/zoom.html)
+* [可缩放线图](../demo/scroll-linechart.html)
 
 
 ## 初始化组件
@@ -64,8 +65,6 @@ XScroll
 #### containerHeight 
 
 内容器高度
-
-#### autoRender 是否自动渲染
 
 ### Method
 
@@ -132,6 +131,33 @@ XScroll
 #### boundry.reset()
 
 边界复位、复位拓展项，初始化为滚动容器的位置尺寸
+
+
+### ATTRS
+
+- width  滚动区域宽度
+
+- height  滚动区域高度
+
+- containerWidth  内容器宽度
+
+- containerHeight  内容器高度
+
+- scale  缩放比
+
+- minScale 最小缩放比
+
+- maxScale 最大缩放比
+
+- x 水平偏移量
+
+- y 垂直偏移量
+
+- lockX 是否锁定水平滚动（默认false）
+
+- lockY 是否锁定垂直滚动（默认false）
+
+
 
 
 ### Event

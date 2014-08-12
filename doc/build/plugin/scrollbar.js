@@ -146,11 +146,8 @@ KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 		scrollTo: function(offset, duration, easing) {
 			var self = this;
-			// self.show();
-			// setTimeout(function(){
-				self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
-				self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
-			// },0)
+			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
+			self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
 		},
 		moveTo: function(offset) {
 			var self = this;
@@ -181,6 +178,22 @@ KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 			self.xscroll.on("scale", function(e) {
 				self._update()
+			})
+
+			self.xscroll.on("afterContainerHeightChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterContainerWidthChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterWidthChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterHeightChange",function(e){
+				self._update();
 			})
 
 			self.xscroll.on("refresh",function(e){
@@ -229,5 +242,5 @@ KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.0.0/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.1/util']
 })
