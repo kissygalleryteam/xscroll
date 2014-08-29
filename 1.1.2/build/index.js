@@ -97,8 +97,9 @@ KISSY.add('kg/xscroll/1.1.1/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var userConfig = self.userConfig = S.mix({
                 scalable: false
             }, self.userConfig, undefined, undefined, true);
-
-            self.$renderTo = $(userConfig.renderTo);
+            self.$renderTo = $(userConfig.renderTo).css({
+                overflowY: "hidden"
+            });
 
             var clsPrefix = self.clsPrefix = userConfig.clsPrefix || "ks-xscroll-";
 
@@ -497,23 +498,17 @@ KISSY.add('kg/xscroll/1.1.1/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                 });
                 self.isScrollingX = false;
                 self.isScrollingY = false;
-                self.set("directionX",e.directionX);
-                self.set("directionY",e.directionY);
                 self.fire(SCROLL, {
                     offset: {
                         x: posX,
                         y: posY
-                    },
-                    directionX:self.get("directionX"),
-                    directionY:self.get("directionY")
+                    }
                 });
                 self.fire(PAN, {
                     offset: {
                         x: posX,
                         y: posY
-                    },
-                    directionX:self.get("directionX"),
-                    directionY:self.get("directionY")
+                    }
                 });
 
             }).on(Pan.PAN_END, function(e) {

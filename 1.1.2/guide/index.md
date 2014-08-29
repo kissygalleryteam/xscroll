@@ -24,7 +24,6 @@ XScroll
 * [2D滚动](../demo/2d-scroll.html)
 * [支持缩放+滚动条](../demo/zoom.html)
 * [可缩放线图](../demo/scroll-linechart.html)
-* [下拉刷新](../demo/pulldown-refresh.html)
 
 
 ## 初始化组件

@@ -67,21 +67,15 @@ KISSY.add('kg/xscroll/1.1.1/plugin/pulldown',function(S, Base, Node) {
 			})
 
 			self.on("afterStatusChange", function(e) {
+				console.log(e.newVal)
 				$pulldown.removeClass(prefix + e.prevVal).addClass(prefix + e.newVal);
 				self.setContent(self.userConfig[e.newVal + "Content"]);
 
 			})
 
-			var top = xscroll.boundry.top;
-
-			xscroll.on("panStart",function(e){
-				clearTimeout(loadingItv);
-			})
-
 			xscroll.on("panEnd", function(e) {
 				var offsetTop = xscroll.getOffsetTop();
 				if(offsetTop > height){
-					xscroll.boundry.top = top;
 					xscroll.boundry.expandTop(height);
 					xscroll.bounce(true);
 					self.set("status","loading");

@@ -33,8 +33,6 @@ kg/xscroll/1.1.1/pan
 			touch.deltaX = 0;
 			touch.deltaY = 0;
 			e.touch = touch;
-			touch.prevX = touch.startX;
-			touch.prevY = touch.startY;
 			record.push({
 				deltaX: touch.deltaX,
 				deltaY: touch.deltaY,
@@ -49,10 +47,6 @@ kg/xscroll/1.1.1/pan
 			if(this.gestureType != "pan") return;
 			touch.deltaX = e.touches[0].clientX - touch.startX;
 			touch.deltaY = e.touches[0].clientY - touch.startY;
-			touch.directionX = e.touches[0].clientX - touch.prevX > 0 ? "right":"left";
-			touch.directionY = e.touches[0].clientY - touch.prevY > 0 ? "bottom":"top";
-			touch.prevX = e.touches[0].clientX;
-			touch.prevY = e.touches[0].clientY;
 			e.touch = touch;
 			record.push({
 				deltaX: touch.deltaX,
@@ -64,8 +58,6 @@ kg/xscroll/1.1.1/pan
 			e.deltaY = touch.deltaY;
 			e.velocityX = 0;
 			e.velocityY = 0;
-			e.directionX = touch.directionX;
-			e.directionY = touch.directionY;
 			if (!e.isPropagationStopped()) {
 				$(e.target).fire(PAN, e);
 			}

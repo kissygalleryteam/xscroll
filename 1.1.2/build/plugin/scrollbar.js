@@ -46,6 +46,7 @@ KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util)
     	pluginDestructor:function(){
     		console.log("destroy")
     	},
+
 		render: function() {
 			var self = this;
 			if (self.__isRender) return;
