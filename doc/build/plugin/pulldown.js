@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.1/plugin/pulldown
+kg/xscroll/1.1.3/plugin/pulldown
 
 */
 /**
@@ -10,7 +10,7 @@ kg/xscroll/1.1.1/plugin/pulldown
  * @plugin pulldown xscroll下拉刷新插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.1/plugin/pulldown',function(S, Base, Node) {
+KISSY.add('kg/xscroll/1.1.3/plugin/pulldown',function(S, Base, Node) {
 	var $ = S.all;
 	var prefix;
 	var containerCls;

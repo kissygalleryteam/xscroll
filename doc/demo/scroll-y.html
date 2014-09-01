@@ -124,12 +124,12 @@
         packages:[
             {
                 name:"kg",
-                path:"http://g.tbcdn.cn/kg/",
+                 path:KISSY.Config.debug ? "http://g.assets.daily.taobao.net/kg/":"http://g.tbcdn.cn/kg/",
                 ignorePackageNameInUri:true
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.2/index,kg/xscroll/1.1.2/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
+    KISSY.use("node,kg/xscroll/1.1.3/index,kg/xscroll/1.1.3/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
         var $ = S.all;
         var html ="";
         for(var i=0;i<100;i++){

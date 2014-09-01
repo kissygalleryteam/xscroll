@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.1/plugin/scrollbar
+kg/xscroll/1.1.3/plugin/scrollbar
 
 */
 /**
@@ -10,7 +10,7 @@ kg/xscroll/1.1.1/plugin/scrollbar
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add('kg/xscroll/1.1.3/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -169,6 +169,11 @@ KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 			self.xscroll.on("scrollEnd",function(e){
 				self._update(e.offset);
+				// self.hide();
+			})
+
+			self.xscroll.on("scroll",function(e){
+				// self.show();
 			})
 
 			self.xscroll.on("scaleAnimate",function(e){
@@ -198,6 +203,8 @@ KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			self.xscroll.on("refresh",function(e){
 				self.reset();
 			})
+
+
 		},
 		reset:function(){
 			var self = this;
@@ -241,5 +248,5 @@ KISSY.add('kg/xscroll/1.1.1/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.2/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.3/util']
 })

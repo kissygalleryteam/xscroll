@@ -73,12 +73,12 @@
         packages:[
             {
                 name:"kg",
-                path:"http://g.tbcdn.cn/kg/",
+                 path:KISSY.Config.debug ? "http://g.assets.daily.taobao.net/kg/":"http://g.tbcdn.cn/kg/",
                 ignorePackageNameInUri:true
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.2/index,kg/xscroll/1.1.2/plugin/scrollbar,kg/kcharts/2.0.2/linechart/,kg/kcharts/2.0.2/tip/,gallery/template/1.0/",function(S,Node,XScroll,ScrollBarPlugin,LineChart,Tip,Template){
+    KISSY.use("node,kg/xscroll/1.1.3/index,kg/xscroll/1.1.3/plugin/scrollbar,kg/kcharts/2.0.2/linechart/,kg/kcharts/2.0.2/tip/,gallery/template/1.0/",function(S,Node,XScroll,ScrollBarPlugin,LineChart,Tip,Template){
         var $ = S.all;
         var xscroll = new XScroll({
             renderTo:"#J_Scroll",

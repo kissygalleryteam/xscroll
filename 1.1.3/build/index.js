@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.1/index
+kg/xscroll/1.1.3/index
 
 */
 /**
@@ -9,7 +9,7 @@ kg/xscroll/1.1.1/index
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @module xscroll
  **/
-KISSY.add('kg/xscroll/1.1.1/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
+KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
     var $ = S.all;
     //event names
     var SCROLL_END = "scrollEnd";
@@ -378,6 +378,10 @@ KISSY.add('kg/xscroll/1.1.1/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                         offset: self.getOffset(),
                         zoomType: type
                     })
+                    self.fire(SCROLL_END,{
+                        offset: self.getOffset(),
+                        zoomType: type
+                    })
                     callback && callback({
                         type: type
                     });
@@ -716,5 +720,5 @@ KISSY.add('kg/xscroll/1.1.1/index',function(S, Node, Event, Base, Pan, Pinch, Ut
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.2/pan', 'kg/xscroll/1.1.2/pinch', 'kg/xscroll/1.1.2/util']
+    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.3/pan', 'kg/xscroll/1.1.3/pinch', 'kg/xscroll/1.1.3/util']
 });
