@@ -290,6 +290,7 @@ KISSY.add('kg/xscroll/1.1.4/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             cancelRAF(self.rafY);
             self.fire(SCROLL_END, {
                 offset: offset,
+                triggerType:"tap",
                 scale: self.get("scale")
             });
         },
@@ -566,7 +567,8 @@ KISSY.add('kg/xscroll/1.1.4/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var offset = self.getOffset();
             if (Math.abs(e.velocity) < 0.5) {
                 self.fire(SCROLL_END, {
-                    offset: offset
+                    offset: offset,
+                    triggerType:"panEnd"
                 })
                 self.boundryCheck();
                 return;

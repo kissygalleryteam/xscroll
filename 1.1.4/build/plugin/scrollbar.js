@@ -91,8 +91,8 @@ KISSY.add('kg/xscroll/1.1.4/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			self._update();
 		},
 		_update: function(offset,duration,easing) {
-			if(undefined == offset) return;
 			var self = this;
+			var offset = offset || self.xscroll.getOffset();
 			var barInfo = self.computeScrollBar(offset);
 			self.isY ? self.$indicate.height(barInfo.size):self.$indicate.width(barInfo.size);
 			if(duration && easing){
@@ -105,7 +105,7 @@ KISSY.add('kg/xscroll/1.1.4/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 		computeScrollBar: function(offset) {
 			var self = this;
 			var type = self.isY ? "y" : "x";
-			var offset = offset && -offset[type] || 0;
+			var offset = offset && -offset[type];
 			self.set("containerSize",self.isY ? self.xscroll.get("containerHeight"):self.xscroll.get("containerWidth"))
 			self.set("indicateSize", self.isY ? self.xscroll.get("height"):self.xscroll.get("width"));
 			//滚动条容器高度
@@ -169,12 +169,13 @@ KISSY.add('kg/xscroll/1.1.4/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			})
 
 			self.xscroll.on("scrollEnd",function(e){
-				self._update(e.offset);
-				// self.hide();
+				if("tap" == e.triggerType){
+					self._update(e.offset);
+				}
 			})
 
 			self.xscroll.on("scroll",function(e){
-				// self.show();
+				self.show();
 			})
 
 			self.xscroll.on("scaleAnimate",function(e){

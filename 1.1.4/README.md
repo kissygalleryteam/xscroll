@@ -31,6 +31,7 @@ XScroll
 - 修复超链接误点的问题
 - 修复isScrollingX,isScrollingY和scrollEnd的判断逻辑错误问题
 - content高度100%限制去除
+- 修复滚动条定位问题
 
 
 
