@@ -1,16 +1,10 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.5/plugin/fastscroll
-
-*/
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @plugin fastscroll 加速滚动
  **/
 ;
-KISSY.add('kg/xscroll/1.1.5/plugin/fastscroll',function(S, Base, Node,Event) {
+KISSY.add(function(S, Base, Node,Event) {
 	var $ = S.all;
 	//最小的滑动速度
 	var MIN_PAN_VELOCITY = 1;

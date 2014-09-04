@@ -27,6 +27,8 @@
 			touch.deltaX = 0;
 			touch.deltaY = 0;
 			e.touch = touch;
+			touch.prevX = touch.startX;
+			touch.prevY = touch.startY;
 			record.push({
 				deltaX: touch.deltaX,
 				deltaY: touch.deltaY,
@@ -41,6 +43,10 @@
 			if(this.gestureType != "pan") return;
 			touch.deltaX = e.touches[0].clientX - touch.startX;
 			touch.deltaY = e.touches[0].clientY - touch.startY;
+			touch.directionX = e.touches[0].clientX - touch.prevX > 0 ? "right":"left";
+			touch.directionY = e.touches[0].clientY - touch.prevY > 0 ? "bottom":"top";
+			touch.prevX = e.touches[0].clientX;
+			touch.prevY = e.touches[0].clientY;
 			e.touch = touch;
 			record.push({
 				deltaX: touch.deltaX,
@@ -52,6 +58,8 @@
 			e.deltaY = touch.deltaY;
 			e.velocityX = 0;
 			e.velocityY = 0;
+			e.directionX = touch.directionX;
+			e.directionY = touch.directionY;
 			if (!e.isPropagationStopped()) {
 				$(e.target).fire(PAN, e);
 			}
@@ -120,6 +128,14 @@
 		var flickStartRecord = record[flickStartIndex];
 		//移除前面没有用的点
 		e.touch.record = e.touch.record.splice(flickStartIndex - 1);
+		//去除NaN的点
+		for(var i =0,l = e.touch.record.length;i<l;i++){
+			if(isNaN(e.touch.record[i].velocity)){
+				e.touch.record.splice(i,1);
+			}
+		}
+
+
 		var velocityObj = getSpeed(e.touch.record);
 		e.velocityX = Math.abs(velocityObj.velocityX) > MAX_SPEED ? velocityObj.velocityX / Math.abs(velocityObj.velocityX) * MAX_SPEED : velocityObj.velocityX;
 		e.velocityY = Math.abs(velocityObj.velocityY) > MAX_SPEED ? velocityObj.velocityY / Math.abs(velocityObj.velocityY) * MAX_SPEED : velocityObj.velocityY;
@@ -156,12 +172,10 @@
 	S.each([PAN], function(evt) {
 		S.Event.Special[evt] = {
 			setup: function() {
-				// $(this).on('touchstart', touchStartHandler);
 				$(this).on('touchmove', touchMoveHandler);
 				$(this).on('touchend', touchEndHandler);
 			},
 			teardown: function() {
-				// $(this).detach('touchstart', touchStartHandler);
 				$(this).detach('touchmove', touchMoveHandler);
 				$(this).detach('touchend', touchEndHandler);
 			}

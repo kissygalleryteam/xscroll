@@ -252,5 +252,5 @@ KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.4/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.5/util']
 })

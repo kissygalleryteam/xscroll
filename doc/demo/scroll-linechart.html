@@ -17,13 +17,13 @@
     body{
         position: absolute;
         width: 100%;
-        height: 100%;
-
+        height: 100%; 
+        background: #888;
+  
 
     }
     #J_Scroll{
       height: 100%;
-      background: #555;
     }
     #J_Scroll ul{
         white-space: nowrap;
@@ -78,7 +78,7 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.3/index,kg/xscroll/1.1.3/plugin/scrollbar,kg/kcharts/2.0.2/linechart/,kg/kcharts/2.0.2/tip/,gallery/template/1.0/",function(S,Node,XScroll,ScrollBarPlugin,LineChart,Tip,Template){
+    KISSY.use("node,kg/xscroll/1.1.5/index,kg/xscroll/1.1.5/plugin/scrollbar,kg/kcharts/2.0.2/linechart/,kg/kcharts/2.0.2/tip/,gallery/template/1.0/",function(S,Node,XScroll,ScrollBarPlugin,LineChart,Tip,Template){
         var $ = S.all;
         var xscroll = new XScroll({
             renderTo:"#J_Scroll",

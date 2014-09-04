@@ -44,7 +44,7 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.0.0/index,kg/xscroll/1.0.0/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
+    KISSY.use("node,kg/xscroll/1.1.5/index,kg/xscroll/1.1.5/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
 		var $ = S.all;
 		var xscroll = new XScroll({
 			renderTo:"#demo",
@@ -81,7 +81,7 @@
 		var minScale = xscroll.get("minScale");
 		var maxScale = xscroll.get("maxScale");
 
-		xscroll.$renderTo.on("tap", function(e) {
+		xscroll.$renderTo.on("doubleTap", function(e) {
             containerSize = Math.min(xscroll.get("containerWidth"), xscroll.get("containerHeight"))
             originX = (e.pageX - xscroll.get("x")) / containerSize
             originY = (e.pageY - xscroll.get("y")) / containerSize

@@ -58,7 +58,6 @@ body {
     bottom: 48px;
     left: 0;
     width: 100%;
-    background: #ccc;
     overflow: hidden;
 }
 #J_Scroll ul{
@@ -71,7 +70,6 @@ body {
     line-height: 40px;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #fff;
-    background-color: #fafafa;
     font-size: 16px;
     display: block;
     list-style: none;

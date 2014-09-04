@@ -1,14 +1,14 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.3/pan
+kg/xscroll/1.1.5/pan
 
 */
 /*
 	Pan Event for KISSY MINI 
 	@author xiaoqi.huxq@alibaba-inc.com
 */
-;KISSY.add('kg/xscroll/1.1.3/pan',function(S, Node,Event) {
+;KISSY.add('kg/xscroll/1.1.5/pan',function(S, Node,Event) {
 	var doc = window.document;
 	var PAN_START = 'gesturePanStart',
 		PAN_END = 'gesturePanEnd',
@@ -134,6 +134,14 @@ kg/xscroll/1.1.3/pan
 		var flickStartRecord = record[flickStartIndex];
 		//移除前面没有用的点
 		e.touch.record = e.touch.record.splice(flickStartIndex - 1);
+		//去除NaN的点
+		for(var i =0,l = e.touch.record.length;i<l;i++){
+			if(isNaN(e.touch.record[i].velocity)){
+				e.touch.record.splice(i,1);
+			}
+		}
+
+
 		var velocityObj = getSpeed(e.touch.record);
 		e.velocityX = Math.abs(velocityObj.velocityX) > MAX_SPEED ? velocityObj.velocityX / Math.abs(velocityObj.velocityX) * MAX_SPEED : velocityObj.velocityX;
 		e.velocityY = Math.abs(velocityObj.velocityY) > MAX_SPEED ? velocityObj.velocityY / Math.abs(velocityObj.velocityY) * MAX_SPEED : velocityObj.velocityY;
@@ -170,12 +178,10 @@ kg/xscroll/1.1.3/pan
 	S.each([PAN], function(evt) {
 		S.Event.Special[evt] = {
 			setup: function() {
-				// $(this).on('touchstart', touchStartHandler);
 				$(this).on('touchmove', touchMoveHandler);
 				$(this).on('touchend', touchEndHandler);
 			},
 			teardown: function() {
-				// $(this).detach('touchstart', touchStartHandler);
 				$(this).detach('touchmove', touchMoveHandler);
 				$(this).detach('touchend', touchEndHandler);
 			}

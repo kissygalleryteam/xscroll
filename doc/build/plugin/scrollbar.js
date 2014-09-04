@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.3/plugin/scrollbar
+kg/xscroll/1.1.5/plugin/scrollbar
 
 */
 /**
@@ -10,7 +10,7 @@ kg/xscroll/1.1.3/plugin/scrollbar
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.3/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -92,6 +92,7 @@ KISSY.add('kg/xscroll/1.1.3/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 		},
 		_update: function(offset,duration,easing) {
 			var self = this;
+			var offset = offset || self.xscroll.getOffset();
 			var barInfo = self.computeScrollBar(offset);
 			self.isY ? self.$indicate.height(barInfo.size):self.$indicate.width(barInfo.size);
 			if(duration && easing){
@@ -104,7 +105,7 @@ KISSY.add('kg/xscroll/1.1.3/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 		computeScrollBar: function(offset) {
 			var self = this;
 			var type = self.isY ? "y" : "x";
-			var offset = offset && -offset[type] || 0;
+			var offset = offset && -offset[type];
 			self.set("containerSize",self.isY ? self.xscroll.get("containerHeight"):self.xscroll.get("containerWidth"))
 			self.set("indicateSize", self.isY ? self.xscroll.get("height"):self.xscroll.get("width"));
 			//滚动条容器高度
@@ -159,21 +160,24 @@ KISSY.add('kg/xscroll/1.1.3/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			if (self.__isEvtBind) return;
 			self.__isEvtBind = true;
 			var type = self.isY ? "y" : "x";
-			self.xscroll.on("pan",function(e){
-				self._update(e.offset);
-			})
+			// self.xscroll.on("pan",function(e){
+			// 	self._update(e.offset);
+			// })
 
-			self.xscroll.on("scrollAnimate",function(e){
-				self._update(e.offset,e.duration,e.easing);
-			})
 
-			self.xscroll.on("scrollEnd",function(e){
-				self._update(e.offset);
-				// self.hide();
-			})
+			// self.xscroll.on("scrollAnimate",function(e){
+			// 	self._update(e.offset,e.duration,e.easing);
+			// })
+
+			// self.xscroll.on("scrollEnd",function(e){
+			// 	if("tap" == e.triggerType){
+			// 		self._update(e.offset);
+			// 	}
+			// })
 
 			self.xscroll.on("scroll",function(e){
 				// self.show();
+				self._update();
 			})
 
 			self.xscroll.on("scaleAnimate",function(e){
@@ -181,7 +185,7 @@ KISSY.add('kg/xscroll/1.1.3/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			})
 
 			self.xscroll.on("scale", function(e) {
-				self._update()
+				self._update();
 			})
 
 			self.xscroll.on("afterContainerHeightChange",function(e){
@@ -248,5 +252,5 @@ KISSY.add('kg/xscroll/1.1.3/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.3/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.5/util']
 })

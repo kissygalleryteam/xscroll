@@ -5,7 +5,7 @@
     <title>Document</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <script src="http://g.tbcdn.cn/kissy/k/1.4.2/seed-min.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="demo.css">
+    <link rel="stylesheet" type="text/css" href="../demo/demo.css">
 </head>
 <body>
     <style type="text/css">
@@ -16,6 +16,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        background: #aaa;
     }
 
     #J_Scroll .ks-xscroll-content{
@@ -432,7 +433,7 @@
         packages:[
             {
                 name:"kg",
-                 path:KISSY.Config.debug ? "http://g.assets.daily.taobao.net/kg/":"http://g.tbcdn.cn/kg/",
+                path:"http://g.assets.daily.taobao.net/kg/",
                 ignorePackageNameInUri:true,
                 tag:"20140731"
             }
@@ -446,6 +447,7 @@
             scalable:true,
             maxScale:2,
             minScale:1
+
         });
         xscroll.plug(new ScrollBarPlugin({
         }));
@@ -460,7 +462,6 @@
             originY = (e.pageY - xscroll.get("y")) / xscroll.get("containerHeight")
             xscroll.get("scale") > minScale ? xscroll.scaleTo(minScale, originX,originY,200) : xscroll.scaleTo(maxScale, originX,originY,200);
         });
-        window.xscroll = xscroll
     });
     </script>
 </body>

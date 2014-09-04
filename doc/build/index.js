@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.3/index
+kg/xscroll/1.1.5/index
 
 */
 /**
@@ -9,7 +9,7 @@ kg/xscroll/1.1.3/index
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @module xscroll
  **/
-KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
+KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
     var $ = S.all;
     //event names
     var SCROLL_END = "scrollEnd";
@@ -97,17 +97,11 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var userConfig = self.userConfig = S.mix({
                 scalable: false
             }, self.userConfig, undefined, undefined, true);
-
             self.$renderTo = $(userConfig.renderTo);
-
             var clsPrefix = self.clsPrefix = userConfig.clsPrefix || "ks-xscroll-";
-
             self.SROLL_ACCELERATION = userConfig.SROLL_ACCELERATION || SROLL_ACCELERATION;
-
             self.containerClsName = clsPrefix + "container";
-
             self.contentClsName = clsPrefix + "content";
-
         },
         /*
             render & scroll to top
@@ -141,7 +135,6 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var maxScale = self.userConfig.maxScale || 1;
             self.set("minScale", minScale);
             self.set("maxScale", maxScale);
-
             self.boundry = {
                 reset: function() {
                     this.left = 0;
@@ -167,7 +160,6 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                     return this;
                 }
             };
-
             self.boundry.reset();
             self.fire(AFTER_RENDER);
             self._bindEvt();
@@ -186,10 +178,7 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             container.style.width = "100%";
             container.style[transformOrigin] = "0 0";
             content.style.position = "absolute";
-
-            //init zoom
             content.style[transformOrigin] = "0 0";
-
             self.translate({
                 x: 0,
                 y: 0
@@ -216,10 +205,13 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var transitionStr = "";
             //不可缩放
             if (!self.userConfig.scalable || self.get("scale") == scale || !scale) return;
-            self.scale(scale, originX, originY);
+            
             if (duration) {
                 var easing = easing || "ease-out";
                 transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
+                self.$ctn[0].style[transition] = transitionStr;
+                self.$content[0].style[transition] = transitionStr;
+                self.scale(scale, originX, originY);
                 self.fire(SCALE_ANIMATE, {
                     scale: self.get("scale"),
                     duration: duration,
@@ -230,8 +222,6 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                     }
                 });
             }
-            self.$ctn[0].style[transition] = transitionStr;
-            self.$content[0].style[transition] = transitionStr;
             return;
         },
         scale: function(scale, originX, originY) {
@@ -264,7 +254,6 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             self.set("x", x);
             self.set("y", y);
             self._transform();
-
             self.fire(SCALE, {
                 scale: scale
             })
@@ -277,27 +266,31 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             this.set("y", y);
             this._transform();
         },
-        stop: function() {
+        _noTransition:function(){
             var self = this;
-            var offset = self.getOffset();
-            self.translate(offset);
-            if (Util.isAndroid) {
+             if (Util.isAndroid) {
                 self.$content[0].style[transitionDuration] = "0.001s";
                 self.$ctn[0].style[transitionDuration] = "0.001s";
             } else {
                 self.$content[0].style[transition] = "none";
                 self.$ctn[0].style[transition] = "none";
             }
-            self.isScrollingX = false;
-            self.isScrollingY = false;
+        },
+        stop: function() {
+            var self = this;
+            var offset = self.getOffset();
+            self.translate(offset);
+            self._noTransition();
+            cancelRAF(self.rafX);
+            cancelRAF(self.rafY);
             self.fire(SCROLL_END, {
                 offset: offset,
                 scale: self.get("scale")
             });
         },
         _transform: function() {
-            this.$content[0].style[transform] = "translate(" + (this.get("x") || 0) + "px,0px) translateZ(0) scaleX(" + this.get("scale") + ")";
-            this.$ctn[0].style[transform] = "translate(0px," + (this.get("y") || 0) + "px) translateZ(0) scaleY(" + this.get("scale") + ")";
+            this.$content[0].style[transform] = "translate(" + this.get("x") + "px,0px) translateZ(0) scaleX(" + this.get("scale") + ")";
+            this.$ctn[0].style[transform] = "translate(0px," + this.get("y") + "px) translateZ(0) scaleY(" + this.get("scale") + ")";
         },
         getOffset: function() {
             var self = this;
@@ -338,7 +331,7 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             self.translateX(-x);
             var transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
             content.style[transition] = transitionStr;
-            self._scrollHandler(x, duration, callback, easing, transitionStr, "x");
+            self._scrollHandler(duration, callback, easing, transitionStr, "x");
             return content.style[transition] = transitionStr;
         },
         scrollY: function(y, duration, easing, callback) {
@@ -349,10 +342,10 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             self.translateY(-y);
             var transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
             container.style[transition] = transitionStr;
-           self._scrollHandler(y, duration, callback, easing, transitionStr, "y");
+           self._scrollHandler(duration, callback, easing, transitionStr, "y");
             return container.style[transition] = transitionStr;
         },
-        _scrollHandler: function(offset, duration, callback, easing, transitionStr, type) {
+        _scrollHandler: function( duration, callback, easing, transitionStr, type) {
             var self = this;
             if (duration <= 0) return;
             var Type = type.toUpperCase();
@@ -412,11 +405,11 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var containerWidth = self.get("containerWidth");
             var boundry = self.boundry;
             if (offset.x > boundry.left) {
-                offset['x'] = boundry.left;
-                self.scrollX(-offset['x'], BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                offset.x = boundry.left;
+                self.scrollX(-offset.x, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
             } else if (offset.x + containerWidth < boundry.right) {
-                offset['x'] = boundry.right - containerWidth;
-                self.scrollX(-offset['x'], BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                offset.x = boundry.right - containerWidth;
+                self.scrollX(-offset.x, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
             }
         },
         boundryCheckY: function(callback) {
@@ -427,11 +420,11 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var containerHeight = self.get("containerHeight");
             var boundry = self.boundry;
             if (offset.y > boundry.top) {
-                offset['y'] = boundry.top;
-                self.scrollY(-offset['y'], BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                offset.y = boundry.top;
+                self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
             } else if (offset.y + containerHeight < boundry.bottom) {
-                offset['y'] = boundry.bottom - containerHeight;
-                self.scrollY(-offset['y'], BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                offset.y = boundry.bottom - containerHeight;
+                self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
             }
         },
         //boundry back bounce
@@ -470,6 +463,10 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                 self.boundryCheck();
                 if (!self.isScrollingX && !self.isScrollingY) {
                     simulateMouseEvent(e, "click");
+                }else{
+                    self.isScrollingX = false;
+                    self.isScrollingY = false;
+                    self.stop();
                 }
             }).on(Pan.PAN_START, function(e) {
                 offset = self.getOffset();
@@ -499,6 +496,7 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                     x: posX,
                     y: posY
                 });
+                self._noTransition();
                 self.isScrollingX = false;
                 self.isScrollingY = false;
                 self.set("directionX",e.directionX);
@@ -516,6 +514,8 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                         x: posX,
                         y: posY
                     },
+                    deltaX:e.deltaX,
+                    deltaY:e.deltaY,
                     directionX:self.get("directionX"),
                     directionY:self.get("directionY")
                 });
@@ -540,9 +540,9 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                 });
                 self.$renderTo.on(Pinch.PINCH, function(e) {
                     if (self.get("scale") <= self.get("minScale")) {
-                        self.scaleTo(scale * e.scale, originX, originY);
+                        self.scale(scale * e.scale, originX, originY);
                     } else {
-                        self.scaleTo(scale * e.scale, originX, originY);
+                        self.scale(scale * e.scale, originX, originY);
                     }
                 });
                 self.$renderTo.on(Pinch.PINCH_END, function(e) {
@@ -558,7 +558,7 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                 self.refresh();
             })
         },
-        panEndHandler: function(e,isFast) {
+        panEndHandler: function(e) {
             var self = this;
             var userConfig = self.userConfig;
             var offset = self.getOffset();
@@ -615,7 +615,6 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             } else {
                 if (type == "x") {
                     self.boundryCheckX();
-
                 } else if (type == "y") {
                     self.boundryCheckY();
                 }
@@ -720,5 +719,5 @@ KISSY.add('kg/xscroll/1.1.3/index',function(S, Node, Event, Base, Pan, Pinch, Ut
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.3/pan', 'kg/xscroll/1.1.3/pinch', 'kg/xscroll/1.1.3/util']
+    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.5/pan', 'kg/xscroll/1.1.5/pinch', 'kg/xscroll/1.1.5/util']
 });

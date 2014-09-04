@@ -40,7 +40,6 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
     	pluginDestructor:function(){
     		console.log("destroy")
     	},
-
 		render: function() {
 			var self = this;
 			if (self.__isRender) return;
@@ -87,6 +86,7 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 		},
 		_update: function(offset,duration,easing) {
 			var self = this;
+			var offset = offset || self.xscroll.getOffset();
 			var barInfo = self.computeScrollBar(offset);
 			self.isY ? self.$indicate.height(barInfo.size):self.$indicate.width(barInfo.size);
 			if(duration && easing){
@@ -99,7 +99,7 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 		computeScrollBar: function(offset) {
 			var self = this;
 			var type = self.isY ? "y" : "x";
-			var offset = offset && -offset[type] || 0;
+			var offset = offset && -offset[type];
 			self.set("containerSize",self.isY ? self.xscroll.get("containerHeight"):self.xscroll.get("containerWidth"))
 			self.set("indicateSize", self.isY ? self.xscroll.get("height"):self.xscroll.get("width"));
 			//滚动条容器高度
@@ -140,11 +140,8 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 
 		scrollTo: function(offset, duration, easing) {
 			var self = this;
-			// self.show();
-			// setTimeout(function(){
-				self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
-				self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
-			// },0)
+			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
+			self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
 		},
 		moveTo: function(offset) {
 			var self = this;
@@ -157,16 +154,24 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 			if (self.__isEvtBind) return;
 			self.__isEvtBind = true;
 			var type = self.isY ? "y" : "x";
-			self.xscroll.on("pan",function(e){
-				self._update(e.offset);
-			})
+			// self.xscroll.on("pan",function(e){
+			// 	self._update(e.offset);
+			// })
 
-			self.xscroll.on("scrollAnimate",function(e){
-				self._update(e.offset,e.duration,e.easing);
-			})
 
-			self.xscroll.on("scrollEnd",function(e){
-				self._update(e.offset);
+			// self.xscroll.on("scrollAnimate",function(e){
+			// 	self._update(e.offset,e.duration,e.easing);
+			// })
+
+			// self.xscroll.on("scrollEnd",function(e){
+			// 	if("tap" == e.triggerType){
+			// 		self._update(e.offset);
+			// 	}
+			// })
+
+			self.xscroll.on("scroll",function(e){
+				// self.show();
+				self._update();
 			})
 
 			self.xscroll.on("scaleAnimate",function(e){
@@ -174,12 +179,30 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 			})
 
 			self.xscroll.on("scale", function(e) {
-				self._update()
+				self._update();
+			})
+
+			self.xscroll.on("afterContainerHeightChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterContainerWidthChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterWidthChange",function(e){
+				self._update();
+			})
+
+			self.xscroll.on("afterHeightChange",function(e){
+				self._update();
 			})
 
 			self.xscroll.on("refresh",function(e){
 				self.reset();
 			})
+
+
 		},
 		reset:function(){
 			var self = this;
@@ -223,5 +246,5 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.0.0/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.5/util']
 })

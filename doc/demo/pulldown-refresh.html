@@ -19,7 +19,6 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background: #aaa;
     }
     #J_Scroll ul{
         width: 100%;
@@ -133,7 +132,7 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.3/index,kg/xscroll/1.1.3/plugin/scrollbar,kg/xscroll/1.1.3/plugin/pulldown",function(S,Node,XScroll,ScrollBarPlugin,PullDownPlugin){
+    KISSY.use("node,kg/xscroll/1.1.5/index,kg/xscroll/1.1.5/plugin/scrollbar,kg/xscroll/1.1.5/plugin/pulldown",function(S,Node,XScroll,ScrollBarPlugin,PullDownPlugin){
         var $ = S.all;
         var html ="";
         for(var i=0;i<100;i++){
@@ -157,6 +156,10 @@
 
         pulldown.on("refresh",function(e){
             location.reload()
+        })
+
+        pulldown.on("afterStatusChange",function(e){
+            console.log(e)
         })
 
         xscroll.plug(pulldown)
