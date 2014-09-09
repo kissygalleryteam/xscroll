@@ -26,7 +26,8 @@ KISSY.add(function(S) {
 			if (this.vendor === '') return style;
 			return this.vendor + style.charAt(0).toUpperCase() + style.substr(1);
 		},
-		isAndroid:/Android /.test(window.navigator.appVersion)
+		isAndroid:/Android /.test(window.navigator.appVersion),
+		isBadAndroid : /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion))
 	}
 
 	return Util;
