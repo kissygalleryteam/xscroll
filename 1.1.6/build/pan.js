@@ -1,14 +1,14 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.6/pan
+kg/xscroll/1.1.5/pan
 
 */
 /*
 	Pan Event for KISSY MINI 
 	@author xiaoqi.huxq@alibaba-inc.com
 */
-;KISSY.add('kg/xscroll/1.1.6/pan',function(S, Node,Event) {
+;KISSY.add('kg/xscroll/1.1.5/pan',function(S, Node,Event) {
 	var doc = window.document;
 	var PAN_START = 'gesturePanStart',
 		PAN_END = 'gesturePanEnd',
@@ -134,21 +134,12 @@ kg/xscroll/1.1.6/pan
 		var flickStartRecord = record[flickStartIndex];
 		//移除前面没有用的点
 		e.touch.record = e.touch.record.splice(flickStartIndex - 1);
-
-
 		//去除NaN的点
 		for(var i =0,l = e.touch.record.length;i<l;i++){
 			if(isNaN(e.touch.record[i].velocity)){
 				e.touch.record.splice(i,1);
 			}
 		}
-
-		var str = ""
-		for(var i in e.touch.record){
-			str += e.touch.record[i].velocityY.toFixed(2)+" "
-		}
-
-
 
 
 		var velocityObj = getSpeed(e.touch.record);
@@ -179,10 +170,8 @@ kg/xscroll/1.1.6/pan
 		velocityX /= len;
 		//手指反弹的误差处理
 		return {
-			// velocityY: Math.abs(record[len - 1]['velocityY']) > MIN_SPEED ? velocityY : 0,
-			// velocityX: Math.abs(record[len - 1]['velocityX']) > MIN_SPEED ? velocityX : 0
-			velocityY:velocityY,
-			velocityX:velocityX
+			velocityY: Math.abs(record[len - 1]['velocityY']) > MIN_SPEED ? velocityY : 0,
+			velocityX: Math.abs(record[len - 1]['velocityX']) > MIN_SPEED ? velocityX : 0
 		}
 	}
 

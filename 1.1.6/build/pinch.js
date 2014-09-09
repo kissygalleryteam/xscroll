@@ -1,14 +1,14 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.6/pinch
+kg/xscroll/1.1.5/pinch
 
 */
 /*
 	Pinch Event 
 	@author xiaoqi.huxq@alibaba-inc.com
 */
-KISSY.add('kg/xscroll/1.1.6/pinch',function(S, Node, Event) {
+KISSY.add('kg/xscroll/1.1.5/pinch',function(S, Node, Event) {
 	var doc = window.document;
 	var PINCH_START = 'gesturePinchStart',
 		PINCH_END = 'gesturePinchEnd',
@@ -52,6 +52,7 @@ KISSY.add('kg/xscroll/1.1.6/pinch',function(S, Node, Event) {
 		this.isStart = 0;
 		if(this.gestureType != "pinch") return;
 		if(e.touches.length == 0){
+			console.log("pinchend")
 			$(this).fire(PINCH_END,e)
 			this.gestureType = "";
 		}

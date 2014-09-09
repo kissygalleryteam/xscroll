@@ -46,6 +46,7 @@ KISSY.add(function(S, Node, Event) {
 		this.isStart = 0;
 		if(this.gestureType != "pinch") return;
 		if(e.touches.length == 0){
+			console.log("pinchend")
 			$(this).fire(PINCH_END,e)
 			this.gestureType = "";
 		}

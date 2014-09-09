@@ -220,11 +220,11 @@
           {
             name:"kg",
              path:KISSY.Config.debug ? "http://g.assets.daily.taobao.net/kg/":"http://g.tbcdn.cn/kg/",
-             ignorePackageNameInUri:true
+            combine:false
           }
         ]
       })
-      KISSY.use("kg/xscroll/1.1.6/index,kg/xscroll/1.1.6/plugin/scrollbar,kg/xslide/1.1.1/index", function(S, XScroll,ScrollBarPlugin,XSlide) {
+      KISSY.use("kg/xscroll/1.1.5/index,kg/xscroll/1.1.5/plugin/scrollbar,kg/xslide/1.1.1/index", function(S, XScroll,ScrollBarPlugin,XSlide) {
         var slide = new XSlide({
             renderTo: "#J_Slide",
             crousel:true //寮€鍚棆杞湪椹�

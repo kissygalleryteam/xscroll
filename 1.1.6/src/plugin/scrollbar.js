@@ -49,8 +49,8 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 			var css = self.isY ? {
 				width: "3px",
 				position: "absolute",
-				bottom: "5px",
-				top: "5px",
+				bottom: "2px",
+				top: "2px",
 				right: "2px",
 				zIndex: 999,
 				overflow: "hidden",
@@ -60,8 +60,8 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 			}:{
 				height: "3px",
 				position: "absolute",
-				left: "5px",
-				right: "5px",
+				left: "2px",
+				right: "2px",
 				bottom: "2px",
 				zIndex: 999,
 				overflow: "hidden",
@@ -140,13 +140,13 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 
 		scrollTo: function(offset, duration, easing) {
 			var self = this;
-			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px) translateZ(0)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)  translateZ(0)"
+			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
 			self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
 		},
 		moveTo: function(offset) {
 			var self = this;
 			self.show();
-			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)  translateZ(0)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)  translateZ(0)"
+			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
 			self.$indicate[0].style[transition] = "";
 		},
 		_bindEvt: function() {
@@ -154,6 +154,21 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 			if (self.__isEvtBind) return;
 			self.__isEvtBind = true;
 			var type = self.isY ? "y" : "x";
+			// self.xscroll.on("pan",function(e){
+			// 	self._update(e.offset);
+			// })
+
+
+			// self.xscroll.on("scrollAnimate",function(e){
+			// 	self._update(e.offset,e.duration,e.easing);
+			// })
+
+			// self.xscroll.on("scrollEnd",function(e){
+			// 	if("tap" == e.triggerType){
+			// 		self._update(e.offset);
+			// 	}
+			// })
+
 			self.xscroll.on("scroll",function(e){
 				// self.show();
 				self._update();
@@ -231,5 +246,5 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.6/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.5/util']
 })
