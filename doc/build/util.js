@@ -1,11 +1,11 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.5/util
+kg/xscroll/1.1.6/util
 
 */
 ;
-KISSY.add('kg/xscroll/1.1.5/util',function(S) {
+KISSY.add('kg/xscroll/1.1.6/util',function(S) {
 	var Util = {
 		/*
         vendors
@@ -32,7 +32,8 @@ KISSY.add('kg/xscroll/1.1.5/util',function(S) {
 			if (this.vendor === '') return style;
 			return this.vendor + style.charAt(0).toUpperCase() + style.substr(1);
 		},
-		isAndroid:/Android /.test(window.navigator.appVersion)
+		isAndroid:/Android /.test(window.navigator.appVersion),
+		isBadAndroid : /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion))
 	}
 
 	return Util;

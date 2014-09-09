@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.5/plugin/scrollbar
+kg/xscroll/1.1.6/plugin/scrollbar
 
 */
 /**
@@ -10,7 +10,7 @@ kg/xscroll/1.1.5/plugin/scrollbar
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add('kg/xscroll/1.1.6/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -55,8 +55,8 @@ KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			var css = self.isY ? {
 				width: "3px",
 				position: "absolute",
-				bottom: "2px",
-				top: "2px",
+				bottom: "5px",
+				top: "5px",
 				right: "2px",
 				zIndex: 999,
 				overflow: "hidden",
@@ -66,8 +66,8 @@ KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			}:{
 				height: "3px",
 				position: "absolute",
-				left: "2px",
-				right: "2px",
+				left: "5px",
+				right: "5px",
 				bottom: "2px",
 				zIndex: 999,
 				overflow: "hidden",
@@ -146,13 +146,13 @@ KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 		scrollTo: function(offset, duration, easing) {
 			var self = this;
-			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
+			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px) translateZ(0)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)  translateZ(0)"
 			self.$indicate[0].style[transition] = ["all ",duration, "s ", easing, " 0"].join("");
 		},
 		moveTo: function(offset) {
 			var self = this;
 			self.show();
-			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)"
+			self.isY ? self.$indicate[0].style[transform] = "translateY(" + offset.y + "px)  translateZ(0)" : self.$indicate[0].style[transform] = "translateX(" + offset.x + "px)  translateZ(0)"
 			self.$indicate[0].style[transition] = "";
 		},
 		_bindEvt: function() {
@@ -160,21 +160,6 @@ KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			if (self.__isEvtBind) return;
 			self.__isEvtBind = true;
 			var type = self.isY ? "y" : "x";
-			// self.xscroll.on("pan",function(e){
-			// 	self._update(e.offset);
-			// })
-
-
-			// self.xscroll.on("scrollAnimate",function(e){
-			// 	self._update(e.offset,e.duration,e.easing);
-			// })
-
-			// self.xscroll.on("scrollEnd",function(e){
-			// 	if("tap" == e.triggerType){
-			// 		self._update(e.offset);
-			// 	}
-			// })
-
 			self.xscroll.on("scroll",function(e){
 				// self.show();
 				self._update();
@@ -252,5 +237,5 @@ KISSY.add('kg/xscroll/1.1.5/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.5/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.6/util']
 })

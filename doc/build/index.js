@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.5/index
+kg/xscroll/1.1.6/index
 
 */
 /**
@@ -9,7 +9,7 @@ kg/xscroll/1.1.5/index
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @module xscroll
  **/
-KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
+KISSY.add('kg/xscroll/1.1.6/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
     var $ = S.all;
     //event names
     var SCROLL_END = "scrollEnd";
@@ -64,8 +64,8 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
 
     var vendors = ['webkit', 'moz', 'ms', 'o'];
     var cancelRAF = window.cancelAnimationFrame;
-    for (var i = 0; i < vendors.length;i++) {
-        if(window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame']){
+    for (var i = 0; i < vendors.length; i++) {
+        if (window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame']) {
             cancelRAF = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
         }
     }
@@ -192,72 +192,6 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             this.translateY(offset.y)
             return;
         },
-        /*
-            scale(0.5,0.5,0.5,500,"ease-out")
-            @param {Number} scale 缩放比
-            @param {Float} 0~1之间的缩放中心值 水平方向
-            @param {Fload} 0~1之间的缩放中心值 垂直方向
-            @param {Number} 动画周期
-            @param {String} 动画函数
-        */
-        scaleTo: function(scale, originX, originY, duration, easing, callback) {
-            var self = this;
-            var transitionStr = "";
-            //不可缩放
-            if (!self.userConfig.scalable || self.get("scale") == scale || !scale) return;
-            
-            if (duration) {
-                var easing = easing || "ease-out";
-                transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
-                self.$ctn[0].style[transition] = transitionStr;
-                self.$content[0].style[transition] = transitionStr;
-                self.scale(scale, originX, originY);
-                self.fire(SCALE_ANIMATE, {
-                    scale: self.get("scale"),
-                    duration: duration,
-                    easing: easing,
-                    offset: {
-                        x: self.get("x"),
-                        y: self.get("y")
-                    }
-                });
-            }
-            return;
-        },
-        scale: function(scale, originX, originY) {
-            var self = this;
-            if (!self.userConfig.scalable || self.get("scale") == scale || !scale) return;
-            originX && self.set("originX", originX);
-            originY && self.set("originY", originY);
-            var boundry = self.boundry;
-            var containerWidth = scale * self.get("initialContainerWidth");
-            var containerHeight = scale * self.get("initialContainerHeight");
-            self.set("containerWidth", containerWidth > self.get("width") ? containerWidth : self.get("width"));
-            self.set("containerHeight", containerHeight > self.get("height") ? containerHeight : self.get("height"));
-            self.set("scale", scale);
-            var x = -originX * self.get("containerWidth") + self.get("width") / 2;
-            var y = -originY * self.get("containerHeight") + self.get("height") / 2;
-
-            if (x > boundry.left) {
-                x = boundry.left;
-            }
-            if (y > boundry.top) {
-                y = boundry.top;
-            }
-            if (x < boundry.right - self.get("containerWidth")) {
-                x = boundry.right - self.get("containerWidth");
-            }
-            if (y < boundry.bottom - self.get("containerHeight")) {
-                y = boundry.bottom - self.get("containerHeight")
-            }
-
-            self.set("x", x);
-            self.set("y", y);
-            self._transform();
-            self.fire(SCALE, {
-                scale: scale
-            })
-        },
         translateX: function(x) {
             this.set("x", x);
             this._transform();
@@ -266,9 +200,9 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             this.set("y", y);
             this._transform();
         },
-        _noTransition:function(){
+        _noTransition: function() {
             var self = this;
-             if (Util.isAndroid) {
+            if (Util.isBadAndroid) {
                 self.$content[0].style[transitionDuration] = "0.001s";
                 self.$ctn[0].style[transitionDuration] = "0.001s";
             } else {
@@ -289,8 +223,8 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             });
         },
         _transform: function() {
-            this.$content[0].style[transform] = "translate(" + this.get("x") + "px,0px) translateZ(0) scaleX(" + this.get("scale") + ")";
-            this.$ctn[0].style[transform] = "translate(0px," + this.get("y") + "px) translateZ(0) scaleY(" + this.get("scale") + ")";
+            this.$content[0].style[transform] = "translate(" + this.get("x") + "px,0px) translateZ(0) scaleX(" + this.get("scale") + ") scaleY(" + this.get("scale") + ")";
+            this.$ctn[0].style[transform] = "translate(0px," + this.get("y") + "px) translateZ(0)";
         },
         getOffset: function() {
             var self = this;
@@ -342,10 +276,10 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             self.translateY(-y);
             var transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
             container.style[transition] = transitionStr;
-           self._scrollHandler(duration, callback, easing, transitionStr, "y");
+            self._scrollHandler(duration, callback, easing, transitionStr, "y");
             return container.style[transition] = transitionStr;
         },
-        _scrollHandler: function( duration, callback, easing, transitionStr, type) {
+        _scrollHandler: function(duration, callback, easing, transitionStr, type) {
             var self = this;
             if (duration <= 0) return;
             var Type = type.toUpperCase();
@@ -353,11 +287,10 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var start = Date.now();
             self['destTime' + Type] = start + duration;
             cancelRAF(self['raf' + Type]);
-            var step = 0;
             var run = function() {
                 var now = Date.now();
                 if (self['isScrolling' + Type]) {
-                   RAF(function() {
+                    RAF(function() {
                         self.fire(SCROLL, {
                             zoomType: type,
                             offset: self.getOffset()
@@ -371,7 +304,7 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                         offset: self.getOffset(),
                         zoomType: type
                     })
-                    self.fire(SCROLL_END,{
+                    self.fire(SCROLL_END, {
                         offset: self.getOffset(),
                         zoomType: type
                     })
@@ -381,7 +314,7 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                     return;
                 }
 
-                self['raf'+Type] = RAF(run);
+                self['raf' + Type] = RAF(run);
             }
             run();
 
@@ -406,10 +339,10 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var boundry = self.boundry;
             if (offset.x > boundry.left) {
                 offset.x = boundry.left;
-                self.scrollX(-offset.x, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                self.scrollX(-offset.x, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING, callback);
             } else if (offset.x + containerWidth < boundry.right) {
                 offset.x = boundry.right - containerWidth;
-                self.scrollX(-offset.x, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                self.scrollX(-offset.x, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING, callback);
             }
         },
         boundryCheckY: function(callback) {
@@ -421,10 +354,10 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
             var boundry = self.boundry;
             if (offset.y > boundry.top) {
                 offset.y = boundry.top;
-                self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING, callback);
             } else if (offset.y + containerHeight < boundry.bottom) {
                 offset.y = boundry.bottom - containerHeight;
-                self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING,callback);
+                self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING, callback);
             }
         },
         //boundry back bounce
@@ -436,7 +369,7 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
         /**
          * enable the switch for boundry back bounce
          **/
-        bounce: function(isEnabled,callback) {
+        bounce: function(isEnabled, callback) {
             var self = this;
             self.set("boundryCheckEnabled", isEnabled);
             isEnabled ? self.boundryCheck(callback) : undefined;
@@ -463,7 +396,7 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                 self.boundryCheck();
                 if (!self.isScrollingX && !self.isScrollingY) {
                     simulateMouseEvent(e, "click");
-                }else{
+                } else {
                     self.isScrollingX = false;
                     self.isScrollingY = false;
                     self.stop();
@@ -499,25 +432,25 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                 self._noTransition();
                 self.isScrollingX = false;
                 self.isScrollingY = false;
-                self.set("directionX",e.directionX);
-                self.set("directionY",e.directionY);
+                self.set("directionX", e.directionX);
+                self.set("directionY", e.directionY);
                 self.fire(SCROLL, {
                     offset: {
                         x: posX,
                         y: posY
                     },
-                    directionX:self.get("directionX"),
-                    directionY:self.get("directionY")
+                    directionX: self.get("directionX"),
+                    directionY: self.get("directionY")
                 });
                 self.fire(PAN, {
                     offset: {
                         x: posX,
                         y: posY
                     },
-                    deltaX:e.deltaX,
-                    deltaY:e.deltaY,
-                    directionX:self.get("directionX"),
-                    directionY:self.get("directionY")
+                    deltaX: e.deltaX,
+                    deltaY: e.deltaY,
+                    directionX: self.get("directionX"),
+                    directionY: self.get("directionY")
                 });
 
             }).on(Pan.PAN_END, function(e) {
@@ -529,7 +462,6 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                 })
             })
 
-            var rscale;
             //可缩放
             if (self.userConfig.scalable) {
                 var originX, originY;
@@ -539,13 +471,10 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                     originY = (e.origin.pageY - self.get("y")) / self.get("containerHeight");
                 });
                 self.$renderTo.on(Pinch.PINCH, function(e) {
-                    if (self.get("scale") <= self.get("minScale")) {
-                        self.scale(scale * e.scale, originX, originY);
-                    } else {
-                        self.scale(scale * e.scale, originX, originY);
-                    }
+                    self._scale(scale * e.scale, originX, originY);
                 });
                 self.$renderTo.on(Pinch.PINCH_END, function(e) {
+                    self.isScaling = false;
                     if (self.get("scale") < self.get("minScale")) {
                         self.scaleTo(self.get("minScale"), originX, originY, SCALE_TO_DURATION);
                     } else if (self.get("scale") > self.get("maxScale")) {
@@ -553,44 +482,116 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
                     }
                 })
             }
-
             window.addEventListener("resize", function(e) {
                 self.refresh();
             })
+        },
+        _scale: function(scale, originX, originY) {
+            var self = this;
+            if (!self.userConfig.scalable || self.get("scale") == scale || !scale) return;
+
+            if (!self.isScaling) {
+                self.scaleBegin = self.get("scale");
+                self.isScaling = true;
+                self.scaleBeginX = self.get("x");
+                self.scaleBeginY = self.get("y");
+            }
+            originX && self.set("originX", originX);
+            originY && self.set("originY", originY);
+            var boundry = self.boundry;
+            var containerWidth = scale * self.get("initialContainerWidth");
+            var containerHeight = scale * self.get("initialContainerHeight");
+            self.set("containerWidth", containerWidth > self.get("width") ? containerWidth : self.get("width"));
+            self.set("containerHeight", containerHeight > self.get("height") ? containerHeight : self.get("height"));
+            self.set("scale", scale);
+            var x = originX * (self.get("initialContainerWidth") * self.scaleBegin - self.get("containerWidth")) + self.scaleBeginX;
+            var y = originY * (self.get("initialContainerHeight") * self.scaleBegin - self.get("containerHeight")) + self.scaleBeginY;
+            if (x > boundry.left) {
+                x = boundry.left;
+            }
+            if (y > boundry.top) {
+                y = boundry.top;
+            }
+            if (x < boundry.right - self.get("containerWidth")) {
+                x = boundry.right - self.get("containerWidth");
+            }
+            if (y < boundry.bottom - self.get("containerHeight")) {
+                y = boundry.bottom - self.get("containerHeight")
+            }
+            self.set("x", x);
+            self.set("y", y);
+            self._transform();
+            self.fire(SCALE, {
+                scale: scale
+            })
+        },
+        /*
+            scale(0.5,0.5,0.5,500,"ease-out")
+            @param {Number} scale 缩放比
+            @param {Float} 0~1之间的缩放中心值 水平方向
+            @param {Fload} 0~1之间的缩放中心值 垂直方向
+            @param {Number} 动画周期
+            @param {String} 动画函数
+        */
+        scaleTo: function(scale, originX, originY, duration, easing, callback) {
+            var self = this;
+            //不可缩放
+            if (!self.userConfig.scalable || self.get("scale") == scale || !scale) return;
+                var duration = duration || 1;
+                var easing = easing || "ease-out",
+                    transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
+                var start = Date.now();
+                self.destTimeScale = start + duration;
+                cancelRAF(self._rafScale);
+                var scaleStart = self.get("scale");
+                var step = 0;
+                var run = function() {
+                    var now = Date.now();
+                    if (now > start + duration && now >= self.destTimeScale) {
+                        self.isScaling = false;
+                        return;
+                    }
+                    self._rafScale = RAF(run);
+                }
+                run();
+                self.$ctn[0].style[transition] = transitionStr;
+                self.$content[0].style[transition] = transitionStr;
+                self._scale(scale, originX, originY);
+                self.fire(SCALE_ANIMATE, {
+                    scale: self.get("scale"),
+                    duration: duration,
+                    easing: easing,
+                    offset: {
+                        x: self.get("x"),
+                        y: self.get("y")
+                    }
+                });
         },
         panEndHandler: function(e) {
             var self = this;
             var userConfig = self.userConfig;
             var offset = self.getOffset();
-            if (Math.abs(e.velocity) < 0.5) {
-                self.fire(SCROLL_END, {
-                    offset: offset
-                })
-                self.boundryCheck();
-                return;
-            } else {
-                var transX = self._bounce("x", offset.x, e.velocityX, self.get("width"), self.get("containerWidth"));
-                var transY = self._bounce("y", offset.y, e.velocityY, self.get("height"), self.get("containerHeight"));
-                var x = transX ? transX['offset'] : 0;
-                var y = transY ? transY['offset'] : 0;
-                var duration;
+            var transX = self._bounce("x", offset.x, e.velocityX, self.get("width"), self.get("containerWidth"));
+            var transY = self._bounce("y", offset.y, e.velocityY, self.get("height"), self.get("containerHeight"));
+            var x = transX ? transX['offset'] : 0;
+            var y = transY ? transY['offset'] : 0;
+            var duration;
 
-                if (transX && transY && transX.status && transY.status && transX.duration && transY.duration) {
-                    //保证常规滚动时间相同 x y方向不发生时间差
-                    duration = Math.max(transX.duration, transY.duration);
-                }
-
-                transX && self.scrollX(x, duration || transX['duration'], transX['easing'], function(e) {
-                    self._scrollEndHandler("x");
-                });
-                transY && self.scrollY(y, duration || transY['duration'], transY['easing'], function(e) {
-                    self._scrollEndHandler("y");
-                });
-
-                //judge the direction
-                self.set("directionX", e.velocityX < 0 ? "left" : "right");
-                self.set("directionY", e.velocityY < 0 ? "up" : "down");
+            if (transX && transY && transX.status && transY.status && transX.duration && transY.duration) {
+                //保证常规滚动时间相同 x y方向不发生时间差
+                duration = Math.max(transX.duration, transY.duration);
             }
+
+            transX && self.scrollX(x, duration || transX['duration'], transX['easing'], function(e) {
+                self._scrollEndHandler("x");
+            });
+            transY && self.scrollY(y, duration || transY['duration'], transY['easing'], function(e) {
+                self._scrollEndHandler("y");
+            });
+
+            //judge the direction
+            self.set("directionX", e.velocityX < 0 ? "left" : "right");
+            self.set("directionY", e.velocityY < 0 ? "up" : "down");
         },
         _scrollEndHandler: function(type) {
             var self = this;
@@ -719,5 +720,5 @@ KISSY.add('kg/xscroll/1.1.5/index',function(S, Node, Event, Base, Pan, Pinch, Ut
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.5/pan', 'kg/xscroll/1.1.5/pinch', 'kg/xscroll/1.1.5/util']
+    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.6/pan', 'kg/xscroll/1.1.6/pinch', 'kg/xscroll/1.1.6/util']
 });

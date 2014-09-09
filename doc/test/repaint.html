@@ -5,7 +5,6 @@
     <title>Document</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <script src="http://g.tbcdn.cn/kissy/k/1.4.2/seed-min.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="demo.css">
 </head>
 <body>
     <style type="text/css">
@@ -19,66 +18,37 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        /*-webkit-backface-visibility:hidden;*/
+    }
+    #J_Scroll{
+        position: absolute;
+        width:100%;
+        height: 100%;
+        overflow: hidden;
     }
     #J_Scroll ul{
         width: 100%;
     }
     #J_Scroll ul li{
         width: 100%;
-        position: relative;
+        display: block;
+        height: 40px;
+        border:1px solid;
     }
     .ks-xscroll-container{
         width: 100%;
-    }
-
-
-     #J_Scroll2 ul{
-        white-space: nowrap;
         position: absolute;
-        height: 100%;
-        font-size: 0;
     }
-    #J_Scroll2 ul li{
-        display: inline-block;
-        width: 100px;
-        height: 100%;
-        border-left:1px solid #ccc;
-        border-right:1px solid #fff;
-    }
-
-    #J_Scroll .ks-xscroll-container, #J_Scroll .ks-xscroll-content{
-        width: 100%;
-    }
-
-    #J_Scroll2 .ks-xscroll-container, #J_Scroll2 .ks-xscroll-content{
-        width: 1000px;
+    .ks-xscroll-content{
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
     }
     </style>
-    <div id="header">XScroll</div>
     <div id="J_Scroll">
         <div class="ks-xscroll-container">
-            <div class="ks-xscroll-content">
-                <div style="height:100px;width:100%;position:relative;">
-                    <div id="J_Scroll2">
-                        <div class="ks-xscroll-container">
-                            <ul class="ks-xscroll-content">
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                                <li>block</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <ul style="-webkit-transform:translateZ(0);">
+            <ul class="ks-xscroll-content">
+                <li>row1</li>
                 <li>row2</li>
                 <li>row3</li>
                 <li>row</li>
@@ -159,10 +129,8 @@
                 <li>row</li>
                 <li>row</li>
             </ul>
-            </div>
         </div>
     </div>
-    <div id="footer">Scroll-Vertical</div>
     <script type="text/javascript">
    KISSY.config({
         packages:[
@@ -173,39 +141,32 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.6/index,kg/xscroll/1.1.6/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
+    KISSY.use("node,kg/xscroll/1.1.5/pan",function(S,Node,Pan){
         var $ = S.all;
-        var xscroll = new XScroll({
-            renderTo:"#J_Scroll",
-            autoRender:false
-        });
+        var html ="";
+        var el = $(".ks-xscroll-content");
+        // for(var i=0;i<100;i++){
+        //     html +='<li>row'+i+'</li>'
+        // }
+        
+        // el.html(html)
 
-        xscroll.set("lockX",true);
-        xscroll.plug(new ScrollBarPlugin());
-        xscroll.render();
+        var offsetTop = getOffset();
 
+        function getOffset(){
+           return window.getComputedStyle(el[0]).webkitTransform.match(/[-\d\.*\d*]+/g) || 0;
+        }
 
+        // el[0].style.webkitTransition = "-webkit-transform 0s ease-out"
 
-        var xscroll2 = new XScroll({
-            renderTo:"#J_Scroll2",
-            autoRender:false
-        });
-        xscroll2.set("lockY",true);
-        xscroll2.plug(new ScrollBarPlugin({
-            type:"x"
-        }));
-
-        xscroll2.render()
-        //横竖事件锁
-        xscroll2.on("pan",function(e){
-            if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){
-                xscroll.set("lockY",true)
-            }else{
-                xscroll.set("lockY",false)
-            }
-        }).on("panEnd",function(e){
-            xscroll.set("lockY",false)
+        el.on(Pan.PAN_START,function(e){
+           // offsetTop  = getOffset();
+        }).on(Pan.PAN,function(e){
+            el[0].style.webkitTransform = "translate(0,"+(Number(e.deltaY))+"px) translateZ(0)";
         })
+
+
+
     });
     </script>
 </body>
