@@ -58,13 +58,8 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             window.setTimeout(callback, 1000 / 60);
         };
 
-    var vendors = ['webkit', 'moz', 'ms', 'o'];
-    var cancelRAF = window.cancelAnimationFrame;
-    for (var i = 0; i < vendors.length; i++) {
-        if (window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame']) {
-            cancelRAF = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
-        }
-    }
+    var cancelRAF = Util.vendor ? window[Util.vendor+'CancelAnimationFrame'] || window[Util.vendor+'CancelRequestAnimationFrame'] :window.cancelAnimationFrame ;
+
     cancelRAF = cancelRAF || window.clearTimeout;
     //simulateMouseEvent
     var simulateMouseEvent = function(event, type) {
@@ -133,10 +128,26 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             self.set("maxScale", maxScale);
             self.boundry = {
                 reset: function() {
-                    this.left = 0;
+                    this.resetTop();
+                    this.resetLeft();
+                    this.resetBottom();
+                    this.resetRight();
+                    return this;
+                },
+                resetTop:function(){
                     this.top = 0;
-                    this.right = self.get("width");
+                    return this;
+                },
+                resetLeft:function(){
+                    this.left = 0;
+                    return this;
+                },
+                resetBottom:function(){
                     this.bottom = self.get("height");
+                    return this;
+                },
+                resetRight:function(){
+                    this.right = self.get("width");
                     return this;
                 },
                 expandTop: function(top) {
@@ -168,7 +179,6 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             var content = $("." + self.contentClsName, self.$renderTo)[0];
             self.$ctn = $(container);
             self.$content = $(content);
-            //support sync rendering
             container.style.position = "absolute";
             container.style.height = "100%";
             container.style.width = "100%";
@@ -182,7 +192,6 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             self.__isContainerCreated = true;
 
         },
-        //translate a element 
         translate: function(offset) {
             this.translateX(offset.x)
             this.translateY(offset.y)
@@ -208,6 +217,7 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
         },
         stop: function() {
             var self = this;
+            if(self.isScaling) return;
             var offset = self.getOffset();
             self.translate(offset);
             self._noTransition();
@@ -278,7 +288,13 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
         },
         _scrollHandler: function(duration, callback, easing, transitionStr, type) {
             var self = this;
-            if (duration <= 0) return;
+            if (duration <= 0) {
+                self.fire(SCROLL, {
+                    zoomType: type,
+                    offset: self.getOffset()
+                });
+                return;
+            }
             var Type = type.toUpperCase();
             self['isScrolling' + Type] = true;
             var start = Date.now();
@@ -402,13 +418,13 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
                 containerWidth = self.get("containerWidth");
                 containerHeight = self.get("containerHeight");
                 if (posY > boundry.top) { //overtop 
-                    posY = posY * PAN_RATE;
+                    posY = (posY - boundry.top) * PAN_RATE + boundry.top;
                 }
                 if (posY < boundry.bottom - containerHeight) { //overbottom 
                     posY = posY + (boundry.bottom - containerHeight - posY) * PAN_RATE;
                 }
                 if (posX > boundry.left) { //overleft
-                    posX = posX * PAN_RATE;
+                    posX = (posX - boundry.left) * PAN_RATE + boundry.left;
                 }
                 if (posX < boundry.right - containerWidth) { //overright
                     posX = posX + (boundry.right - containerWidth - posX) * PAN_RATE;
@@ -610,8 +626,9 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
         _bounce: function(type, offset, v, size, innerSize) {
             var self = this;
             var boundry = self.boundry;
-            var boundryOffset = boundry[type];
-            var boundrySize = type == "x" ? boundry.w : boundry.h;
+            var boundryStart = type == "x" ? boundry.left : boundry.top;
+            var boundryEnd = type == "x" ? boundry.right : boundry.bottom;
+            var size = boundryEnd - boundryStart; 
             var transition = {};
             if (v === 0) {
                 type == "x" ? self.boundryCheckX() : self.boundryCheckY();
@@ -627,7 +644,7 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             if (v < -maxSpeed) {
                 v = -maxSpeed;
             }
-            if (offset > 0 || offset < size - innerSize) {
+            if (offset > boundryStart || offset < size - innerSize) {
                 var a = BOUNDRY_CHECK_ACCELERATION * (v / Math.abs(v));
                 var t = v / a;
                 var s = offset + t * v / 2;
@@ -641,10 +658,10 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             var t = v / a;
             var s = offset / 1 + t * v / 2;
             //over top boundry check bounce
-            if (s > 0) {
-                var _s = 0 - offset;
+            if (s > boundryStart) {
+                var _s = boundryStart - offset;
                 var _t = (v - Math.sqrt(-2 * a * _s + v * v)) / a;
-                transition['offset'] = 0;
+                transition['offset'] = -boundryStart;
                 transition['duration'] = _t;
                 transition['easing'] = "cubic-bezier(" + quadratic2cubicBezier(-t, -t + _t) + ")";
                 self["_bounce" + type] = v - a * _t;
