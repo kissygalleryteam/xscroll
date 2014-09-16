@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+        <script src="http://g.tbcdn.cn/??kissy/k/1.4.2/seed-min.js,mtb/lib-windvane/1.2.4/bridge.js,mtb/lib-windvane/1.2.4/api.js" ></script>
+        <title>siderbar</title>
+        <style type="text/css">
+           body,ul,li{
+            margin:0;
+            padding: 0;
+           }
+
+           .sider-bar{
+              position: absolute;
+              z-index: 100;
+              width: 12.4%;
+              height: 100%;
+              overflow: hidden;
+              background: #f7f7f7;
+              border-width: 1px;
+              border-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjRFMEQ5Rjc5RDk3QTExRTNBQTA3QjMyODc2NEUyN0EzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjRFMEQ5RjdBRDk3QTExRTNBQTA3QjMyODc2NEUyN0EzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NEUwRDlGNzdEOTdBMTFFM0FBMDdCMzI4NzY0RTI3QTMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NEUwRDlGNzhEOTdBMTFFM0FBMDdCMzI4NzY0RTI3QTMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7VBHDLAAAAMUlEQVR42mK8fPnyfwYsgAVKM6KJ/2eCsXR0dMAYBpgYcACYUQxXrlzBKoHhAIAAAwA5WAkNJZ43FgAAAABJRU5ErkJggg==) 2 repeat;
+}
+           .sider-bar ul li{
+                padding: 12.4%;
+                text-align: center;
+           }
+           .sider-bar ul li.cur{
+              color:#e51a53
+           }
+           .ks-xscroll-content{
+            width: 100%;
+           }
+
+
+
+           .pop-bar{
+            z-index: 99;
+              position: absolute;
+              width: 12.4%;
+              left: 0;
+              height: 100%;
+              overflow: hidden;
+              background: #fff;
+              border-width: 1px;
+              border-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjRFMEQ5Rjc5RDk3QTExRTNBQTA3QjMyODc2NEUyN0EzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjRFMEQ5RjdBRDk3QTExRTNBQTA3QjMyODc2NEUyN0EzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NEUwRDlGNzdEOTdBMTFFM0FBMDdCMzI4NzY0RTI3QTMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NEUwRDlGNzhEOTdBMTFFM0FBMDdCMzI4NzY0RTI3QTMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7VBHDLAAAAMUlEQVR42mK8fPnyfwYsgAVKM6KJ/2eCsXR0dMAYBpgYcACYUQxXrlzBKoHhAIAAAwA5WAkNJZ43FgAAAABJRU5ErkJggg==) 2 repeat;
+}
+           .pop-bar ul li{
+                padding: 12.4%;
+                text-align: center;
+                font-size: 18px;
+           }
+           .pop-mask{
+            position: absolute;
+            top:0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #000;
+            z-index: 98;
+            opacity: 0;
+           }
+
+           /*portrait*/
+@media screen and (max-width:1024px) and (orientation:portrait){
+.sider-bar,.pop-bar{
+  width:15.6%;
+}
+
+}
+        </style>
+  
+    </head>
+
+    <body>
+  <div class="pop-mask" id="J_PopMask"></div>
+  <div class="sider-bar" id="J_SiderBar">
+    <div class="ks-xscroll-container">
+      <ul class="ks-xscroll-content">
+        <li class="cur">全部</li>
+        <li>女装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装 &gt;</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pop-bar" id="J_PopBar">
+    <div class="ks-xscroll-container">
+      <ul class="ks-xscroll-content">
+        <li>男装</li>
+        <li>男装</li>
+        <li>男装</li>
+      </ul>
+    </div>
+  </div>
+
+    </body>
+      <script type="text/javascript">
+        KISSY.config({
+          packages:[
+            {
+                name:"kg",
+                 path:KISSY.Config.debug ? "http://g.assets.daily.taobao.net/kg/":"http://g.tbcdn.cn/kg/",
+                ignorePackageNameInUri:true
+            }
+        ]
+        });
+        KISSY.use("node,event,kg/xscroll/1.1.7/index",function(S,Node,Event,XScroll){
+        var $ = S.all;
+        var xscroll = new XScroll({
+            renderTo:"#J_SiderBar",
+            autoRender:false
+        });
+        xscroll.set("lockX",true);
+        xscroll.render();
+        var scrollY = 0;
+        $("#J_SiderBar").on("tap",function(e){
+            if(e.target.tagName.toLowerCase() == "li"){
+              $(e.target).addClass("cur").siblings().removeClass("cur");
+              var offset = xscroll.getOffsetTop();
+              var index = S.indexOf(e.target,$("li",$(e.currentTarget)));
+              var height = $("li",$(e.currentTarget)).outerHeight();
+              scrollY =  $(e.currentTarget).height()/2 - height*index;
+              if(scrollY > 0){
+                scrollY = 0;
+              }
+              if(scrollY <   xscroll.boundry.bottom - xscroll.get("containerHeight")){
+                scrollY =  xscroll.boundry.bottom - xscroll.get("containerHeight")
+              }
+              xscroll.scrollY(-scrollY,300);
+              show();
+            }
+        })
+
+
+        var popbar = new XScroll({
+            renderTo:"#J_PopBar",
+            autoRender:false
+        });
+        popbar.set("lockX",true);
+        popbar.render();
+
+
+
+        $("#J_PopMask").on("tap",function(e){
+          hide();
+        })
+
+      var $J_PopBar = $("#J_PopBar");
+      var $J_PopMask = $("#J_PopMask");
+
+      function hide(){
+        $J_PopBar[0].style.webkitTransition = "-webkit-transform 0.3s ease-out";
+        $J_PopBar[0].style.webkitTransform = "translateX(0px)";
+        $J_PopMask[0].style.opacity = 0;
+        $J_PopMask[0].style.webkitTransition = "opacity 0.3s ease-out";
+      }
+
+      function show(){
+        $J_PopBar[0].style.webkitTransition = "-webkit-transform 0.3s ease-out";
+        $J_PopBar[0].style.webkitTransform = "translateX("+$J_PopBar.width()+"px)";
+        $J_PopMask[0].style.opacity = 0.6;
+         $J_PopMask[0].style.webkitTransition = "opacity 0.3s ease-out";
+      }
+      });
+
+
+
+    
+      
+
+
+
+
+
+      </script>
+
+</html>
