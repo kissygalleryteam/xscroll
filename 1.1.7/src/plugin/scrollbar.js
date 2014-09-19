@@ -148,7 +148,6 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 			_offset[type] = barOffset;
 			result.offset = _offset;
 			return result;
-
 		},
 
 		scrollTo: function(offset, duration, easing) {
@@ -222,5 +221,5 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.7/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.8/util']
 })

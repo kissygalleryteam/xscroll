@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.7/plugin/scrollbar
+kg/xscroll/1.1.8/plugin/scrollbar
 
 */
 /**
@@ -10,7 +10,7 @@ kg/xscroll/1.1.7/plugin/scrollbar
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.7/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add('kg/xscroll/1.1.8/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -154,7 +154,6 @@ KISSY.add('kg/xscroll/1.1.7/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 			_offset[type] = barOffset;
 			result.offset = _offset;
 			return result;
-
 		},
 
 		scrollTo: function(offset, duration, easing) {
@@ -228,5 +227,5 @@ KISSY.add('kg/xscroll/1.1.7/plugin/scrollbar',function(S, Node, Base, Anim,Util)
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.7/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.8/util']
 })

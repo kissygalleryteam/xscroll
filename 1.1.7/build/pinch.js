@@ -1,14 +1,14 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.7/pinch
+kg/xscroll/1.1.8/pinch
 
 */
 /*
 	Pinch Event 
 	@author xiaoqi.huxq@alibaba-inc.com
 */
-KISSY.add('kg/xscroll/1.1.7/pinch',function(S, Node, Event) {
+KISSY.add('kg/xscroll/1.1.8/pinch',function(S, Node, Event) {
 	var doc = window.document;
 	var PINCH_START = 'gesturePinchStart',
 		PINCH_END = 'gesturePinchEnd',

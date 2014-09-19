@@ -1,11 +1,11 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.7/util
+kg/xscroll/1.1.8/util
 
 */
 ;
-KISSY.add('kg/xscroll/1.1.7/util',function(S) {
+KISSY.add('kg/xscroll/1.1.8/util',function(S) {
 	var Util = {
 		/*
         vendors

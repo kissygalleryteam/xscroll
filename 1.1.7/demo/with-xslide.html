@@ -20,11 +20,11 @@
            #J_Slide{
              width: 100%;
              overflow: hidden;
-             width: 320px;
+             width: 100%;
              height: 140px;
            }
            #J_Slide .ks-xslide-item,#J_Slide .ks-xslide-item img{
-             width: 320px;
+             width: 100%;
              display: block;
              float: left;
               height: 110px;
@@ -224,7 +224,7 @@
           }
         ]
       })
-      KISSY.use("kg/xscroll/1.1.7/index,kg/xscroll/1.1.7/plugin/scrollbar,kg/xslide/1.1.1/index", function(S, XScroll,ScrollBarPlugin,XSlide) {
+      KISSY.use("kg/xscroll/1.1.8/index,kg/xscroll/1.1.8/plugin/scrollbar,kg/xslide/1.1.1/index", function(S, XScroll,ScrollBarPlugin,XSlide) {
         var slide = new XSlide({
             renderTo: "#J_Slide",
             crousel:true //寮€鍚棆杞湪椹�
@@ -239,6 +239,7 @@
          xscroll.plug(new ScrollBarPlugin());
 
         xscroll.render();
+
       })
       </script>
 

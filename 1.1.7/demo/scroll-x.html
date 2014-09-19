@@ -77,11 +77,10 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.7/index,kg/xscroll/1.1.7/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
+    KISSY.use("node,kg/xscroll/1.1.8/index,kg/xscroll/1.1.8/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
         var $ = S.all;
         var xscroll = new XScroll({
-            renderTo:"#J_Scroll",
-            autoRender:false
+            renderTo:"#J_Scroll"
         });
         xscroll.set("lockY",true);
         xscroll.plug(new ScrollBarPlugin({

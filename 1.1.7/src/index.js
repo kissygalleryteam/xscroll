@@ -112,11 +112,11 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             self._createContainer();
             var height = userConfig.height || self.$renderTo.height();
             var width = userConfig.width || self.$renderTo.width();
-            self.set("width", width);
-            self.set("height", height);
+            self.set("width", Math.round(width));
+            self.set("height", Math.round(height));
             self.set("scale", userConfig.scale || 1);
-            var containerWidth = userConfig.containerWidth || self.$content.width();
-            var containerHeight = userConfig.containerHeight || self.$content.height();
+            var containerWidth = Math.round(userConfig.containerWidth || self.$content.width());
+            var containerHeight = Math.round(userConfig.containerHeight || self.$content.height());
             self.set("containerWidth", containerWidth < self.get("width") ? self.get("width") : containerWidth);
             self.set("containerHeight", containerHeight < self.get("height") ? self.get("height") : containerHeight);
             self.set("initialContainerWidth", self.get("containerWidth"));
@@ -338,7 +338,6 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             var self = this;
             if (!self.get("boundryCheckEnabled") || self.get("lockX")) return;
             var offset = self.getOffset();
-            var width = self.get("width");
             var containerWidth = self.get("containerWidth");
             var boundry = self.boundry;
             if (offset.x > boundry.left) {
@@ -353,13 +352,13 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             var self = this;
             if (!self.get("boundryCheckEnabled") || self.get("lockY")) return;
             var offset = self.getOffset();
-            var height = self.get("height");
             var containerHeight = self.get("containerHeight");
+
             var boundry = self.boundry;
             if (offset.y > boundry.top) {
                 offset.y = boundry.top;
                 self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING, callback);
-            } else if (offset.y + containerHeight < boundry.bottom) {
+            } else if (offset.y + containerHeight < boundry.bottom){
                 offset.y = boundry.bottom - containerHeight;
                 self.scrollY(-offset.y, BOUNDRY_CHECK_DURATION, BOUNDRY_CHECK_EASING, callback);
             }
@@ -483,7 +482,7 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
                     originY = (e.origin.pageY - self.get("y")) / self.get("containerHeight");
                 });
                 self.$renderTo.on(Pinch.PINCH, function(e) {
-                    self._scale(scale * e.scale, originX, originY);
+                    self._scale(scale * e.scale, originX, originY,"pinch");
                 });
                 self.$renderTo.on(Pinch.PINCH_END, function(e) {
                     self.isScaling = false;
@@ -498,7 +497,7 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
                 self.refresh();
             })
         },
-        _scale: function(scale, originX, originY) {
+        _scale: function(scale, originX, originY,triggerEvent) {
             var self = this;
             if (!self.userConfig.scalable || self.get("scale") == scale || !scale) return;
 
@@ -513,8 +512,8 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             var boundry = self.boundry;
             var containerWidth = scale * self.get("initialContainerWidth");
             var containerHeight = scale * self.get("initialContainerHeight");
-            self.set("containerWidth", containerWidth > self.get("width") ? containerWidth : self.get("width"));
-            self.set("containerHeight", containerHeight > self.get("height") ? containerHeight : self.get("height"));
+            self.set("containerWidth", Math.round(containerWidth > self.get("width") ? containerWidth : self.get("width")));
+            self.set("containerHeight", Math.round(containerHeight > self.get("height") ? containerHeight : self.get("height")));
             self.set("scale", scale);
             var x = originX * (self.get("initialContainerWidth") * self.scaleBegin - self.get("containerWidth")) + self.scaleBeginX;
             var y = originY * (self.get("initialContainerHeight") * self.scaleBegin - self.get("containerHeight")) + self.scaleBeginY;
@@ -534,7 +533,12 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             self.set("y", y);
             self._transform();
             self.fire(SCALE, {
-                scale: scale
+                scale: scale,
+                origin:{
+                    x:originX,
+                    y:originY
+                },
+                triggerEvent:triggerEvent
             })
         },
         /*
@@ -568,7 +572,7 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
                 run();
                 self.$ctn[0].style[transition] = transitionStr;
                 self.$content[0].style[transition] = transitionStr;
-                self._scale(scale, originX, originY);
+                self._scale(scale, originX, originY,"scaleTo");
                 self.fire(SCALE_ANIMATE, {
                     scale: self.get("scale"),
                     duration: duration,
@@ -576,7 +580,8 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
                     offset: {
                         x: self.get("x"),
                         y: self.get("y")
-                    }
+                    },
+                    origin:{x:originX,y:originY}
                 });
         },
         panEndHandler: function(e) {
@@ -723,5 +728,5 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.7/pan', 'kg/xscroll/1.1.7/pinch', 'kg/xscroll/1.1.7/util']
+    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.8/pan', 'kg/xscroll/1.1.8/pinch', 'kg/xscroll/1.1.8/util']
 });
