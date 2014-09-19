@@ -353,7 +353,6 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             if (!self.get("boundryCheckEnabled") || self.get("lockY")) return;
             var offset = self.getOffset();
             var containerHeight = self.get("containerHeight");
-
             var boundry = self.boundry;
             if (offset.y > boundry.top) {
                 offset.y = boundry.top;
