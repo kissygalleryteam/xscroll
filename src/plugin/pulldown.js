@@ -10,6 +10,7 @@ KISSY.add(function(S, Base, Node) {
 	var containerCls;
 	var content = "Pull Down To Refresh";
 	var loadingContent = "Loading...";
+
 	var PullDown = Base.extend({
 		pluginId:"xscroll/plugin/pulldown",
 		pluginInitializer:function(xscroll){
@@ -31,20 +32,8 @@ KISSY.add(function(S, Base, Node) {
 				})
 			}
 		},
-		pluginDestructor:function () {
-			 var self = this;
-			 //remove element
-			 self.$pulldown && self.$pulldown.remove();
-			 self.detach("afterStatusChange");
-			 self.xscroll.detach("panStart",self._panStartHandler,self);
-			 self.xscroll.detach("pan",self._panHandler,self);
-			 self.xscroll.detach("panEnd",self._panEndHandler,self);
-			 delete self;
-		},
 		render: function() {
 			var self = this;
-			if (self.__isRender) return;
-			self.__isRender = true;
 			var containerCls = prefix + "container";
 			var tpl = '<div class="' + containerCls + '"></div>';
 			var height = self.userConfig.height || 60;
@@ -62,47 +51,46 @@ KISSY.add(function(S, Base, Node) {
 			var self = this;
 			if(self._evtBinded) return;
 			self._evtBinded = true;
+			var height = self.userConfig.height || 60;
+			var loadingItv;
+			var offsetTop = 0;
 			var $pulldown = self.$pulldown;
 			var xscroll = self.xscroll;
-			xscroll.on("pan", self._panHandler,self)
+			xscroll.on("pan", function(e) {
+				offsetTop = e.offset.y;
+				if(offsetTop < 0) return;
+				Math.abs(offsetTop) < height ? self.set("status", "down") : self.set("status", "up");
+			})
+
 			self.on("afterStatusChange", function(e) {
 				$pulldown.removeClass(prefix + e.prevVal).addClass(prefix + e.newVal);
 				self.setContent(self.userConfig[e.newVal + "Content"]);
+
 			})
-			xscroll.on("panStart",self._panStartHandler,self)
-			xscroll.on("panEnd",self._panEndHandler,self)
-		},
-		_panStartHandler:function(e){
-			clearTimeout(this.loadingItv);
-		},
-		_panHandler:function  (e) {
-			var self = this;
-			var	offsetTop = e.offset.y;
-			var height = self.userConfig.height || 60;
-			if(offsetTop < 0) return;
-			Math.abs(offsetTop) < height ? self.set("status", "down") : self.set("status", "up");
-		},
-		_panEndHandler:function(e){
-			var self = this;
-			var xscroll = self.xscroll;
+
 			var top = xscroll.boundry.top;
-			var height = self.userConfig.height || 60;
-			var offsetTop = xscroll.getOffsetTop();
-			if(offsetTop > height){
-				xscroll.boundry.top = top;
-				!self._expanded && xscroll.boundry.expandTop(height);
-				self._expanded = true;
-				xscroll.bounce(true);
-				self.set("status","loading");
-				clearTimeout(self.loadingItv);
-				self.loadingItv = setTimeout(function(){
-					xscroll.boundry.expandTop(-height);
-					xscroll.bounce(true,function(){
-						self.fire("refresh");
-						self.userConfig.autoRefresh && window.location.reload();
-					})
-				},800);
-			}
+
+			xscroll.on("panStart",function(e){
+				clearTimeout(loadingItv);
+			})
+
+			xscroll.on("panEnd", function(e) {
+				var offsetTop = xscroll.getOffsetTop();
+				if(offsetTop > height){
+					xscroll.boundry.top = top;
+					xscroll.boundry.expandTop(height);
+					xscroll.bounce(true);
+					self.set("status","loading");
+					clearTimeout(loadingItv);
+					loadingItv = setTimeout(function(){
+						xscroll.boundry.expandTop(-height);
+						xscroll.bounce(true,function(){
+							self.fire("refresh");
+							self.userConfig.autoRefresh && window.location.reload();
+						})
+					},800);
+				}
+			})
 		},
 		setContent: function(content) {
 			var self = this;

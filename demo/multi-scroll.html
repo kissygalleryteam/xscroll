@@ -52,7 +52,7 @@
     }
 
     #J_Scroll2 .ks-xscroll-container, #J_Scroll2 .ks-xscroll-content{
-        width: auto;
+        width: 1000px;
     }
     </style>
     <div id="header">XScroll</div>
@@ -63,18 +63,18 @@
                     <div id="J_Scroll2">
                         <div class="ks-xscroll-container">
                             <ul class="ks-xscroll-content">
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                    <li>block</li>
-                                </ul>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                                <li>block</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.8/index,kg/xscroll/1.1.8/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
+    KISSY.use("node,kg/xscroll/1.1.6/index,kg/xscroll/1.1.6/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
         var $ = S.all;
         var xscroll = new XScroll({
             renderTo:"#J_Scroll",

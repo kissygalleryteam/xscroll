@@ -16,7 +16,6 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background: #888;
     }
 
     #J_Scroll .ks-xscroll-content{
@@ -439,15 +438,14 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.8/index,kg/xscroll/1.1.8/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
+    KISSY.use("node,kg/xscroll/1.1.6/index,kg/xscroll/1.1.6/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
         var $ = S.all;
         var xscroll = new XScroll({
             renderTo:"#J_Scroll",
             autoRender:false,
             scalable:true,
             maxScale:2,
-            minScale:1,
-            SROLL_ACCELERATION:0.002
+            minScale:1
         });
         xscroll.plug(new ScrollBarPlugin({
         }));

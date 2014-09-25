@@ -1,14 +1,14 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.8/pan
+kg/xscroll/1.1.6/pan
 
 */
 /*
 	Pan Event for KISSY MINI 
 	@author xiaoqi.huxq@alibaba-inc.com
 */
-;KISSY.add('kg/xscroll/1.1.8/pan',function(S, Node,Event) {
+;KISSY.add('kg/xscroll/1.1.6/pan',function(S, Node,Event) {
 	var doc = window.document;
 	var PAN_START = 'gesturePanStart',
 		PAN_END = 'gesturePanEnd',
