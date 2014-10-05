@@ -142,8 +142,7 @@
         $(".ks-xscroll-content").html(html);
 
         var xscroll = new XScroll({
-            renderTo:"#J_Scroll",
-            autoRender:false
+            renderTo:"#J_Scroll"
         });
 
         xscroll.set("lockX",true);
@@ -163,8 +162,6 @@
         })
 
         xscroll.plug(pulldown)
-
-        window.xscroll = xscroll
 
         xscroll.render();
     });

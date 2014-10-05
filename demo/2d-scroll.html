@@ -462,7 +462,6 @@
             originY = (e.pageY - xscroll.get("y")) / xscroll.get("containerHeight")
             xscroll.get("scale") > minScale ? xscroll.scaleTo(minScale, originX,originY,200) : xscroll.scaleTo(maxScale, originX,originY,200);
         });
-        window.xscroll = xscroll
     });
     </script>
 </body>
