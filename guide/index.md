@@ -19,13 +19,7 @@ XScroll
 
 ### Demo
 
-* [水平方向滚动](../demo/scroll-x.html)
-* [垂直方向滚动](../demo/scroll-y.html)
-* [2D滚动](../demo/2d-scroll.html)
-* [支持缩放+滚动条](../demo/zoom.html)
-* [可缩放线图](../demo/scroll-linechart.html)
-* [下拉刷新](../demo/pulldown-refresh.html)
-* [动态侧栏菜单(双xscroll实例)](../demo/sidebar.html)
+* [demo地址](../demo/index.html)
 	
 
 ## API说明
