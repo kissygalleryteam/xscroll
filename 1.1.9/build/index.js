@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.8/index
+kg/xscroll/1.1.9/index
 
 */
 /**
@@ -9,7 +9,7 @@ kg/xscroll/1.1.8/index
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @module xscroll
  **/
-KISSY.add('kg/xscroll/1.1.8/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
+KISSY.add('kg/xscroll/1.1.9/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
     var $ = S.all;
     var SROLL_ACCELERATION = 0.0005;
     //event names
@@ -745,5 +745,5 @@ KISSY.add('kg/xscroll/1.1.8/index',function(S, Node, Event, Base, Pan, Pinch, Ut
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.8/pan', 'kg/xscroll/1.1.8/pinch', 'kg/xscroll/1.1.8/util']
+    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.9/pan', 'kg/xscroll/1.1.9/pinch', 'kg/xscroll/1.1.9/util']
 });
