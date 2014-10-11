@@ -1,2 +1,2 @@
-/*!build time : 2014-09-16 2:10:53 PM*/
-KISSY.config("modules",{"kg/xscroll/1.1.8/plugin/scrollbar":{requires:["node","base","anim","kg/xscroll/1.1.8/util"]}});
+/*!build time : 2014-10-11 4:04:01 PM*/
+KISSY.config("modules",{"kg/xscroll/1.1.9/plugin/scrollbar":{requires:["node","base","anim","kg/xscroll/1.1.9/util"]}});

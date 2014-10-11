@@ -173,11 +173,10 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.8/index,kg/xscroll/1.1.8/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
+    KISSY.use("node,kg/xscroll/1.1.9/index,kg/xscroll/1.1.9/plugin/scrollbar",function(S,Node,XScroll,ScrollBarPlugin){
         var $ = S.all;
         var xscroll = new XScroll({
-            renderTo:"#J_Scroll",
-            autoRender:false
+            renderTo:"#J_Scroll"
         });
 
         xscroll.set("lockX",true);
@@ -187,8 +186,7 @@
 
 
         var xscroll2 = new XScroll({
-            renderTo:"#J_Scroll2",
-            autoRender:false
+            renderTo:"#J_Scroll2"
         });
         xscroll2.set("lockY",true);
         xscroll2.plug(new ScrollBarPlugin({

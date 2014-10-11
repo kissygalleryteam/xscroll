@@ -132,7 +132,7 @@
             }
         ]
     });
-    KISSY.use("node,kg/xscroll/1.1.8/index,kg/xscroll/1.1.8/plugin/scrollbar,kg/xscroll/1.1.8/plugin/pulldown",function(S,Node,XScroll,ScrollBarPlugin,PullDownPlugin){
+    KISSY.use("node,kg/xscroll/1.1.9/index,kg/xscroll/1.1.9/plugin/scrollbar,kg/xscroll/1.1.9/plugin/pulldown",function(S,Node,XScroll,ScrollBarPlugin,PullDownPlugin){
         var $ = S.all;
         var html ="";
         for(var i=0;i<100;i++){
@@ -142,8 +142,7 @@
         $(".ks-xscroll-content").html(html);
 
         var xscroll = new XScroll({
-            renderTo:"#J_Scroll",
-            autoRender:false
+            renderTo:"#J_Scroll"
         });
 
         xscroll.set("lockX",true);
@@ -163,8 +162,6 @@
         })
 
         xscroll.plug(pulldown)
-
-        window.xscroll = xscroll
 
         xscroll.render();
     });
