@@ -56,4 +56,5 @@ XScroll
 #### v1.1.9
 
 - 新增gpuAcceleration开关是否启用GPU加速
+- 修复超出边缘点击不进行回弹的Bug
 
