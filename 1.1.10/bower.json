@@ -5,9 +5,6 @@
     "xiaoqi.huxq@alibaba-inc.com"
   ],
   "main": "src/index.js",
-  "keywords": [
-    "xscroll"
-  ],
   "license": "MIT",
   "private": true,
   "ignore": [
