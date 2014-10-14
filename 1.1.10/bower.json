@@ -11,6 +11,10 @@
   "license": "MIT",
   "private": true,
   "ignore": [
+    "build",
+    "demo",
+    "guide",
+    "meta",
     "**/.*",
     "node_modules",
     "bower_components",
