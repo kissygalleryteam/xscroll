@@ -1,6 +1,6 @@
 {
     "name": "xscroll",
-    "main":"./src/",
+    "main":"./src/index.js",
     "version":"1.1.10",
     "ignore": [
         "**/*",
