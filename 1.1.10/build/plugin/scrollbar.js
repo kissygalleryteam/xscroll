@@ -1,52 +1,10 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/util
-kg/xscroll/1.1.10/plugin/scrollbar
-
-*/
-;
-KISSY.add('kg/xscroll/1.1.10/util',function(S) {
-	var Util = {
-		/*
-        vendors
-        @example webkit|moz|ms|O 
-    	*/
-		vendor: (function() {
-			var el = document.createElement('div').style;
-			var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
-				transform,
-				i = 0,
-				l = vendors.length;
-			for (; i < l; i++) {
-				transform = vendors[i] + 'ransform';
-				if (transform in el) return vendors[i].substr(0, vendors[i].length - 1);
-			}
-			return false;
-		})(),
-		/**
-		 *  attrs with vendor
-		 *  @return { String }
-		 **/
-		prefixStyle: function(style) {
-			if (this.vendor === false) return false;
-			if (this.vendor === '') return style;
-			return this.vendor + style.charAt(0).toUpperCase() + style.substr(1);
-		},
-		isAndroid:/Android /.test(window.navigator.appVersion),
-		isBadAndroid : /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion))
-	}
-
-	return Util;
-
-});
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.10/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add(function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -263,5 +221,5 @@ KISSY.add('kg/xscroll/1.1.10/plugin/scrollbar',function(S, Node, Base, Anim,Util
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.10/util']
+	requires: ['node', 'base', 'anim','xscroll/util']
 })

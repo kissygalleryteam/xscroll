@@ -1,10 +1,4 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/tap
-
-*/
-;KISSY.add('kg/xscroll/1.1.10/tap',function(S,Node,Event) {
+;KISSY.add(function(S,Node,Event) {
         var $ = S.all;
         var tap_max_touchtime = 250, 
             tap_max_distance = 10, 

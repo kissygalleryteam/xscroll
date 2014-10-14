@@ -1,16 +1,10 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/plugin/pulldown
-
-*/
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @plugin pulldown xscroll下拉刷新插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.10/plugin/pulldown',function(S, Base, Node) {
+KISSY.add(function(S, Base, Node) {
 	var $ = S.all;
 	var prefix;
 	var containerCls;

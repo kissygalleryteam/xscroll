@@ -23,10 +23,12 @@ module.exports = function(grunt) {
                 packages: [
                     {
                         name: '<%= pkg.name %>',
-                        path: '../'
+                        path: 'build/',
+                        ignorePackageNameInUri:true
                     }
                 ],
-                depFilePath: 'mods.js',
+                // depFilePath: 'mods.js',
+                comboOnly: true,
                 fixModuleName:true,
                 map: [["<%= pkg.name %>/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
             },
@@ -34,8 +36,8 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: SRC,
-                        src: [ './*.js','./plugin/*.js','!./node_modules/**/*.js','!./demo/**/*.js' ,'!./test/**/*.js','!./Gruntfile.js'],
+                        cwd: 'build/',
+                        src: [ '**/*.js','!map.js'],
                         dest: 'build/'
                     }
                 ]
@@ -91,11 +93,15 @@ module.exports = function(grunt) {
 		copy : {
 			main: {
 				files:[
-					{
+					{  
 						expand:true,
 						cwd:SRC,
+
 						src: [
+                            '**/*.js',
 							'**/*.css',
+                            '!meta/**/*',
+                            '!test/**/*',
 							'!build/**/*.css',
 							'!demo/**/*.css',
                             '!node_modules/**/*',
@@ -167,7 +173,7 @@ module.exports = function(grunt) {
 
 
 	grunt.registerTask('build', '默认构建任务', function() {
-		task.run(['clean:build', 'kmc','uglify', 'copy']);
+		task.run(['clean:build', 'copy','kmc','uglify']);
 	});
 
     return grunt.registerTask('default', '',function(type){
