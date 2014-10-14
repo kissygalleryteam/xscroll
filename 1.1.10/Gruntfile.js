@@ -35,7 +35,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: SRC,
-                        src: [ './*.js','./plugin/*.js','!./node_modules/**/*.js','!./demo/**/*.js' ,'!./test/**/*.js','!Gruntfile.js'],
+                        src: [ './*.js','./plugin/*.js','!./node_modules/**/*.js','!./demo/**/*.js' ,'!./test/**/*.js','!./Gruntfile.js'],
                         dest: 'build/'
                     }
                 ]
@@ -99,7 +99,8 @@ module.exports = function(grunt) {
 							'!build/**/*.css',
 							'!demo/**/*.css',
                             '!node_modules/**/*',
-                            '!node_modules/**/*.css'
+                            '!node_modules/**/*.css',
+                            '!Gruntfile.js'
 						], 
 						dest: './build/', 
 						filter: 'isFile'
