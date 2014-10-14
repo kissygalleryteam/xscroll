@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <script src="http://g.tbcdn.cn/kissy/k/1.4.2/seed-min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="demo.css">
+    <style type="text/css">
+    body,ul,li,div,img{
+        padding: 0;margin:0;
+    }
+    img{
+        display: block;
+    }
+    body{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .mask{
+        background: #000;
+         position: absolute;
+        z-index: 99;
+         width: 100%;
+         height: 100%;
+        top:0;
+        display: none;
+        -webkit-transform:translateZ(3px);
+       
+    }
+    #J_Scroll{
+         position: absolute;
+        width: 100%;
+         height:60%;
+        top:20%;
+        z-index: 100;
+        -webkit-transform:translateZ(4px);
+        display: none;
+    }
+
+    
+    #J_Slide{
+             width: 100%;
+             max-width: 640px;
+             margin:auto;
+             overflow: hidden;
+             height:100%;
+           }
+           #J_Slide .ks-xslide-item,#J_Slide .ks-xslide-item img{
+             width: 100%;
+             display: block;
+             float: left;
+             overflow: hidden;
+             height: 100%;
+           }
+           .ks-xslide-layer{
+
+           }
+           .ks-xslide-nav{
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left:0;
+            text-align: center;
+            z-index: 1;
+           }
+           .ks-xslide-nav .ks-xslide-nav-item{
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ddd;
+            text-indent: 9999px;
+            overflow: hidden;
+            border-radius:5px;
+            margin:0px 2px;
+           }
+           .ks-xslide-nav .current{
+            background: #f60;
+           }
+
+
+    </style>
+</head>
+<body>
+
+<div id="J_Slide">
+        <ul class="ks-xslide-nav">
+        </ul>  
+         <ul class="ks-xslide-layer">
+          <li class="ks-xslide-item">
+              <img src="http://gtms02.alicdn.com/tps/i3/TB1IjjBFVXXXXbBXVXXXXXXXXXX_.jpg_790x10000Q75.jpg">
+          </li>
+          <li class="ks-xslide-item">
+              <img src="http://gtms02.alicdn.com/tps/i1/TB1lTLGFVXXXXbmXFXXXXXXXXXX_.jpg_790x10000Q75.jpg">
+          </li>
+
+           <li class="ks-xslide-item">
+              <img src="http://gtms02.alicdn.com/tps/i1/TB14PXOGXXXXXXWXXXXXXXXXXXX_.jpg_790x10000Q75.jpg">
+          </li>
+
+           <li class="ks-xslide-item">
+              <img src="http://gtms02.alicdn.com/tps/i2/TB1WP4sGXXXXXXTaXXXXXXXXXXX_.jpg_790x10000Q75.jpg">
+          </li>
+
+           <li class="ks-xslide-item">
+              <img src="http://gtms02.alicdn.com/tps/i1/TB1g1q6FVXXXXb2XpXXXXXXXXXX_.jpg_790x10000Q75.jpg">
+          </li>
+
+           <li class="ks-xslide-item">
+              <img src="http://gtms02.alicdn.com/tps/i4/TB1hp6XFVXXXXXmXXXXXXXXXXXX_.jpg_790x10000Q75.jpg">
+          </li>
+         </ul>
+      </div>
+
+<div class="mask" id="J_Mask"></div>
+     <div id="J_Scroll">
+        <div class="ks-xscroll-container">
+            <div class="ks-xscroll-content">
+                
+            </div>
+        </div>
+    </div>
+
+<script src="http://g.tbcdn.cn/kissy/k/1.4.2/seed-min.js" charset="utf-8"></script>
+      <script type="text/javascript">
+      KISSY.config({
+        packages:[
+          {
+            name:"kg",
+            path:KISSY.Config.debug ? "http://g.assets.daily.taobao.net/kg/":"http://g.tbcdn.cn/kg/",
+            combine:false,
+             ignorePackageNameInUri:true
+          }
+        ]
+      })
+      KISSY.use("kg/xslide/1.1.3/index,kg/xscroll/1.1.10/index,kg/xscroll/1.1.10/plugin/scrollbar", function(S, XSlide,XScroll,ScrollBarPlugin) {
+        var $ = S.all;
+        var $J_Mask = $("#J_Mask");
+
+        $("body").on("touchmove",function(e){e.preventDefault()})
+
+
+        var slide = new XSlide({
+            renderTo: "#J_Slide",
+            crousel:true
+        });
+
+        var xscroll= new XScroll({
+            renderTo:"#J_Scroll",
+            scalable:true,
+            maxScale:2,
+            minScale:1
+        })
+        xscroll.plug(new ScrollBarPlugin({type:"y"}))
+         xscroll.plug(new ScrollBarPlugin({type:"x"}))
+        xscroll.render();
+        
+         var minScale = xscroll.get("minScale");
+        var maxScale = xscroll.get("maxScale");
+
+        $(".ks-xslide-item").on("tap",function(e){
+            e.preventDefault();
+            xscroll.$content.html("<img style='width:100%' src="+$(e.currentTarget).all("img").attr("src")+">");
+             xscroll.$renderTo.show();
+             xscroll.set("containerHeight",xscroll.$content.all("img").height())
+             xscroll.set("height",xscroll.$content.all("img").height())
+             xscroll.set("scale",minScale);
+             xscroll.render();
+             xscroll.scrollTo({x:0,y:0});
+             $J_Mask.show();
+            
+            
+        })
+
+        
+        xscroll.$renderTo.on("doubleTap", function(e) {
+            originX = (e.pageX - xscroll.get("x")) / xscroll.get("containerWidth")
+            originY = (e.pageY - xscroll.get("y")) / xscroll.get("containerHeight")
+            xscroll.get("scale") > minScale ? xscroll.scaleTo(minScale, originX,originY,200) : xscroll.scaleTo(maxScale, originX,originY,200);
+        });
+
+        $J_Mask.on("tap",function(e){
+           xscroll.$renderTo.hide();
+           $(this).hide()
+        })
+
+
+
+        window.xscroll = xscroll;
+
+
+
+
+      })
+      </script>
+  </body>
+  </html>
