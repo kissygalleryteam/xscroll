@@ -221,5 +221,5 @@ KISSY.add(function(S, Node, Base, Anim,Util) {
 
 
 }, {
-	requires: ['node', 'base', 'anim','xscroll/util']
+	requires: ['node', 'base', 'anim','../util']
 })

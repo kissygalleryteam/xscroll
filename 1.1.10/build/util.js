@@ -1,5 +1,5 @@
 ;
-KISSY.add(function(S) {
+KISSY.add('kg/xscroll/1.1.10/util',function(S) {
 	var Util = {
 		/*
         vendors

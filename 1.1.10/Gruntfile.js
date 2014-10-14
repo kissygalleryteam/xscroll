@@ -22,15 +22,14 @@ module.exports = function(grunt) {
             options: {
                 packages: [
                     {
-                        name: '<%= pkg.name %>',
+                        name: 'kg/<%= pkg.name %>/<%= pkg.version %>/',
                         path: 'build/',
                         ignorePackageNameInUri:true
                     }
                 ],
-                // depFilePath: 'mods.js',
                 comboOnly: true,
                 fixModuleName:true,
-                map: [["<%= pkg.name %>/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
+                // map: [["<%= pkg.name %>/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
             },
             main: {
                 files: [
