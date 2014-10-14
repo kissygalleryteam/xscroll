@@ -761,5 +761,5 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.10/pan', 'kg/xscroll/1.1.10/pinch', 'kg/xscroll/1.1.10/util']
+    requires: ['node', 'event', 'base', 'xscroll/pan', 'xscroll/pinch', 'xscroll/util']
 });

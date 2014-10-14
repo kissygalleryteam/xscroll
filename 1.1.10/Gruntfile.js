@@ -23,7 +23,7 @@ module.exports = function(grunt) {
                 packages: [
                     {
                         name: '<%= pkg.name %>',
-                        path: './'
+                        path: '../'
                     }
                 ],
                 depFilePath: 'mods.js',

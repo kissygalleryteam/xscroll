@@ -1,3 +1,3 @@
 KISSY.config('modules', {
- 'kg/xscroll/1.1.10/plugin/scrollbar': { requires: ['node', 'base', 'anim', 'kg/xscroll/1.1.10/util']} 
+ 'kg/xscroll/1.1.10/plugin/scrollbar': { requires: ['node', 'base', 'anim']} 
 });
