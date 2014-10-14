@@ -1,16 +1,10 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/plugin/scrollbar
-
-*/
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.10/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add(function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -227,5 +221,5 @@ KISSY.add('kg/xscroll/1.1.10/plugin/scrollbar',function(S, Node, Base, Anim,Util
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/kg/xscroll/1.1.10/1.1.10/util']
+	requires: ['node', 'base', 'anim','kg/xscroll/1.1.10/util']
 })

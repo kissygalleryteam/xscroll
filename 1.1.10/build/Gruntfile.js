@@ -1,3 +1,9 @@
+/*
+combined files : 
+
+kg/xscroll/1.1.10/Gruntfile
+
+*/
 module.exports = function(grunt) {
 	var task = grunt.task;
     var SRC = './';
@@ -175,3 +181,4 @@ module.exports = function(grunt) {
 		}
 	});
 };
+
