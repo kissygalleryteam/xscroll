@@ -1,0 +1,12 @@
+{
+    "name": "xscroll",
+    "main":"./src/",
+    "version":"1.1.10",
+    "ignore": [
+        "**/*",
+        "!index.js",
+        "!index.css",
+        "!index.less",
+        "!lib/**/*"
+    ]
+}
