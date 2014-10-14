@@ -5,6 +5,7 @@
  **/
 KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
     var $ = S.all;
+    var SROLL_ACCELERATION = 0.0005;
     //event names
     var SCROLL_END = "scrollEnd";
     var SCROLL = "scroll";
@@ -15,10 +16,7 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
     var SCALE_ANIMATE = "scaleAnimate";
     var SCALE = "scale";
     var AFTER_RENDER = "afterRender";
-    // var SYNC = "sync";
     var REFRESH = "refresh";
-    //constant acceleration for scrolling
-    var SROLL_ACCELERATION = 0.0005;
     //boundry checked bounce effect
     var BOUNDRY_CHECK_DURATION = 300;
     var BOUNDRY_CHECK_EASING = "ease-in-out";
@@ -42,12 +40,14 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
 
     var transformStr = Util.vendor ? ["-", Util.vendor, "-transform"].join("") : "transform";
 
+
     function quadratic2cubicBezier(a, b) {
         return [
             [(a / 3 + (a + b) / 3 - a) / (b - a), (a * a / 3 + a * b * 2 / 3 - a * a) / (b * b - a * a)],
             [(b / 3 + (a + b) / 3 - a) / (b - a), (b * b / 3 + a * b * 2 / 3 - a * a) / (b * b - a * a)]
         ];
     }
+
 
     var RAF = window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
@@ -85,6 +85,7 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
     var XScroll = Base.extend({
         initializer: function() {
             var self = this;
+            window.xscroll = this;
             var userConfig = self.userConfig = S.mix({
                 scalable: false
             }, self.userConfig, undefined, undefined, true);
@@ -218,7 +219,13 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
         stop: function() {
             var self = this;
             if(self.isScaling) return;
+            var boundry = self.boundry;
             var offset = self.getOffset();
+
+            //outside of boundry 
+            if (offset.y > boundry.top || offset.y + self.get("containerHeight") < boundry.bottom || offset.x > boundry.left || offset.x + self.get("containerWidth") < boundry.right) {
+                return;
+            } 
             self.translate(offset);
             self._noTransition();
             cancelRAF(self.rafX);
@@ -230,8 +237,9 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             });
         },
         _transform: function() {
-            this.$content[0].style[transform] = "translate(" + this.get("x") + "px,0px) translateZ(0) scaleX(" + this.get("scale") + ") scaleY(" + this.get("scale") + ")";
-            this.$ctn[0].style[transform] = "translate(0px," + this.get("y") + "px) translateZ(0)";
+            var translateZ = this.get("gpuAcceleration") ? " translateZ(0) " : "";
+            this.$content[0].style[transform] = "translate(" + this.get("x") + "px,0px)  scaleX(" + this.get("scale") + ") scaleY(" + this.get("scale") + ") " + translateZ;
+            this.$ctn[0].style[transform] = "translate(0px," + this.get("y") + "px) "+translateZ;
         },
         getOffset: function() {
             var self = this;
@@ -266,36 +274,46 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
         },
         scrollX: function(x, duration, easing, callback) {
             var self = this;
+            var x = Math.round(x);
             if (self.get("lockX")) return;
             var duration = duration || 0;
+            var easing = easing || "cubic-bezier(0.333333, 0.666667, 0.666667, 1)";
             var content = self.$content[0];
             self.translateX(-x);
-            var transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
+            var transitionStr = duration > 0 ? [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("") : "none";
             content.style[transition] = transitionStr;
-            self._scrollHandler(duration, callback, easing, transitionStr, "x");
+            self._scrollHandler(-x,duration, callback, easing, transitionStr, "x");
             return content.style[transition] = transitionStr;
         },
         scrollY: function(y, duration, easing, callback) {
             var self = this;
+            var y = Math.round(y);
             if (self.get("lockY")) return;
             var duration = duration || 0;
+            var easing = easing || "cubic-bezier(0.333333, 0.666667, 0.666667, 1)";
             var container = self.$ctn[0];
             self.translateY(-y);
-            var transitionStr = [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("");
+            var transitionStr = duration > 0 ? [transformStr, " ", duration / 1000, "s ", easing, " 0s"].join("") : "none";
             container.style[transition] = transitionStr;
-            self._scrollHandler(duration, callback, easing, transitionStr, "y");
+            self._scrollHandler(-y,duration, callback, easing, transitionStr, "y");
             return container.style[transition] = transitionStr;
         },
-        _scrollHandler: function(duration, callback, easing, transitionStr, type) {
+        _scrollHandler: function(dest,duration, callback, easing, transitionStr, type) {
             var self = this;
+            var offset = self.getOffset();
             if (duration <= 0) {
                 self.fire(SCROLL, {
+                   zoomType: type,
+                   offset: self.getOffset()
+                });
+                self.fire(SCROLL_END, {
                     zoomType: type,
-                    offset: self.getOffset()
+                    offset: offset
                 });
                 return;
             }
             var Type = type.toUpperCase();
+
             self['isScrolling' + Type] = true;
             var start = Date.now();
             self['destTime' + Type] = start + duration;
@@ -353,7 +371,6 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             if (!self.get("boundryCheckEnabled") || self.get("lockY")) return;
             var offset = self.getOffset();
             var containerHeight = self.get("containerHeight");
-
             var boundry = self.boundry;
             if (offset.y > boundry.top) {
                 offset.y = boundry.top;
@@ -597,12 +614,25 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
                 //保证常规滚动时间相同 x y方向不发生时间差
                 duration = Math.max(transX.duration, transY.duration);
             }
-            transX && self.scrollX(x, duration || transX['duration'], transX['easing'], function(e) {
-                self._scrollEndHandler("x");
-            });
-            transY && self.scrollY(y, duration || transY['duration'], transY['easing'], function(e) {
-                self._scrollEndHandler("y");
-            });
+            if(transX){
+                if(transX['duration'] < 100){
+                     self._scrollEndHandler("x");
+                }else{
+                    self.scrollX(x, duration || transX['duration'], transX['easing'], function(e) {
+                        self._scrollEndHandler("x");
+                    });
+                }
+            }
+            
+            if(transY){
+                if(transY['duration'] < 100){
+                    self._scrollEndHandler("y");
+                }else{
+                    self.scrollY(y, duration || transY['duration'], transY['easing'], function(e) {
+                        self._scrollEndHandler("y");
+                    });
+                }
+            }
             //judge the direction
             self.set("directionX", e.velocityX < 0 ? "left" : "right");
             self.set("directionY", e.velocityY < 0 ? "up" : "down");
@@ -723,10 +753,13 @@ KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
             },
             originY: {
                 value: 0
+            },
+            gpuAcceleration:{
+                value:true
             }
         }
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.8/pan', 'kg/xscroll/1.1.8/pinch', 'kg/xscroll/1.1.8/util']
+    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.10/pan', 'kg/xscroll/1.1.10/pinch', 'kg/xscroll/1.1.10/util']
 });

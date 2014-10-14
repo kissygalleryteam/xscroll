@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-kg/xscroll/1.1.8/plugin/fastscroll
+kg/xscroll/1.1.10/plugin/fastscroll
 
 */
 /**
@@ -10,7 +10,7 @@ kg/xscroll/1.1.8/plugin/fastscroll
  * @plugin fastscroll 加速滚动
  **/
 ;
-KISSY.add('kg/xscroll/1.1.8/plugin/fastscroll',function(S, Base, Node,Event) {
+KISSY.add('kg/xscroll/1.1.10/plugin/fastscroll',function(S, Base, Node,Event) {
 	var $ = S.all;
 	//最小的滑动速度
 	var MIN_PAN_VELOCITY = 1;
