@@ -16,6 +16,8 @@
     "guide",
     "meta",
     "**/.*",
+    "**/*.json",
+    "**/*.md",
     "node_modules",
     "bower_components",
     "test",
