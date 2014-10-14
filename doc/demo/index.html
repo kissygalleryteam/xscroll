@@ -40,7 +40,7 @@
 	<div id="J_Scroll">
 	<div class="ks-xscroll-container">
 		<div class="ks-xscroll-content">
-	<h1>Demo</h1>
+	<h1>XScroll Demo - 滚动</h1>
 	<ul>
 		<li><a href="scroll-x.html">水平方向滚动</a></li>
 		<li><a href="scroll-y.html">垂直方向滚动</a></li>
@@ -53,6 +53,7 @@
 		<li><a href="multi-scroll.html">多个xscroll嵌套</a></li>
 		<li><a href="indicator.html">缩略图</a></li>
 		<li><a href="with-xslide-zoom.html">轮播+点击查看缩略图</a></li>
+		<li><a href="http://gallery.kissyui.com/xlist/doc/demo/index.html">xlist demo</a></li>
 		</ul>
 	</div>
 	</div>
@@ -67,12 +68,11 @@
             }
         ]
     });
-    KISSY.use("kg/xscroll/1.1.8/index,kg/xscroll/1.1.8/plugin/scrollbar",function(S,XScroll,ScrollBarPlugin){
+    KISSY.use("kg/xscroll/1.1.10/index,kg/xscroll/1.1.10/plugin/scrollbar",function(S,XScroll,ScrollBarPlugin){
     	var $ = S.all;
         var xscroll = new XScroll({
             renderTo:"#J_Scroll"
         });
-        console.log($(".ks-xscroll-content").height())
         xscroll.set("lockX",true);
         xscroll.plug(new ScrollBarPlugin());
         xscroll.render();

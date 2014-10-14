@@ -4,7 +4,7 @@
  * @plugin scrollbar XScroll滚动条插件
  **/
 ;
-KISSY.add('kg/xscroll/1.1.10/plugin/scrollbar',function(S, Node, Base, Anim,Util) {
+KISSY.add(function(S, Node, Base, Anim,Util) {
 	var $ = S.all;
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;

@@ -3,7 +3,7 @@
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
  * @module xscroll
  **/
-KISSY.add('kg/xscroll/1.1.10/index',function(S, Node, Event, Base, Pan, Pinch, Util) {
+KISSY.add(function(S, Node, Event, Base, Pan, Pinch, Util) {
     var $ = S.all;
     var SROLL_ACCELERATION = 0.0005;
     //event names

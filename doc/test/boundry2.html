@@ -144,17 +144,16 @@
             autoRender:false
         });
 
-        // xscroll.set("lockX",true);
+        xscroll.set("lockX",true);
         xscroll.plug(new ScrollBarPlugin());
 
         window.xscroll = xscroll
 
         xscroll.render();
-        xscroll.boundry.expandTop(100);
-        xscroll.boundry.expandBottom(100);
+        // xscroll.boundry.expandTop(-300);
+        // xscroll.boundry.expandBottom(-300);
         // xscroll.boundry.expandLeft(100);
         // xscroll.boundry.expandRight(100);
-        xscroll.boundry.resetTop()
         // xscroll.boundry.expandTop(-100);
     });
     </script>
