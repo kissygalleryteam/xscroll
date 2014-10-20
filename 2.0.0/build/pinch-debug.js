@@ -59,5 +59,7 @@ define('kg/xscroll/2.0.0/pinch',["./util","./event"],function(require, exports, 
 		PINCH_END: PINCH_END
 	};
 
+	module.exports = Pinch;
+
 
 });

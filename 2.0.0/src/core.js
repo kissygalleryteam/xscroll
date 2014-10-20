@@ -843,4 +843,5 @@
 
    window.XScroll = XScroll;
 
+   module.exports = XScroll;
 

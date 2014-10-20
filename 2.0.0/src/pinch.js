@@ -58,3 +58,5 @@
 		PINCH_END: PINCH_END
 	};
 
+	module.exports = Pinch;
+

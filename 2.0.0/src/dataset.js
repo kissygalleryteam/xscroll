@@ -42,5 +42,5 @@
 		return this.id;
 	};
 
-
+	module.exports = DataSet;
 

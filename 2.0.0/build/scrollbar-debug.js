@@ -184,5 +184,7 @@ define('kg/xscroll/2.0.0/scrollbar',["./util"],function(require, exports, module
 		}
 	});
 
+	module.exports = ScrollBar;
+
 
 });

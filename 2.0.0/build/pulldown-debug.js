@@ -168,4 +168,6 @@ define('kg/xscroll/2.0.0/pulldown',["./util"],function(require, exports, module)
 		}
 	})
 
+	module.exports = PullDown;
+
 });

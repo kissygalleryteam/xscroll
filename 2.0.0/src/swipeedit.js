@@ -131,3 +131,5 @@
 			}
 		}
 	});
+
+	module.exports = SwipeEdit;

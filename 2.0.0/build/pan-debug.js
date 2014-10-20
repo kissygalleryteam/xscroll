@@ -167,5 +167,7 @@ define('kg/xscroll/2.0.0/pan',["./util","./event"],function(require, exports, mo
 		PAN:PAN
 	};
 
+	module.exports = Pan;
+
 
 });

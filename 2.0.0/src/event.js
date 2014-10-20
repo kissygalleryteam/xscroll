@@ -18,3 +18,5 @@
 			tgt.dispatchEvent(event);
 		}
 	};
+
+	module.exports = Gesture;

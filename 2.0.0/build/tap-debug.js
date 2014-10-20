@@ -167,6 +167,8 @@ define('kg/xscroll/2.0.0/tap',["./util","./event"],function(require, exports, mo
         DOUBLE_TAP:DOUBLE_TAP
     };
 
+    module.exports = Tap;
+
 
 
 });

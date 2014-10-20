@@ -166,4 +166,6 @@
         DOUBLE_TAP:DOUBLE_TAP
     };
 
+    module.exports = Tap;
+
 

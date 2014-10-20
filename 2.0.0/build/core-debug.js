@@ -844,6 +844,7 @@ define('kg/xscroll/2.0.0/core',["./util","./event","./pan","./tap","./pinch","./
 
    window.XScroll = XScroll;
 
+   module.exports = XScroll;
 
 
 });

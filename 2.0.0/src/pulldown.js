@@ -166,3 +166,5 @@
 			}
 		}
 	})
+
+	module.exports = PullDown;

@@ -166,3 +166,5 @@
 		PAN:PAN
 	};
 
+	module.exports = Pan;
+

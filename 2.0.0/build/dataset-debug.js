@@ -43,7 +43,7 @@ define('kg/xscroll/2.0.0/dataset',[],function(require, exports, module) {
 		return this.id;
 	};
 
-
+	module.exports = DataSet;
 
 
 });

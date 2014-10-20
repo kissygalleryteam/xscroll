@@ -133,4 +133,6 @@ define('kg/xscroll/2.0.0/swipeedit',["./util"],function(require, exports, module
 		}
 	});
 
+	module.exports = SwipeEdit;
+
 });
