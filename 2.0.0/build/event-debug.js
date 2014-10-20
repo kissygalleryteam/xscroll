@@ -1,6 +1,6 @@
-define('kg/xscroll/2.0.0/event',["util"],function(require, exports, module) {
+define('kg/xscroll/2.0.0/event',["./util"],function(require, exports, module) {
 define(function(require,exports,module){
-	var Util = require('util');
+	var Util = require('./util');
 	var gestures = {};
 	var Gesture = {
 		on:function(el,type,handler){

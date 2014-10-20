@@ -1,5 +1,5 @@
 define(function(require,exports,module){
-	var Util = require('util');
+	var Util = require('./util');
 	var gestures = {};
 	var Gesture = {
 		on:function(el,type,handler){

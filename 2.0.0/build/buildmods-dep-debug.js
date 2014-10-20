@@ -14,7 +14,7 @@ KISSY.config('modules',{
     },
     "kg/xscroll/2.0.0/event": {
         "requires": [
-            "util"
+            "./util"
         ]
     },
     "kg/xscroll/2.0.0/pan": {
