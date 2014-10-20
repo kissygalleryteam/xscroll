@@ -1,4 +1,3 @@
-define(function(require, exports, module) {
 
 	var DataSet = function(cfg){
 
@@ -44,6 +43,4 @@ define(function(require, exports, module) {
 	};
 
 
-	return DataSet;
 
-})

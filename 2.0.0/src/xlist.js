@@ -1,4 +1,3 @@
-define(function(require, exports, module) {
 	var Util = require('./util');
 	var XScroll = require('./core');
 	var DataSet = require('./dataset');
@@ -432,6 +431,4 @@ define(function(require, exports, module) {
 	else {
 		window.XList = XList;
 	}
-	return XList;
 
-});

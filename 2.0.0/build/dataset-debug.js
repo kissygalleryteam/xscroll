@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/dataset',[],function(require, exports, module) {
-define(function(require, exports, module) {
 
 	var DataSet = function(cfg){
 
@@ -45,7 +44,6 @@ define(function(require, exports, module) {
 	};
 
 
-	return DataSet;
 
-})
+
 });

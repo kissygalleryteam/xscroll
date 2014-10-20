@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/tap',["./util","./event"],function(require, exports, module) {
-define(function(require, exports, module) {
     var Util = require('./util');
     var Event = require("./event");
     var TAP = "tap";
@@ -161,7 +160,7 @@ define(function(require, exports, module) {
     document.addEventListener("touchstart", touchStart);
     document.addEventListener("touchend", touchEnd);
 
-    return {
+    var Tap= {
         TAP: TAP,
         TAP_HOLD:TAP_HOLD,
         SINGLE_TAP:SINGLE_TAP,
@@ -169,5 +168,5 @@ define(function(require, exports, module) {
     };
 
 
-});
+
 });

@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/event',["./util"],function(require, exports, module) {
-define(function(require,exports,module){
 	var Util = require('./util');
 	var gestures = {};
 	var Gesture = {
@@ -20,6 +19,5 @@ define(function(require,exports,module){
 			tgt.dispatchEvent(event);
 		}
 	};
-	return Gesture;
-});
+
 });

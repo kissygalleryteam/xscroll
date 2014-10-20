@@ -1,4 +1,3 @@
-define(function(require, exports, module) {
 	var Util = require('./util');
 	//transform
 	var transform = Util.prefixStyle("transform");
@@ -132,6 +131,3 @@ define(function(require, exports, module) {
 			}
 		}
 	});
-	return SwipeEdit;
-
-});

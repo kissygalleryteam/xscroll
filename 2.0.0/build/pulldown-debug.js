@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/pulldown',["./util"],function(require, exports, module) {
-define(function(require, exports, module) {
 	var Util = require('./util');
 	var prefix;
 	var containerCls;
@@ -169,7 +168,4 @@ define(function(require, exports, module) {
 		}
 	})
 
-	return PullDown;
-
-});
 });

@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/swipeedit',["./util"],function(require, exports, module) {
-define(function(require, exports, module) {
 	var Util = require('./util');
 	//transform
 	var transform = Util.prefixStyle("transform");
@@ -133,7 +132,5 @@ define(function(require, exports, module) {
 			}
 		}
 	});
-	return SwipeEdit;
 
-});
 });

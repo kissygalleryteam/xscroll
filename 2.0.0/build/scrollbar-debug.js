@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/scrollbar',["./util"],function(require, exports, module) {
-define(function(require,exports,module){
 
 	var Util = require('./util');
 	//最短滚动条高度
@@ -185,6 +184,5 @@ define(function(require,exports,module){
 		}
 	});
 
-	return ScrollBar;
-});
+
 });

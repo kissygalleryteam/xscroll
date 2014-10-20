@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/xlist',["./util","./core","./dataset","./swipeedit"],function(require, exports, module) {
-define(function(require, exports, module) {
 	var Util = require('./util');
 	var XScroll = require('./core');
 	var DataSet = require('./dataset');
@@ -433,7 +432,6 @@ define(function(require, exports, module) {
 	else {
 		window.XList = XList;
 	}
-	return XList;
 
-});
+
 });

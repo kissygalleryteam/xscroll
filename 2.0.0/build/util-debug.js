@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/util',[],function(require, exports, module) {
-define(function(require, exports, module) {
 	var Util = {
 
 		mix: function(to, from) {
@@ -53,5 +52,5 @@ define(function(require, exports, module) {
 		}
 	}
 	module.exports = Util;
-})
+
 });

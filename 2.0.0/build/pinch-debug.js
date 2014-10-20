@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/pinch',["./util","./event"],function(require, exports, module) {
-define(function(require,exports,module){
 	var Util = require('./util');
 	var Event = require("./event");
 	var doc = window.document;
@@ -54,11 +53,11 @@ define(function(require,exports,module){
 	document.addEventListener("touchmove",pinchMoveHandler)
 	document.addEventListener("touchend",pinchEndHandler)
 	//枚举
-	return {
+	var Pinch = {
 		PINCH_START: PINCH_START,
 		PINCH: PINCH,
 		PINCH_END: PINCH_END
 	};
 
-});
+
 });

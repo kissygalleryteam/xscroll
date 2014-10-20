@@ -226,19 +226,18 @@ body {
         packages: {
             "kg":{
                 tag: "20140918",
-                combine:true,
+                // combine:true,
                 base: "http://g.assets.daily.taobao.net/kg/"
             }
         }
     });
     require("kg/xscroll/2.0.0/core",function(XScroll){
-        console.log(arguments[0])
-        // var xscroll = new XScroll({
-        //     renderTo:"#J_Scroll",
-        //     scrollbarX:false,
-        //     lockX:true
-        // });
-        // xscroll.render();
+        var xscroll = new XScroll({
+            renderTo:"#J_Scroll",
+            scrollbarX:false,
+            lockX:true
+        });
+        xscroll.render();
     });
     </script>
 </body>

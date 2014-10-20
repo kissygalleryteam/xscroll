@@ -1,5 +1,4 @@
 define('kg/xscroll/2.0.0/pan',["./util","./event"],function(require, exports, module) {
-define(function(require,exports,module){
 	var Util = require('./util');
 	var Event = require("./event");
 	var doc = window.document;
@@ -162,11 +161,11 @@ define(function(require,exports,module){
 	document.addEventListener("touchmove",touchMoveHandler)
 	document.addEventListener("touchend",touchEndHandler)
 
-	return {
+	var Pan = {
 		PAN_START:PAN_START,
 		PAN_END:PAN_END,
 		PAN:PAN
-	}
+	};
 
-});
+
 });

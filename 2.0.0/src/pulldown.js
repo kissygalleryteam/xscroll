@@ -1,4 +1,3 @@
-define(function(require, exports, module) {
 	var Util = require('./util');
 	var prefix;
 	var containerCls;
@@ -167,7 +166,3 @@ define(function(require, exports, module) {
 			}
 		}
 	})
-
-	return PullDown;
-
-});
