@@ -1,4 +1,4 @@
-KISSY.add('kg/xscroll/2.0.0/core',["./util","./event","./pan","./tap","./pinch","./scrollbar","./pulldown","./swipeedit"],function(S ,require, exports, module) {
+define('kg/xscroll/2.0.0/core',["./util","./event","./pan","./tap","./pinch","./scrollbar","./pulldown","./swipeedit"],function(require, exports, module) {
 define(function(require, exports, module) {
     var win = window;
     var Util = require('./util');

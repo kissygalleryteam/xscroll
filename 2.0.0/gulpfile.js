@@ -17,6 +17,7 @@ gulp.task('kmc', function() {
   gulp.src(src + "/**/*.js")
   //转换cmd模块为kissy模块
   .pipe(kmc.convert({
+    seajs:true,
     fixModuleName:true,
     minify: true, //是否压缩
     //ext:"-min.js",//转换后文件扩展名，如果minify 为true则是压缩文件扩展名,同时也支持下面这种配置
