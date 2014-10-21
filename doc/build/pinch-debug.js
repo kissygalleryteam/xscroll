@@ -1,3 +1,4 @@
+define('kg/xscroll/2.0.0/pinch',["./util","./event"],function(require, exports, module) {
 	var Util = require('./util');
 	var Event = require("./event");
 	var doc = window.document;
@@ -60,3 +61,5 @@
 
 	module.exports = Pinch;
 
+
+});

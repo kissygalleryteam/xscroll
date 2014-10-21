@@ -1,3 +1,4 @@
+define('kg/xscroll/2.0.0/pan',["./util","./event"],function(require, exports, module) {
 	var Util = require('./util');
 	var Event = require("./event");
 	var doc = window.document;
@@ -168,3 +169,5 @@
 
 	module.exports = Pan;
 
+
+});

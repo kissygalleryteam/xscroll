@@ -1,3 +1,4 @@
+define('kg/xscroll/2.0.0/util',[],function(require, exports, module) {
 	var Util = {
 
 		mix: function(to, from) {
@@ -51,3 +52,5 @@
 		}
 	}
 	module.exports = Util;
+
+});
