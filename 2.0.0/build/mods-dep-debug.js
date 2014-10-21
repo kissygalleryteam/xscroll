@@ -17,6 +17,14 @@ KISSY.config('modules',{
             "./util"
         ]
     },
+    "kg/xscroll/2.0.0/infinite": {
+        "requires": [
+            "./util",
+            "./core",
+            "./dataset",
+            "./swipeedit"
+        ]
+    },
     "kg/xscroll/2.0.0/pan": {
         "requires": [
             "./util",
@@ -48,14 +56,6 @@ KISSY.config('modules',{
         "requires": [
             "./util",
             "./event"
-        ]
-    },
-    "kg/xscroll/2.0.0/xlist": {
-        "requires": [
-            "./util",
-            "./core",
-            "./dataset",
-            "./swipeedit"
         ]
     }
 });

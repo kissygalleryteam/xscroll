@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <script src=""></script>
 </head>
 <body>
     <style type="text/css">
-* {
+    * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -62,50 +63,18 @@ body {
     text-align: center;
 }
 
-#J_Scroll {
+#J_Menu,#J_Scroll {
     position: absolute;
     z-index: 1;
     top: 45px;
     bottom: 48px;
-    left: 0;
     width: 100%;
     overflow: hidden;
 }
-#J_Scroll li{
-    width: 100%;
-    padding: 0 10px;
-    height: 40px;
-    line-height: 40px;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #fff;
-    background-color: #fafafa;
+#J_Scroll ul{
+    /*position: absolute;*/
 }
-
-.xs-plugin-pulldown-container{
-    text-align: center;
-    width: 100%;
-    line-height: 50px;
-}
-.xs-plugin-pulldown-up .up{
-    display: inline;
-}
-.xs-plugin-pulldown-up .down{
-    display: none;
-}
-.xs-plugin-pulldown-down .up{
-    display: none;
-}
-.xs-plugin-pulldown-down .down{
-    display: inline;
-}
-
-.xs-plugin-pullup-container{
-        line-height: 60px;
-        text-align: center;
-}
-
-
-#J_Scroll li{
+#J_Menu li,#J_Scroll li{
     padding: 0 10px;
 
     height: 40px;
@@ -115,6 +84,7 @@ body {
     font-size: 16px;
     display: block;
     list-style: none;
+    /*-webkit-transition:-webkit-transform 0.2s ease-out 0s;*/
 }
 
     img{
@@ -125,6 +95,10 @@ body {
         width: 100%;
         height: 100%;
     }
+    #J_Scroll{
+        width:80%;
+        right: 0;
+    }
     #J_Scroll ul{
         width: 100%;
     }
@@ -134,8 +108,35 @@ body {
     .xs-container{
         width: 100%;
     }
+    #J_Menu{
+        width: 20%;
+    }
     </style>
     <div id="header">XScroll</div>
+    <div id="J_Menu">
+        <div class="xs-container">
+            <ul class="xs-content">
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+                <li>menu</li>
+            </ul>
+        </div>
+    </div>
     <div id="J_Scroll">
         <div class="xs-container">
             <ul class="xs-content">
@@ -155,10 +156,26 @@ body {
                 <li>row</li>
                 <li>row</li>
                 <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
+                <li>row</li>
             </ul>
         </div>
     </div>
-    <div id="footer">scroll-y</div>
+    <div id="footer">Scroll-Vertical</div>
     <script type="text/javascript" src="http://g.tbcdn.cn/??kissy/k/5.0.0/seed-debug.js"></script>
     <script type="text/javascript">
     require.config({
@@ -169,24 +186,55 @@ body {
             }
         }
     });
-    require("kg/xscroll/2.0.0/core",function(XScroll){
-        var xscroll = new XScroll({
+   require("kg/xscroll/2.0.0/infinite,kg/xscroll/2.0.0/core",function(XList,XScroll){
+        var data = [];
+        for(var i =0;i<100;i++){
+            data.push({
+                style:{
+                    height:40
+                },
+                data:{
+                    row:i+1
+                }
+            })
+        }
+        var xlist = new XList({
             renderTo:"#J_Scroll",
+            infiniteElements:'#J_Scroll li',
+            data:data,
+            // scrollbarY:false,
+            renderHook:function(el,row){
+                el.innerHTML = row.data.row;
+            }
+        });
+
+        xlist.render()
+
+        xlist.on("click",function(e){
+            console.log(e)
+        })
+
+        xlist.on("panstart",function(e){
+            console.log(e)
+        })
+
+
+        xlist.on("pan",function(e){
+            // console.log(e)
+        })
+
+        var xscroll = new XScroll({
+            renderTo:"#J_Menu",
+            lockX:true,
             scrollbarX:false,
-            lockX:true
+            scrollbarY:false
         });
         xscroll.render();
 
-        xscroll.on("scroll",function(e){
-            console.log("scroll")
-        })
+        window.xscroll = xscroll;
 
-        xscroll.on("scrollend",function(e){
-            console.log("scrollend")
-        })
-
-        xscroll.scrollY(100);
-    });
+        // window.xlist = xlist
+    })
     </script>
 </body>
 </html>
