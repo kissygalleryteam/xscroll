@@ -62,4 +62,10 @@ XScroll
 
 - 修复duration为0时scrollTo方法不触发scroll、scrollTo事件
 
+#### v2.0.0
+
+- 全面支持KISSY 5
+- 整合XList
+- 解除脚本依赖，原生化，支持Seajs/RequireJS/KISSY等loader使用和静态引入
+
 
