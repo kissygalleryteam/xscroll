@@ -1,13 +1,9 @@
-/*
-	Pinch Event 
-	@author xiaoqi.huxq@alibaba-inc.com
-*/
-KISSY.add(function(S, Node, Event) {
+	var Util = require('./util');
+	var Event = require("./event");
 	var doc = window.document;
 	var PINCH_START = 'gesturePinchStart',
 		PINCH_END = 'gesturePinchEnd',
 		PINCH = 'gesturePinch';
-	var $ = S.all;
 
 	function getDistance(p1, p2) {
 		var deltaX = p1.pageX - p2.pageX,
@@ -32,13 +28,14 @@ KISSY.add(function(S, Node, Event) {
 			this.isStart = 1;
 			this.startDistance = distance;
 			this.gestureType = "pinch";
-			$(this).fire(PINCH_START,e);
+			Event.dispatchEvent(e.target,PINCH_START,e);
 		}else{
 			if(this.gestureType != "pinch") return;
 			//pinchmove
 			e.distance = distance;
 			e.scale = distance/this.startDistance;
-			$(this).fire(PINCH,e,{origin:origin});
+			e.origin = origin;
+			Event.dispatchEvent(e.target,PINCH,e);
 		}
 	}
 
@@ -46,29 +43,20 @@ KISSY.add(function(S, Node, Event) {
 		this.isStart = 0;
 		if(this.gestureType != "pinch") return;
 		if(e.touches.length == 0){
-			$(this).fire(PINCH_END,e)
+			Event.dispatchEvent(e.target,PINCH_END,e);
 			this.gestureType = "";
 		}
-		
 	}
 
-	S.Event.Special[PINCH] = {
-		setup: function() {
-			$(this).on('touchmove', pinchMoveHandler);
-			$(this).on('touchend', pinchEndHandler);
-		},
-		teardown: function() {
-			$(this).detach('touchmove', pinchMoveHandler);
-			$(this).detach('touchend', pinchEndHandler);
-		}
-	}
+
+	document.addEventListener("touchmove",pinchMoveHandler)
+	document.addEventListener("touchend",pinchEndHandler)
 	//枚举
-	return {
+	var Pinch = {
 		PINCH_START: PINCH_START,
 		PINCH: PINCH,
 		PINCH_END: PINCH_END
 	};
 
-}, {
-	requires: ['node', 'event']
-});
+	module.exports = Pinch;
+

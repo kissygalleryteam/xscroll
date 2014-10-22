@@ -1,6 +1,16 @@
-;
-KISSY.add(function(S) {
 	var Util = {
+
+		mix: function(to, from) {
+			for (var i in from) {
+				to[i] = from[i];
+			}
+			return to;
+		},
+		extend:function(superClass,subClass,attrs){
+			this.mix(subClass.prototype,superClass.prototype);
+			subClass.prototype.super = superClass;
+			this.mix(subClass.prototype,attrs)
+		},
 		/*
         vendors
         @example webkit|moz|ms|O 
@@ -26,10 +36,18 @@ KISSY.add(function(S) {
 			if (this.vendor === '') return style;
 			return this.vendor + style.charAt(0).toUpperCase() + style.substr(1);
 		},
-		isAndroid:/Android /.test(window.navigator.appVersion),
-		isBadAndroid : /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion))
+		hasClass:function(el,className){
+			return el && el.className && el.className.indexOf(className) != -1;
+		},
+		addClass:function(el,className){
+			if(el && !this.hasClass(el,className)){
+				el.className += " "+className;
+			}
+		},
+		removeClass:function(el,className){
+			if(el && el.className){
+				el.className = el.className.replace(className,"");
+			}
+		}
 	}
-
-	return Util;
-
-});
+	module.exports = Util;
