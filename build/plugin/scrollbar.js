@@ -1,9 +1,3 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/plugin/scrollbar
-
-*/
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
@@ -227,5 +221,5 @@ KISSY.add('kg/xscroll/1.1.10/plugin/scrollbar',function(S, Node, Base, Anim,Util
 
 
 }, {
-	requires: ['node', 'base', 'anim','kg/xscroll/1.1.10/util']
+	requires: ['node', 'base', 'anim','../util']
 })

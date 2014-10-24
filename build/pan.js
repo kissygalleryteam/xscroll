@@ -1,10 +1,4 @@
 /*
-combined files : 
-
-kg/xscroll/1.1.10/pan
-
-*/
-/*
 	Pan Event for KISSY MINI 
 	@author xiaoqi.huxq@alibaba-inc.com
 */

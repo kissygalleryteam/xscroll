@@ -1,9 +1,3 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/plugin/pulldown
-
-*/
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>

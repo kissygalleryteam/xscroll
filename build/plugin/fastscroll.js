@@ -1,9 +1,3 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/plugin/fastscroll
-
-*/
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>

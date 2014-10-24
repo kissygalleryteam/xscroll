@@ -1,9 +1,3 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/index
-
-*/
 /**
  * @fileoverview
  * @author 伯才<xiaoqi.huxq@alibaba-inc.com>
@@ -767,5 +761,5 @@ KISSY.add('kg/xscroll/1.1.10/index',function(S, Node, Event, Base, Pan, Pinch, U
     });
     return XScroll;
 }, {
-    requires: ['node', 'event', 'base', 'kg/xscroll/1.1.10/pan', 'kg/xscroll/1.1.10/pinch', 'kg/xscroll/1.1.10/util']
+    requires: ['node', 'event', 'base', './pan', './pinch', './util']
 });

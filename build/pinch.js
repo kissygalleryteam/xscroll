@@ -1,10 +1,4 @@
 /*
-combined files : 
-
-kg/xscroll/1.1.10/pinch
-
-*/
-/*
 	Pinch Event 
 	@author xiaoqi.huxq@alibaba-inc.com
 */
