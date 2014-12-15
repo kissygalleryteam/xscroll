@@ -1,4 +1,4 @@
-define('kg/xscroll/2.0.0/dataset',[],function(require, exports, module) {
+define('kg/xscroll/2.3.0/dataset',[],function(require, exports, module) {
 
 	var DataSet = function(cfg){
 
@@ -42,8 +42,9 @@ define('kg/xscroll/2.0.0/dataset',[],function(require, exports, module) {
 	DataSet.prototype.getId = function(){
 		return this.id;
 	};
-
+	
 	module.exports = DataSet;
+	
 
 
 });

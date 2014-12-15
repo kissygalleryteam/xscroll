@@ -1,4 +1,4 @@
-define('kg/xscroll/2.0.0/event',["./util"],function(require, exports, module) {
+define('kg/xscroll/2.3.0/event',["./util"],function(require, exports, module) {
 	var Util = require('./util');
 	var gestures = {};
 	var Gesture = {
@@ -17,8 +17,13 @@ define('kg/xscroll/2.0.0/event',["./util"],function(require, exports, module) {
 			event.initEvent(type, true, true);
 			Util.mix(event, args);
 			tgt.dispatchEvent(event);
+		},
+		GESTURE_PREFIX:"xs",
+		prefix:function(evt){
+			return this.GESTURE_PREFIX + evt[0].toUpperCase() + evt.slice(1);
 		}
 	};
 
 	module.exports = Gesture;
+	
 });

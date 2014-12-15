@@ -1,10 +1,10 @@
-define('kg/xscroll/2.0.0/pinch',["./util","./event"],function(require, exports, module) {
+define('kg/xscroll/2.3.0/pinch',["./util","./event"],function(require, exports, module) {
 	var Util = require('./util');
 	var Event = require("./event");
 	var doc = window.document;
-	var PINCH_START = 'gesturePinchStart',
-		PINCH_END = 'gesturePinchEnd',
-		PINCH = 'gesturePinch';
+	var PINCH_START = Event.prefix('pinchStart'),
+		PINCH_END = Event.prefix('pinchEnd'),
+		PINCH = Event.prefix('pinch');
 
 	function getDistance(p1, p2) {
 		var deltaX = p1.pageX - p2.pageX,
@@ -50,16 +50,19 @@ define('kg/xscroll/2.0.0/pinch',["./util","./event"],function(require, exports, 
 	}
 
 
-	document.addEventListener("touchmove",pinchMoveHandler)
-	document.addEventListener("touchend",pinchEndHandler)
+
+	
 	//枚举
 	var Pinch = {
+		init:function(){
+			document.addEventListener("touchmove",pinchMoveHandler);
+			document.addEventListener("touchend",pinchEndHandler);	
+		},
 		PINCH_START: PINCH_START,
 		PINCH: PINCH,
 		PINCH_END: PINCH_END
 	};
 
 	module.exports = Pinch;
-
-
+	
 });

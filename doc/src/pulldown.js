@@ -1,40 +1,36 @@
 	var Util = require('./util');
+	var Base = require('./base');
 	var prefix;
 	var containerCls;
 	var content = "Pull Down To Refresh";
 	var loadingContent = "Loading...";
 	var PullDown = function(cfg) {
-		this.init(cfg);
+		PullDown.superclass.constructor.call(this);
+		this.userConfig = Util.mix({
+			content: content,
+			height: 60,
+			autoRefresh: true, //是否自动刷新页面
+			downContent: "Pull Down To Refresh",
+			upContent: "Release To Refresh",
+			loadingContent: loadingContent,
+			prefix: "xs-plugin-pulldown-"
+		}, cfg);
 	}
-	Util.mix(PullDown.prototype, {
-		init: function(cfg) {
+	Util.extend(PullDown,Base, {
+		pluginId: "xscroll/plugin/pulldown",
+		pluginInitializer: function(xscroll) {
 			var self = this;
-			self.__events = {};
-			self.userConfig = Util.mix({
-				content: content,
-				height: 60,
-				autoRefresh: true, //是否自动刷新页面
-				downContent: "Pull Down To Refresh",
-				upContent: "Release To Refresh",
-				loadingContent: loadingContent,
-				prefix: "xs-plugin-pulldown-"
-			}, cfg);
-
-			self.xscroll = self.userConfig.xscroll;
-
+			self.xscroll = xscroll;
 			prefix = self.userConfig.prefix;
-
 			if (self.xscroll) {
 				self.xscroll.on("afterrender", function() {
 					self.render()
 				})
 			}
 		},
-		destroy: function() {
+		pluginDestructor: function() {
 			var self = this;
-			//remove element
 			self.pulldown && self.pulldown.remove();
-			// self.detach("afterStatusChange");
 			self.xscroll.detach("panstart", self._panStartHandler, self);
 			self.xscroll.detach("pan", self._panHandler, self);
 			self.xscroll.detach("panend", self._panEndHandler, self);
@@ -91,34 +87,10 @@
 				}
 			}
 		},
-		fire: function(evt) {
-            var self = this;
-            if (self.__events[evt] && self.__events[evt].length) {
-                for (var i in self.__events[evt]) {
-                    self.__events[evt][i].apply(this,[].slice.call(arguments, 1));
-                }
-            }
-        },
-        on: function(evt, fn) {
-            if (!this.__events[evt]) {
-                this.__events[evt] = [];
-            }
-            this.__events[evt].push(fn);
-        },
-        detach: function(evt, fn) {
-            if (!evt || !this.__events[evt]) return;
-            var index = this.__events[evt].indexOf(fn);
-            if (index > -1) {
-                this.__events[evt].splice(index, 1);
-            }
-        },
         reset:function(callback){
-        	var self = this;
-        	var height = self.userConfig.height || 60;
-        	var xscroll = self.xscroll;
-        	xscroll.boundry.resetTop()
-			xscroll.bounce(true, callback);
-			self._expanded = false;
+        	this.xscroll.boundry.resetTop()
+			this.xscroll.bounce(true, callback);
+			this._expanded = false;
         },
 		_panStartHandler: function(e) {
 			clearTimeout(this.loadingItv);
@@ -133,38 +105,32 @@
 		_panEndHandler: function(e) {
 			var self = this;
 			var xscroll = self.xscroll;
-			var top = xscroll.boundry.top;
 			var height = self.userConfig.height || 60;
 			var offsetTop = xscroll.getOffsetTop();
 			if (offsetTop > height) {
-				xscroll.boundry.top = top;
-				!self._expanded && xscroll.boundry.expandTop(height);
-				self._expanded = true;
+				xscroll.boundry.resetTop();
+				xscroll.boundry.expandTop(height);
 				xscroll.bounce(true,function(){
 					self._changeStatus("loading");
 				});
-				
 				if(self.userConfig.autoRefresh){
 					clearTimeout(self.loadingItv);
 					self.loadingItv = setTimeout(function() {
-						xscroll.boundry.expandTop(-height);
+						xscroll.boundry.resetTop();
 						xscroll.bounce(true, function() {
 							window.location.reload();
 						})
 					}, 800);
-				}else{
-
 				}
-				
 			}
 		},
-
 		setContent: function(content) {
 			var self = this;
 			if (content) {
 				self.pulldown.innerHTML = content;
 			}
 		}
-	})
+	});
 
 	module.exports = PullDown;
+	

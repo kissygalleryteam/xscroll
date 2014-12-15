@@ -1,4 +1,5 @@
 	var Util = require('./util');
+	var Base = require('./base');
 	//transform
 	var transform = Util.prefixStyle("transform");
 	//transition webkitTransition MozTransition OTransition msTtransition
@@ -11,10 +12,9 @@
 	var transformStr = Util.vendor ? ["-", Util.vendor, "-transform"].join("") : "transform";
 	//acceration 
 	var acc = 1;
-	
 	var startX;
-
 	var SwipeEdit = function(cfg) {
+		SwipeEdit.superclass.constructor.call(this);
 		this.userConfig = Util.mix({
 			labelSelector: clsPrefix + "label",
 			renderHook: function(el) {
@@ -22,14 +22,18 @@
 			}
 		}, cfg);
 	};
-	Util.mix(SwipeEdit.prototype, {
+	Util.extend(SwipeEdit,Base, {
 		pluginId: "xlist/plugin/swipeedit",
-		initializer: function(xlist) {
+		pluginInitializer: function(xlist) {
 			var self = this;
 			self.xlist = xlist;
 			self._bindEvt();
 		},
+		pluginDestructor:function(xlist){
+			
+		},
 		getTransformX: function(el) {
+			if(!el) return '';
 			var trans = getComputedStyle(el)[transform].match(/[-\d\.*\d*]+/g);
 			return trans ? trans[4] / 1 : 0;
 		},
@@ -39,7 +43,9 @@
 			var lbl = null;
 			xlist.on("panstart", function(e) {
 				hasSlided = false;
+				if(!e.cell || !e.cell.element) return;
 				lbl = e.cell.element.querySelector(self.userConfig.labelSelector);
+				if(!lbl) return;
 				startX = self.getTransformX(lbl);
 				lbl.style[transition] = "none";
 				if (Math.abs(startX) > 0 && !isSliding) {
@@ -48,6 +54,7 @@
 			})
 
 			xlist.on("pan", function(e) {
+				if(!lbl) return;
 				if (e.touch.directionX == "left") {
 					self.slideAllExceptRow(e.cell._row);
 				}
@@ -64,13 +71,14 @@
 						return;
 					}
 					lbl.style[transition] = "none";
-					lbl.style[transform] = "translateX(" + left + "px) translateZ(0)"
+					lbl.style[transform] = "translateX(" + left + "px)"
 				} else if (!isLocked) {
 					xlist.userConfig.lockY = false;
 				}
 			})
 
 			xlist.on("panend", function(e) {
+				if(!lbl) return;
 				isLocked = false;
 				var cpt = self.getTransformX(lbl);
 				if (e.touch.directionX == "left" && Math.abs(e.velocityX) > acc) {
@@ -81,9 +89,7 @@
 					self.slideLeftHandler(e)
 				}
 			})
-
-
-
+			
 			 document.body.addEventListener("webkitTransitionEnd",function(e){
 	           if(new RegExp(self.userConfig.labelSelector.replace(/\./,"")).test(e.target.className)){
 	               isSliding = false;
@@ -93,21 +99,24 @@
 		},
 		slideLeft: function(row) {
 			var self = this;
-			var cell = xlist.getCellByRow(row);
+			var cell = xlist.getCellByRowOrCol(row);
 			if (!cell || !cell.element) return;
 			var el = cell.element.querySelector(self.userConfig.labelSelector);
 			if (!el || !el.style) return;
-			el.style[transform] = "translateX(-" + self.userConfig.width + "px) translateZ(0)";
+			el.style[transform] = "translateX(-" + self.userConfig.width + "px) ";
 			el.style[transition] = transformStr+" 0.15s ease";
 			xlist.getData(0, row).data.status = "delete";
 		},
 		slideRight: function(row) {
 			var self = this;
-			var cell = xlist.getCellByRow(row);
+			var cell = xlist.getCellByRowOrCol(row);
 			if (!cell || !cell.element) return;
 			var el = cell.element.querySelector(self.userConfig.labelSelector);
 			if (!el || !el.style) return;
-			el.style[transform] = "translateX(0) translateZ(0)";
+			var matrix = window.getComputedStyle(el)[transform].match(/[-\d\.*\d*]+/g);
+			var transX = matrix ? Math.round(matrix[4]) : 0;
+			if(transX == 0) return;
+			el.style[transform] = "translateX(0)";
 			el.style[transition] = transformStr+" 0.5s ease";
 			xlist.getData(0, row).data.status = "";
 		},
@@ -133,3 +142,5 @@
 	});
 
 	module.exports = SwipeEdit;
+
+	

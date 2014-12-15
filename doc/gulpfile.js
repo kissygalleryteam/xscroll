@@ -2,11 +2,11 @@ var gulp = require('gulp');
 var kmc = require('gulp-kmc');
 var src = "./src",
   dest = "./build/";
-
+var pkg = require('./package.json');
 kmc.config({
   depFilePath: dest + 'mods-dep.js', //全局依赖文件关系，此处配置后下面的各个模块将不会再生成
   packages: [{
-    name: 'kg/xscroll/2.0.0/',
+    name: 'kg/xscroll/'+pkg.version+'/',
     // combine: true,
     base: './src/' 
   }]
