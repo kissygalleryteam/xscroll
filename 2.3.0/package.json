@@ -1,0 +1,9 @@
+{
+  "name": "xscroll",
+  "version": "2.3.0",
+  "private": true,
+  "devDependencies": {
+    "gulp-kmc": "0.0.29",
+    "gulp": "^3.8.8"
+  }
+}
