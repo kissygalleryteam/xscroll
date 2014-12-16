@@ -62,4 +62,23 @@ XScroll
 
 - 修复duration为0时scrollTo方法不触发scroll、scrollTo事件
 
+#### v2.0.0
 
+- 全面支持KISSY 5
+- 整合XList
+- 解除脚本依赖，原生化，支持Seajs/RequireJS/KISSY等loader使用和静态引入
+
+### v2.2.0
+- 优化边界反弹动画效果
+- 支持水平方向无尽滚动
+- 修复滚动停止时重绘、闪烁的问题
+- 新增useTransition配置，支持帧动画
+- 新增easing配置 如：ease ease-out ease-in
+- API调整 
+    - getCellByRow -> getCellByRowOrCol
+    - getCellByOffsetTop -> getCellByOffset
+    - getCellByPageY -> getCellByPagePos
+
+### v2.3.0
+- 新增snap功能
+- 新增多个xscroll相互嵌套的管理机制
