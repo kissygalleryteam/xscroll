@@ -1,1 +1,105 @@
-define('kg/xscroll/2.3.0/util',[],function(require, exports, module) {function t(){}function e(e,r){var n;return Object.create?n=Object.create(e):(t.prototype=e,n=new t),n.constructor=r,n}var r={mix:function(t,e){for(var r in e)t[r]=e[r];return t},extend:function(t,r,n,s){if(!r||!t)return t;var o,f=r.prototype;return o=e(f,t),t.prototype=this.mix(o,t.prototype),t.superclass=e(f,r),n&&this.mix(o,n),s&&this.mix(t,s),t},vendor:function(){for(var t,e=document.createElement("div").style,r=["t","webkitT","MozT","msT","OT"],n=0,s=r.length;s>n;n++)if(t=r[n]+"ransform",t in e)return r[n].substr(0,r[n].length-1);return!1}(),prefixStyle:function(t){return this.vendor===!1?!1:""===this.vendor?t:this.vendor+t.charAt(0).toUpperCase()+t.substr(1)},hasClass:function(t,e){return t&&t.className&&-1!=t.className.indexOf(e)},addClass:function(t,e){t&&!this.hasClass(t,e)&&(t.className+=" "+e)},removeClass:function(t,e){t&&t.className&&(t.className=t.className.replace(e,""))},getOffsetTop:function(t){var e=t.offsetTop;return null!=t.offsetParent&&(e+=this.getOffsetTop(t.offsetParent)),e},getOffsetLeft:function(t){var e=t.offsetLeft;return null!=t.offsetParent&&(e+=this.getOffsetLeft(t.offsetParent)),e},guid:function(){return Math.round(1e8*Math.random())}};module.exports=r;});
+KISSY.add('kg/xscroll/2.3.1/util',function(S) {
+function Empty() {}
+
+function createObject(proto, constructor) {
+	var newProto;
+	if (Object.create) {
+		newProto = Object.create(proto);
+	} else {
+		Empty.prototype = proto;
+		newProto = new Empty();
+	}
+	newProto.constructor = constructor;
+	return newProto;
+}
+
+var Util = {
+	mix: function(to, from,deep) {
+		for (var i in from) {
+			to[i] = from[i];
+		}
+		return to;
+	},
+	extend: function(r, s, px, sx) {
+		if (!s || !r) {
+			return r;
+		}
+		var sp = s.prototype,
+			rp;
+		// add prototype chain
+		rp = createObject(sp, r);
+		r.prototype = this.mix(rp, r.prototype);
+		r.superclass = createObject(sp, s);
+		// add prototype overrides
+		if (px) {
+			this.mix(rp, px);
+		}
+		// add object overrides
+		if (sx) {
+			this.mix(r, sx);
+		}
+		return r;
+	},
+	/*
+        vendors
+        @example webkit|moz|ms|O 
+    	*/
+	vendor: (function() {
+		var el = document.createElement('div').style;
+		var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
+			transform,
+			i = 0,
+			l = vendors.length;
+		for (; i < l; i++) {
+			transform = vendors[i] + 'ransform';
+			if (transform in el) return vendors[i].substr(0, vendors[i].length - 1);
+		}
+		return false;
+	})(),
+	/**
+	 *  attrs with vendor
+	 *  @return { String }
+	 **/
+	prefixStyle: function(style) {
+		if (this.vendor === false) return false;
+		if (this.vendor === '') return style;
+		return this.vendor + style.charAt(0).toUpperCase() + style.substr(1);
+	},
+	hasClass: function(el, className) {
+		return el && el.className && el.className.indexOf(className) != -1;
+	},
+	addClass: function(el, className) {
+		if (el && !this.hasClass(el, className)) {
+			el.className += " " + className;
+		}
+	},
+	removeClass: function(el, className) {
+		if (el && el.className) {
+			el.className = el.className.replace(className, "");
+		}
+	},
+	getOffsetTop: function(e) {
+		var offset = e.offsetTop;
+		if (e.offsetParent != null) offset += this.getOffsetTop(e.offsetParent);
+		return offset;
+	},
+	getOffsetLeft: function(e) {
+		var offset = e.offsetLeft;
+		if (e.offsetParent != null) offset += this.getOffsetLeft(e.offsetParent);
+		return offset;
+	},
+	guid: function() {
+		return Math.round(Math.random() * 100000000);
+	},
+	isAndroid:function(){
+		return /Android /.test(window.navigator.appVersion);
+	},
+	isBadAndroid :function(){
+		return /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion))
+	}
+}
+
+
+return Util;
+
+});

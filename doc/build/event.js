@@ -1,1 +1,31 @@
-define('kg/xscroll/2.3.0/event',["./util"],function(require, exports, module) {var t=require("./util"),e={on:function(t,e,n){return t.addEventListener(e,n),this.target=t,this},detach:function(t,e,n){return this.target=null,t.removeEventListener(e,n),this},dispatchEvent:function(e,n,i){var r=document.createEvent("Event");r.initEvent(n,!0,!0),t.mix(r,i),e.dispatchEvent(r)},GESTURE_PREFIX:"xs",prefix:function(t){return this.GESTURE_PREFIX+t[0].toUpperCase()+t.slice(1)}};module.exports=e;});
+KISSY.add('kg/xscroll/2.3.1/event',function(S, Util) {
+
+	var gestures = {};
+	var Gesture = {
+		on: function(el, type, handler) {
+			el.addEventListener(type, handler);
+			this.target = el;
+			return this;
+		},
+		detach: function(el, type, handler) {
+			this.target = null;
+			el.removeEventListener(type, handler);
+			return this;
+		},
+		dispatchEvent: function(tgt, type, args) {
+			var event = document.createEvent('Event');
+			event.initEvent(type, true, true);
+			Util.mix(event, args);
+			tgt.dispatchEvent(event);
+		},
+		GESTURE_PREFIX: "xs",
+		prefix: function(evt) {
+			return this.GESTURE_PREFIX + evt[0].toUpperCase() + evt.slice(1);
+		}
+	};
+
+	return Gesture;
+
+}, {
+	requires: ['./util']
+})

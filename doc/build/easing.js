@@ -1,1 +1,26 @@
-define('kg/xscroll/2.3.0/easing',[],function(require, exports, module) {var i={linear:[0,0,1,1],ease:[.25,.1,.25,1],"ease-out":[0,0,.58,1],"ease-in-out":[.42,0,.58,1],quadratic:[.33,.66,.66,1],circular:[.1,.57,.1,1],bounce:[.71,1.35,.47,1.41],format:function(i){return i?"string"==typeof i&&this[i]?this[i]instanceof Array?[" cubic-bezier(",this[i],") "].join(""):this[i]:i instanceof Array?[" cubic-bezier(",i,") "].join(""):i:void 0}};module.exports=i;});
+KISSY.add('kg/xscroll/2.3.1/easing',function(S) {
+
+	var Easing = {
+		"linear": [0, 0, 1, 1],
+		"ease": [.25, .1, .25, 1],
+		"ease-out": [0, 0, .58, 1],
+		"ease-in-out": [.42, 0, .58, 1],
+		"quadratic": [0.33, 0.66, 0.66, 1],
+		"circular": [0.1, 0.57, 0.1, 1],
+		"bounce": [.71, 1.35, .47, 1.41],
+		format: function(easing) {
+			if (!easing) return;
+			if (typeof easing === "string" && this[easing]) {
+				return this[easing] instanceof Array ? [" cubic-bezier(", this[easing], ") "].join("") : this[easing];
+			}
+			if (easing instanceof Array) {
+				return [" cubic-bezier(", easing, ") "].join("");
+			}
+			return easing;
+		}
+	}
+
+
+	return Easing;
+
+});

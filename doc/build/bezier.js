@@ -1,1 +1,55 @@
-define('kg/xscroll/2.3.0/bezier',[],function(require, exports, module) {function r(r,n,t,u,e){var f=function(n){var u=1-n;return 3*u*u*n*r+3*u*n*n*t+n*n*n},a=function(r){var t=1-r;return 3*t*t*r*n+3*t*r*r*u+r*r*r},i=function(n){var u=1-n;return 3*(2*(n-1)*n+u*u)*r+3*(-n*n*n+2*u*n)*t};return function(r){var n,t,u,o,c,v,b=r;for(u=b,v=0;8>v;v++){if(o=f(u)-b,Math.abs(o)<e)return a(u);if(c=i(u),Math.abs(c)<1e-6)break;u-=o/c}if(n=0,t=1,u=b,n>u)return a(n);if(u>t)return a(t);for(;t>n;){if(o=f(u),Math.abs(o-b)<e)return a(u);b>o?n=u:t=u,u=.5*(t-n)+n}return a(u)}}module.exports=r;});
+KISSY.add('kg/xscroll/2.3.1/bezier',function(S) {
+	function Bezier(x1, y1, x2, y2, epsilon) {
+
+		var curveX = function(t) {
+			var v = 1 - t;
+			return 3 * v * v * t * x1 + 3 * v * t * t * x2 + t * t * t;
+		};
+
+		var curveY = function(t) {
+			var v = 1 - t;
+			return 3 * v * v * t * y1 + 3 * v * t * t * y2 + t * t * t;
+		};
+
+		var derivativeCurveX = function(t) {
+			var v = 1 - t;
+			return 3 * (2 * (t - 1) * t + v * v) * x1 + 3 * (-t * t * t + 2 * v * t) * x2;
+		};
+
+		return function(t) {
+
+			var x = t,
+				t0, t1, t2, x2, d2, i;
+
+			// First try a few iterations of Newton's method -- normally very fast.
+			for (t2 = x, i = 0; i < 8; i++) {
+				x2 = curveX(t2) - x;
+				if (Math.abs(x2) < epsilon) return curveY(t2);
+				d2 = derivativeCurveX(t2);
+				if (Math.abs(d2) < 1e-6) break;
+				t2 = t2 - x2 / d2;
+			}
+
+			t0 = 0, t1 = 1, t2 = x;
+
+			if (t2 < t0) return curveY(t0);
+			if (t2 > t1) return curveY(t1);
+
+			// Fallback to the bisection method for reliability.
+			while (t0 < t1) {
+				x2 = curveX(t2);
+				if (Math.abs(x2 - x) < epsilon) return curveY(t2);
+				if (x > x2) t0 = t2;
+				else t1 = t2;
+				t2 = (t1 - t0) * .5 + t0;
+			}
+
+			// Failure
+			return curveY(t2);
+
+		};
+
+	};
+
+	return Bezier;
+});

@@ -1,1 +1,173 @@
-define('kg/xscroll/2.3.0/tap',["./util","./event"],function(require, exports, module) {function t(){if(v.length>2){for(var t=[],e=1;e<v.length;e++)t[e-1]=v[e];v=t}}function e(e){if(t(),0==v.length)return!1;var n=e.startTime-v[v.length-1].startTime;return 10>n?!0:!1}function n(){if(t(),1==v.length)return!1;var e=v[1].startTime-v[0].startTime;return p>e?!0:!1}function i(t){if(t.touches.length>1)return void(T=!1);var e=(t.currentTarget,t.target,t.changedTouches[0].clientX),n=t.changedTouches[0].clientY;T={startX:e,startY:n,startTime:Number(new Date),e:t},f&&clearTimeout(f);t.target;f=setTimeout(function(){if(T){var i={};a.mix(i,t),a.mix(i,{type:o,pageX:e,pageY:n,originalEvent:t}),u.dispatchEvent(t.target,o,i)}clearTimeout(f)},h)}function r(i){if(T){var r=i.changedTouches[0].clientX,o=i.changedTouches[0].clientY,h=Math.abs(r-T.startX),f=Math.abs(o-T.startY);if(a.mix(T,{endX:r,endY:o,distance:Math.sqrt(h*h+f*f),timeSpan:Number(Number(new Date)-T.startTime)}),T.timeSpan>d)return void(T=!1);if(T.distance>m)return void(T=!1);if(!e(T)){v.push(T),t();var x={};a.mix(x,i),a.mix(x,{type:c,pageX:r,pageY:o,originalEvent:i});var E=i.target;return u.dispatchEvent(E,c,x),g?(n()&&(a.mix(x,{type:l}),u.dispatchEvent(E,l,x)),clearTimeout(g),void(g=null)):void(g=setTimeout(function(){clearTimeout(g),g=null,a.mix(x,{type:s}),u.dispatchEvent(E,s,x)},p))}}}var a=require("./util"),u=require("./event"),c=u.prefix("tap"),o=u.prefix("tapHold"),s=u.prefix("singleTap"),l=u.prefix("doubleTap"),d=250,m=10,h=750,p=200,v=[],T=!1,f=null,g=null;document.addEventListener("touchstart",i),document.addEventListener("touchend",r);var x={TAP:c,TAP_HOLD:o,SINGLE_TAP:s,DOUBLE_TAP:l};module.exports=x;});
+KISSY.add('kg/xscroll/2.3.1/tap',function(S, Util, Event) {
+    var TAP = Event.prefix("tap");
+    var TAP_HOLD = Event.prefix("tapHold");
+    var SINGLE_TAP = Event.prefix("singleTap");
+    var DOUBLE_TAP = Event.prefix("doubleTap");
+    var tap_max_touchtime = 250,
+        tap_max_distance = 10,
+        tap_hold_delay = 750,
+        single_tap_delay = 200;
+    var touches = [];
+    var singleTouching = false;
+    var tapHoldTimer = null;
+    var doubleTapTimmer = null;
+
+    function clearTouchArray() {
+        if (touches.length > 2) {
+            var tmpArray = [];
+            for (var i = 1; i < touches.length; i++) {
+                tmpArray[i - 1] = touches[i];
+            }
+            touches = tmpArray;
+        }
+    }
+
+    /*排除多次绑定中的单次点击的多次记录*/
+    function shouldExcludeTouches(touch) {
+        clearTouchArray();
+        if (touches.length == 0) {
+            return false;
+        }
+        var duration = touch.startTime - touches[touches.length - 1].startTime;
+        /*判断是同一次点击*/
+        if (duration < 10) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkDoubleTap() {
+        clearTouchArray();
+
+        if (touches.length == 1) {
+            return false;
+        }
+        var duration = touches[1].startTime - touches[0].startTime;
+        if (duration < single_tap_delay) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function touchStart(e) {
+        if (e.touches.length > 1) {
+            singleTouching = false;
+            return;
+        }
+        var currentTarget = e.currentTarget;
+        var target = e.target;
+        var startX = e.changedTouches[0].clientX;
+        var startY = e.changedTouches[0].clientY;
+        singleTouching = {
+            startX: startX,
+            startY: startY,
+            startTime: Number(new Date()),
+            e: e
+        };
+        /*tapHold*/
+        if (tapHoldTimer) {
+            clearTimeout(tapHoldTimer);
+        }
+        var target = e.target;
+        tapHoldTimer = setTimeout(function() {
+            if (singleTouching) {
+                var eProxy = {};
+                Util.mix(eProxy, e);
+                Util.mix(eProxy, {
+                    type: TAP_HOLD,
+                    pageX: startX,
+                    pageY: startY,
+                    originalEvent: e
+                });
+                Event.dispatchEvent(e.target, TAP_HOLD, eProxy);
+            }
+            clearTimeout(tapHoldTimer);
+        }, tap_hold_delay);
+    }
+
+    function touchEnd(e) {
+        if (!singleTouching) {
+            return;
+        }
+        var endX = e.changedTouches[0].clientX;
+        var endY = e.changedTouches[0].clientY;
+        var deltaX = Math.abs(endX - singleTouching.startX); //滑过的距离
+        var deltaY = Math.abs(endY - singleTouching.startY); //滑过的距离
+        Util.mix(singleTouching, {
+            endX: endX,
+            endY: endY,
+            distance: Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+            timeSpan: Number(Number(new Date()) - singleTouching.startTime)
+        });
+        // console.log
+        if (singleTouching.timeSpan > tap_max_touchtime) {
+            singleTouching = false;
+            return;
+        }
+        if (singleTouching.distance > tap_max_distance) {
+            singleTouching = false;
+            return;
+        }
+        /*
+            同时绑定singleTap和doubleTap时，
+            一次点击push了两次singleTouching，应该只push一次
+            */
+        if (!shouldExcludeTouches(singleTouching)) {
+            touches.push(singleTouching);
+        } else {
+            return;
+        }
+        clearTouchArray();
+        var eProxy = {};
+        Util.mix(eProxy, e);
+        Util.mix(eProxy, {
+            type: TAP,
+            pageX: endX,
+            pageY: endY,
+            originalEvent: e
+        });
+        var target = e.target;
+        /*先触发tap，再触发doubleTap*/
+        Event.dispatchEvent(target, TAP, eProxy);
+        /*doubleTap 和 singleTap 互斥*/
+        if (doubleTapTimmer) {
+            if (checkDoubleTap()) {
+
+                Util.mix(eProxy, {
+                    type: DOUBLE_TAP
+                });
+                Event.dispatchEvent(target, DOUBLE_TAP, eProxy);
+            }
+            clearTimeout(doubleTapTimmer);
+            doubleTapTimmer = null;
+            return;
+        }
+        doubleTapTimmer = setTimeout(function() {
+            clearTimeout(doubleTapTimmer);
+            doubleTapTimmer = null;
+            Util.mix(eProxy, {
+                type: SINGLE_TAP
+            });
+            Event.dispatchEvent(target, SINGLE_TAP, eProxy);
+        }, single_tap_delay);
+
+    }
+
+    document.addEventListener("touchstart", touchStart);
+    document.addEventListener("touchend", touchEnd);
+
+    var Tap= {
+        TAP: TAP,
+        TAP_HOLD:TAP_HOLD,
+        SINGLE_TAP:SINGLE_TAP,
+        DOUBLE_TAP:DOUBLE_TAP
+    };
+
+     return Tap;
+
+}, {
+    requires: ['./util', './event']
+});
+

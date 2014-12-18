@@ -1,1 +1,48 @@
-define('kg/xscroll/2.3.0/dataset',[],function(require, exports, module) {var t=function(t){this.data=t&&t.data||[],this.id=t&&t.id||"_ds_"+Date.now()};t.prototype.appendData=function(t){this.data=this.data.concat(t)},t.prototype.insertData=function(t,a){"number"==typeof t&&this.data.splice(t,0,a)},t.prototype.removeData=function(t){"number"==typeof t&&this.data[t]?this.data.splice(t,1):this.data=[]},t.prototype.getData=function(t){return"number"==typeof t?this.data[t]:this.data},t.prototype.setId=function(t){return t?(this.id=t,this.id):void 0},t.prototype.getId=function(){return this.id},module.exports=t;});
+KISSY.add('kg/xscroll/2.3.1/dataset',function(S,Util){
+
+	var DataSet = function(cfg){
+
+		this.data = cfg && cfg.data || [];
+
+		this.id = cfg && cfg.id || "_ds_"+Util.guid();
+
+	}
+
+	DataSet.prototype.appendData = function(data){
+		this.data = this.data.concat(data)
+	};
+
+	DataSet.prototype.insertData = function(index,data){
+		if(typeof index == "number"){
+			this.data.splice(index,0,data);
+		}
+	};
+
+	DataSet.prototype.removeData = function(index){
+		if(typeof index == "number" && this.data[index]){
+			this.data.splice(index,1);
+		}else{
+			this.data = [];
+		}
+	};
+
+	DataSet.prototype.getData = function(index){
+		if(typeof index == "number"){
+			return this.data[index];
+		}
+		return this.data;
+	};
+
+	DataSet.prototype.setId = function(id){
+		if(!id) return;
+		this.id = id;
+		return this.id;
+	};
+
+	DataSet.prototype.getId = function(){
+		return this.id;
+	};
+	
+	return DataSet;
+	
+},{requires:['./util']})

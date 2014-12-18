@@ -1,1 +1,67 @@
-define('kg/xscroll/2.3.0/pinch',["./util","./event"],function(require, exports, module) {function t(t,e){var i=t.pageX-e.pageX,n=t.pageY-e.pageY;return Math.sqrt(i*i+n*n)}function e(t,e){return{pageX:t.pageX/2+e.pageX/2,pageY:t.pageY/2+e.pageY/2}}function i(i){if(!(i.touches.length<2||i.changedTouches.length<1)){i.preventDefault();var n=t(i.touches[0],i.touches[1]),a=e(i.touches[0],i.touches[1]);if(i.origin=a,this.isStart){if("pinch"!=this.gestureType)return;i.distance=n,i.scale=n/this.startDistance,i.origin=a,s.dispatchEvent(i.target,c,i)}else this.isStart=1,this.startDistance=n,this.gestureType="pinch",s.dispatchEvent(i.target,r,i)}}function n(t){this.isStart=0,"pinch"==this.gestureType&&0==t.touches.length&&(s.dispatchEvent(t.target,a,t),this.gestureType="")}var s=(require("./util"),require("./event")),r=(window.document,s.prefix("pinchStart")),a=s.prefix("pinchEnd"),c=s.prefix("pinch"),h={init:function(){document.addEventListener("touchmove",i),document.addEventListener("touchend",n)},PINCH_START:r,PINCH:c,PINCH_END:a};module.exports=h;});
+KISSY.add('kg/xscroll/2.3.1/pinch',function(S, Util, Event) {
+	var doc = window.document;
+	var PINCH_START = Event.prefix('pinchStart'),
+		PINCH_END = Event.prefix('pinchEnd'),
+		PINCH = Event.prefix('pinch');
+
+	function getDistance(p1, p2) {
+		var deltaX = p1.pageX - p2.pageX,
+			deltaY = p1.pageY - p2.pageY;
+		return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+	}
+
+	function getOrigin(p1, p2) {
+		return {
+			pageX: p1.pageX / 2 + p2.pageX / 2,
+			pageY: p1.pageY / 2 + p2.pageY / 2
+		};
+	}
+
+	function pinchMoveHandler(e) {
+		if (e.touches.length < 2 || e.changedTouches.length < 1) {
+			return;
+		}
+		e.preventDefault();
+		var distance = getDistance(e.touches[0], e.touches[1]);
+		var origin = getOrigin(e.touches[0], e.touches[1]);
+		e.origin = origin;
+		//pinchstart
+		if (!this.isStart) {
+			this.isStart = 1;
+			this.startDistance = distance;
+			this.gestureType = "pinch";
+			Event.dispatchEvent(e.target, PINCH_START, e);
+		} else {
+			if (this.gestureType != "pinch") return;
+			//pinchmove
+			e.distance = distance;
+			e.scale = distance / this.startDistance;
+			e.origin = origin;
+			Event.dispatchEvent(e.target, PINCH, e);
+		}
+	}
+
+	function pinchEndHandler(e) {
+		this.isStart = 0;
+		if (this.gestureType != "pinch") return;
+		if (e.touches.length == 0) {
+			Event.dispatchEvent(e.target, PINCH_END, e);
+			this.gestureType = "";
+		}
+	}
+
+	//枚举
+	var Pinch = {
+		init: function() {
+			document.addEventListener("touchmove", pinchMoveHandler);
+			document.addEventListener("touchend", pinchEndHandler);
+		},
+		PINCH_START: PINCH_START,
+		PINCH: PINCH,
+		PINCH_END: PINCH_END
+	};
+
+	return Pinch;
+}, {
+	requires: ['./util', './event']
+});

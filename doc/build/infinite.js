@@ -1,1 +1,451 @@
-define('kg/xscroll/2.3.0/infinite',["./util","./core","./dataset","./swipeedit","./pullup","./pulldown"],function(require, exports, module) {var e=require("./util"),t=require("./core"),i=require("./dataset"),n=require("./swipeedit"),s=require("./pullup"),a=require("./pulldown"),o=e.prefixStyle("transform"),l=function(e){l.superclass.constructor.call(this,e)};l.Util=e,l.Plugin={SwipeEdit:n,PullUp:s,PullDown:a},l.DataSet=i,e.extend(l,t,{init:function(){var t=this;l.superclass.init.call(this),t.userConfig=e.mix({data:[],itemWidth:40,zoomType:"y",itemHeight:40},t.userConfig),"x"==t.userConfig.zoomType?(t.userConfig.lockY=!0,t.userConfig.scrollbarY=!1):(t.userConfig.lockX=!0,t.userConfig.scrollbarX=!1),t.isY=!("y"!=t.userConfig.zoomType),t._nameTop=t.isY?"_top":"_left",t._nameHeight=t.isY?"_height":"_width",t._nameRow=t.isY?"_row":"_col",t.nameTop=t.isY?"top":"left",t.nameHeight=t.isY?"height":"width",t.nameRow=t.isY?"row":"col",t.nameY=t.isY?"y":"x",t.nameTranslate=t.isY?"translateY":"translateX",t.nameContainerHeight=t.isY?"containerHeight":"containerWidth",t._initInfinite()},_getDomInfo:function(){var e=this,t=0,i=[],n=0,s=e._formatData(),a=e.isY?e.userConfig.itemHeight:e.userConfig.itemWidth;e.hasSticky=!1,e.userConfig.maxSpeed=.06*a;for(var o=0,l=s.length;l>o;o++){var r=s[o];n=r.style&&r.style.height>=0?r.style.height:a,r[e._nameRow]=o,r[e._nameTop]=t,r[e._nameHeight]=n,r.recycled=r.recycled===!1?!1:!0,i.push(r),t+=n,!e.hasSticky&&r.style&&"sticky"==r.style.position&&(e.hasSticky=!0)}return e.domInfo=i,i},appendDataSet:function(e){var t=this;!e instanceof i||t.datasets.push(e)},removeDataSet:function(e){var t=this;if(e){for(var i,n=0,s=t.datasets.length;s>n;n++)e==t.datasets[n].getId()&&(i=n);t.datasets.splice(i,1)}},_fireTouchStart:function(e){var t=this,i=this.getCellByPagePos(t.isY?e.touches[0].pageY:e.touches[0].pageX);e.cell=i,t._curTouchedCell=i,l.superclass._fireTouchStart.call(t,e)},_firePanStart:function(e){var t=this,i=this.getCellByPagePos(t.isY?e.touch.startY:e.touch.startX);e.cell=i,t._curTouchedCell=i,l.superclass._firePanStart.call(t,e)},_firePan:function(e){this._curTouchedCell&&(e.cell=this._curTouchedCell),l.superclass._firePan.call(this,e)},_firePanEnd:function(e){this._curTouchedCell&&(e.cell=this._curTouchedCell),l.superclass._firePanEnd.call(this,e),this._curTouchedCell=null},_fireClick:function(e,t){var i=this,n=i.getCellByPagePos(i.isY?t.pageY:t.pageX);t.cell=n,l.superclass._fireClick.call(i,e,t)},getCellByPagePos:function(t){var i=this,n=i.isY?t-e.getOffsetTop(i.renderTo)+Math.abs(i.getOffsetTop()):t-e.getOffsetLeft(i.renderTo)+Math.abs(i.getOffsetLeft());return i.getCellByOffset(n)},getCellByRowOrCol:function(e){var t,i=this;if("number"==typeof e&&e<i.domInfo.length)for(var n=0;n<i.infiniteLength;n++)if(e==i.infiniteElementsCache[n][i._nameRow])return t=i.domInfo[i.infiniteElementsCache[n][i._nameRow]],t.element=i.infiniteElements[n],t},getCellByOffset:function(e){var t,i=this,n=i.domInfo.length;if(!(0>e))for(var s=0;n>s;s++)if(t=i.domInfo[s],t[i._nameTop]<e&&t[i._nameTop]+t[i._nameHeight]>e)return i.getCellByRowOrCol(s)},insertData:function(e,t,i){var n=this;return i&&e>=0&&n.datasets[e]&&t>=0?n.datasets[e].data=n.datasets[e].data.slice(0,t).concat(i).concat(n.datasets[e].data.slice(t)):void 0},getData:function(e,t){var i=this;return e>=0&&i.datasets[e]&&t>=0?i.datasets[e].getData(t):void 0},updateData:function(e,t,i){var n=this,s=n.getData(e,t);return s.data=i},removeData:function(e,t){var i=this;return e>=0&&i.datasets[e]&&t>=0?i.datasets[e].removeData(t):void 0},getDataSets:function(){var e=this;return e.datasets},getDataSetById:function(e){var t=this;if(e)for(var i=0,n=t.datasets.length;n>i;i++)if(t.datasets[i].getId()==e)return t.datasets[i]},_formatData:function(){var e=this,t=[];for(var i in e.datasets)t=t.concat(e.datasets[i].getData());return t},_getChangedRows:function(e,t){var i=this,n={};for(var s in i.elementsPos)e.hasOwnProperty(s)||(n[s]="delete");for(var s in e)!e[s].recycled||i.elementsPos.hasOwnProperty(s)&&!t||(n[s]="add");return i.elementsPos=e,n},_getElementsPos:function(e){for(var t,i=this,n=i.domInfo,e=-(e||(i.isY?i.getOffsetTop():i.getOffsetLeft())),s=i.isY?i.userConfig.itemHeight:i.userConfig.itemWidth,a=Math.ceil(i.isY?i.height/s:i.width/s),o=void 0===i.userConfig.maxBufferedNum?Math.max(Math.ceil(a/3),1):i.userConfig.maxBufferedNum,l=Math.max(e-o*s,0),r={},f=0,c=n.length;c>f;f++)t=n[f],t[i._nameTop]>=l-s&&t[i._nameTop]<=l+2*o*s+(i.isY?i.height:i.width)&&(r[t[i._nameRow]]=t);return r},render:function(){var e=this;l.superclass.render.call(this),e._getDomInfo(),e._initSticky();var t=e[e.nameHeight],i=e.domInfo[e.domInfo.length-1],n=i&&void 0!==i[e._nameTop]?i[e._nameTop]+i[e._nameHeight]:e[e.nameHeight];t>n&&(n=t),e[e.nameContainerHeight]=n,e.container.style[e.nameHeight]=n+"px",e.renderScrollBars(),e._renderNoRecycledEl(),e._update(e.isY?e.getOffsetTop():e.getOffsetLeft(),!0)},_update:function(e,t){var i=this,n=i.userConfig.gpuAcceleration?" translateZ(0) ":"",e=void 0===e?i.isY?i.getOffsetTop():i.getOffsetLeft():e,s=i._getElementsPos(e),a=i._getChangedRows(s,t),l=null;if(t)for(var r=0;r<i.infiniteLength;r++)i.infiniteElementsCache[r]._visible=!1,i.infiniteElements[r].style.visibility="hidden",delete i.infiniteElementsCache[r][i._nameRow];var f=function(){for(var e=0;e<i.infiniteLength;e++)if(!i.infiniteElementsCache[e]._visible)return i.infiniteElementsCache[e]._visible=!0,e},c=function(e){for(var t=0;t<i.infiniteLength;t++)i.infiniteElementsCache[t][i._nameRow]==e&&(i.infiniteElementsCache[t]._visible=!1,i.infiniteElements[t].style.visibility="hidden",delete i.infiniteElementsCache[t][i._nameRow])};for(var r in a)if("delete"==a[r]&&c(r),"add"==a[r]){var d=f(s[r][i._nameRow]);if(l=i.infiniteElements[d]){i.infiniteElementsCache[d][i._nameRow]=s[r][i._nameRow];for(var m in s[r].style)m!=i.nameHeight&&"display"!=m&&"position"!=m&&(l.style[m]=s[r].style[m]);l.style.visibility="visible",l.style[i.nameHeight]=s[r][i._nameHeight]+"px",l.style[o]=i.nameTranslate+"("+s[r][i._nameTop]+"px) "+n,i.userConfig.renderHook.call(i,l,s[r])}}},_renderNoRecycledEl:function(){var e=this,t=e.userConfig.gpuAcceleration?" translateZ(0) ":"";for(var i in e.domInfo)if(e.domInfo[i].recycled===!1){var n=e.domInfo[i].id&&document.getElementById(e.domInfo[i].id.replace("#",""))||document.createElement("div"),s="xs-row-"+Date.now();n.id=e.domInfo[i].id||s,e.domInfo[i].id=n.id,e.content.appendChild(n);for(var a in e.domInfo[i].style)a!=e.nameHeight&&"display"!=a&&"position"!=a&&(n.style[a]=e.domInfo[i].style[a]);n.style[e.nameTop]=0,n.style.position="absolute",n.style.display="block",n.style[e.nameHeight]=e.domInfo[i][e._nameHeight]+"px",n.style[o]=e.nameTranslate+"("+e.domInfo[i][e._nameTop]+"px) "+t,e.domInfo[i].className&&(n.className=e.domInfo[i].className),e.userConfig.renderHook.call(e,n,e.domInfo[i])}},_initSticky:function(){var e=this;if(e.hasSticky){if(!e._isStickyRendered){var t=document.createElement("div");t.style.position="absolute",t.style[e.nameTop]="0",t.style.display="none",e.renderTo.appendChild(t),e.stickyElement=t,e._isStickyRendered=!0}e.stickyDomInfo=[];for(var i=0,n=e.domInfo.length;n>i;i++)e.domInfo[i]&&e.domInfo[i].style&&"sticky"==e.domInfo[i].style.position&&e.stickyDomInfo.push(e.domInfo[i]);e.stickyDomInfoLength=e.stickyDomInfo.length}},_stickyHandler:function(e){var t=this;if(t.stickyDomInfoLength){for(var i=Math.abs(e),n=[],s=[],a=0;a<t.stickyDomInfoLength;a++)s.push(t.stickyDomInfo[a][t._nameTop]),i>=t.stickyDomInfo[a][t._nameTop]&&n.push(a);if(!n.length)return t.stickyElement.style.display="none",void(t.curStickyIndex=void 0);var o=Math.max.apply(null,n);if(t.curStickyIndex!==o){t.curStickyIndex=o,t.userConfig.renderHook.call(t,t.stickyElement,t.stickyDomInfo[t.curStickyIndex]),t.stickyElement.style.display="block",t.stickyElement.style[t.nameHeight]=t.stickyDomInfo[t.curStickyIndex].style[t.nameHeight]+"px",t.stickyElement.className=t.stickyDomInfo[t.curStickyIndex].className||"";for(var l in t.stickyDomInfo[t.curStickyIndex].style)l!=t.nameHeight&&"display"!=l&&"position"!=l&&(t.stickyElement.style[l]=t.stickyDomInfo[t.curStickyIndex].style[l])}return-e<Math.min.apply(null,s)?(t.stickyElement.style.display="none",void(t.curStickyIndex=void 0)):void 0}},enableGPUAcceleration:function(){var e=this;l.superclass.enableGPUAcceleration.call(e);for(var t=0;t<e.infiniteLength;t++)/translateZ/.test(e.infiniteElements[t].style[o])||(e.infiniteElements[t].style[o]+=" translateZ(0)")},disableGPUAcceleration:function(){var e=this;l.superclass.disableGPUAcceleration.call(e);for(var t=0;t<e.infiniteLength;t++)e.infiniteElements[t].style[o]=e.infiniteElements[t].style[o].replace(/translateZ\(0px\)/,"")},_initInfinite:function(){var e=this,t=e.userConfig.infiniteElements;e.datasets=[],e.userConfig.data&&e.userConfig.data.length&&e.datasets.push(new i({data:e.userConfig.data})),e.infiniteElements=e.renderTo.querySelectorAll(t),e.infiniteLength=e.infiniteElements.length,e.infiniteElementsCache=function(){for(var t=[],i=0;i<e.infiniteLength;i++)t.push({}),e.infiniteElements[i].style.position="absolute",e.infiniteElements[i].style[e.nameTop]=0,e.infiniteElements[i].style.visibility="hidden",e.infiniteElements[i].style.display="block";return t}(),e.elementsPos={},e.on("scroll",function(t){e._update(t.offset[e.nameY]),e._stickyHandler(t.offset[e.nameY])})}}),module.exports=l,window.XList=l;});
+KISSY.add('kg/xscroll/2.3.1/infinite',function(S, Util, XScroll, DataSet, SwipeEdit, PullUp, PullDown) {
+	var transform = Util.prefixStyle("transform");
+	var PAN_END = "panend";
+	var PAN_START = "panstart";
+	var PAN = "pan";
+		var XList = function(cfg) {
+		XList.superclass.constructor.call(this, cfg);
+	}
+	XList.Util = Util;
+	//namespace for plugins
+	XList.Plugin = {
+		SwipeEdit:SwipeEdit,
+		PullUp:PullUp,
+		PullDown:PullDown
+	};
+	XList.DataSet = DataSet;
+
+	Util.extend( XList, XScroll,{
+		init: function() {
+			var self = this;
+			XList.superclass.init.call(this);
+			self.userConfig = Util.mix({
+				data: [],
+				itemWidth:40,
+				zoomType:"y",
+				itemHeight:40
+			}, self.userConfig);
+
+			if(self.userConfig.zoomType == "x"){
+				self.userConfig.lockY = true;
+				self.userConfig.scrollbarY = false;
+			}else{
+				self.userConfig.lockX = true;
+				self.userConfig.scrollbarX = false;
+			}
+			self.isY = !!(self.userConfig.zoomType == "y");
+			self._nameTop = self.isY ? "_top" : "_left";
+			self._nameHeight = self.isY ? "_height" : "_width";
+			self._nameRow = self.isY ? "_row" : "_col";
+			self.nameTop = self.isY ? "top" : "left";
+			self.nameHeight = self.isY ? "height" : "width";
+			self.nameRow = self.isY ? "row" : "col";
+			self.nameY = self.isY ? "y" : "x";
+			self.nameTranslate = self.isY ? "translateY" : "translateX";
+			self.nameContainerHeight = self.isY ? "containerHeight" : "containerWidth";
+			self._initInfinite();
+		},
+		/**
+		 * get all element posInfo such as top,height,template,html
+		 * @return {Array}
+		 **/
+		_getDomInfo: function() {
+			var self = this;
+			var pos = 0,domInfo = [],size = 0,
+				data = self._formatData(),
+				itemSize = self.isY ? self.userConfig.itemHeight:self.userConfig.itemWidth;
+
+			self.hasSticky = false;
+			//f = v/itemSize*1000 < 60 => v = 0.06 * itemSize
+			self.userConfig.maxSpeed = 0.06 * itemSize;
+			for (var i = 0, l = data.length; i < l; i++) {
+				var item = data[i];
+				size = item.style && item.style.height >= 0 ? item.style.height : itemSize;
+				item[self._nameRow] = i;
+				item[self._nameTop] = pos;
+				item[self._nameHeight] = size;
+				item.recycled = item.recycled === false ? false : true;
+				domInfo.push(item);
+				pos += size;
+				if (!self.hasSticky && item.style && item.style.position == "sticky") {
+					self.hasSticky = true;
+				}
+			}
+			self.domInfo = domInfo;
+			return domInfo;
+		},
+		appendDataSet: function(ds) {
+			var self = this;
+			if (!ds instanceof DataSet) return;
+			self.datasets.push(ds);
+		},
+		removeDataSet: function(id) {
+			var self = this;
+			if (!id) return;
+			var index;
+			for (var i = 0, l = self.datasets.length; i < l; i++) {
+				if (id == self.datasets[i].getId()) {
+					index = i;
+				}
+			}
+			self.datasets.splice(index, 1);
+		},
+		_fireTouchStart:function(e){
+			var self = this;
+			var cell = this.getCellByPagePos(self.isY ? e.touches[0].pageY : e.touches[0].pageX);
+			e.cell = cell;
+			self._curTouchedCell = cell;
+			XList.superclass._fireTouchStart.call(self,e);
+		},
+		_firePanStart:function(e){
+			var self = this;
+			var cell = this.getCellByPagePos(self.isY ? e.touch.startY : e.touch.startX);
+			e.cell = cell;
+			self._curTouchedCell = cell;
+			XList.superclass._firePanStart.call(self,e);
+		},
+		_firePan:function(e){
+			if(this._curTouchedCell){
+				e.cell = this._curTouchedCell;
+			}
+			XList.superclass._firePan.call(this,e);
+		},
+		_firePanEnd:function(e){
+			if(this._curTouchedCell){
+				e.cell = this._curTouchedCell;
+			}
+			XList.superclass._firePanEnd.call(this,e);
+			this._curTouchedCell = null;
+		},
+		_fireClick:function(eventName,e){
+			var self =this;
+			var cell = self.getCellByPagePos(self.isY ? e.pageY:e.pageX);
+			e.cell = cell;
+			XList.superclass._fireClick.call(self,eventName,e);
+		},
+		getCellByPagePos:function(pos){
+			var self = this;
+			var offset = self.isY ? pos - Util.getOffsetTop(self.renderTo) + Math.abs(self.getOffsetTop()) : pos - Util.getOffsetLeft(self.renderTo) + Math.abs(self.getOffsetLeft());
+			return self.getCellByOffset(offset);
+		},
+		getCellByRowOrCol:function(row){
+			var self = this,cell;
+			if(typeof row == "number" && row < self.domInfo.length){
+				for(var i = 0;i<self.infiniteLength;i++){
+					if(row == self.infiniteElementsCache[i][self._nameRow]){
+						cell = self.domInfo[self.infiniteElementsCache[i][self._nameRow]];
+						cell.element = self.infiniteElements[i];
+						return cell;
+					}
+				}
+			}
+		},
+		getCellByOffset:function(offset){
+			var self = this;
+			var len = self.domInfo.length;
+			var cell;
+			if(offset < 0) return;
+			for(var i = 0;i<len;i++){
+				cell = self.domInfo[i];
+				if(cell[self._nameTop] < offset && cell[self._nameTop] + cell[self._nameHeight] > offset){
+					return self.getCellByRowOrCol(i);
+				}
+			}
+		},
+		insertData:function(datasetIndex,rowIndex,data){
+			var self = this;
+			if(data && datasetIndex >= 0 && self.datasets[datasetIndex] && rowIndex >= 0){
+				return self.datasets[datasetIndex].data = self.datasets[datasetIndex].data.slice(0,rowIndex).concat(data).concat(self.datasets[datasetIndex].data.slice(rowIndex))
+			}
+			return;
+		},
+		getData:function(datasetIndex,rowIndex){
+			var self = this;
+			if(datasetIndex >= 0 && self.datasets[datasetIndex] && rowIndex >= 0){
+				return self.datasets[datasetIndex].getData(rowIndex);
+			}
+		},
+		updateData:function(datasetIndex,rowIndex,data){
+			var self = this;
+			var d = self.getData(datasetIndex,rowIndex);
+			return d.data = data;
+		},
+		removeData:function(datasetIndex,rowIndex){
+			var self = this;
+			if(datasetIndex >= 0 && self.datasets[datasetIndex] && rowIndex >= 0){
+				return self.datasets[datasetIndex].removeData(rowIndex);
+			}
+			return;
+		},
+		getDataSets: function() {
+			var self = this;
+			return self.datasets;
+		},
+		getDataSetById: function(id) {
+			var self = this;
+			if (!id) return;
+			for (var i = 0, l = self.datasets.length; i < l; i++) {
+				if (self.datasets[i].getId() == id) {
+					return self.datasets[i];
+				}
+			}
+		},
+		_formatData: function() {
+			var self = this;
+			var data = [];
+			for (var i in self.datasets) {
+				data = data.concat(self.datasets[i].getData());
+			}
+			return data;
+		},
+		_getChangedRows: function(newElementsPos, force) {
+			var self = this;
+			var changedRows = {};
+			for (var i in self.elementsPos) {
+				if (!newElementsPos.hasOwnProperty(i)) {
+					changedRows[i] = "delete";
+				}
+			}
+			for (var i in newElementsPos) {
+				if (newElementsPos[i].recycled && (!self.elementsPos.hasOwnProperty(i) || force)) {
+					changedRows[i] = "add";
+				}
+			}
+
+			self.elementsPos = newElementsPos;
+			return changedRows;
+		},
+		_getElementsPos: function(offset) {
+			var self = this;
+			var data = self.domInfo;
+			var offset = -(offset || (self.isY ? self.getOffsetTop() : self.getOffsetLeft()));
+			var itemSize = self.isY ? self.userConfig.itemHeight : self.userConfig.itemWidth;
+			var elementsPerPage = self.isY ? Math.ceil(self.height / itemSize) : Math.ceil(self.width / itemSize);
+			var maxBufferedNum = self.userConfig.maxBufferedNum === undefined ? Math.max(Math.ceil(elementsPerPage / 3), 1) : self.userConfig.maxBufferedNum;
+			var pos = Math.max(offset - maxBufferedNum * itemSize, 0);
+			var tmp = {},
+				item;
+			for (var i = 0, len = data.length; i < len; i++) {
+				item = data[i];
+				if (item[self._nameTop] >= pos - itemSize && item[self._nameTop] <= pos + 2 * maxBufferedNum * itemSize + (self.isY ? self.height:self.width)) {
+					tmp[item[self._nameRow]] = item;
+				}
+			}
+			return tmp
+		},
+		render: function() {
+			var self = this;
+			XList.superclass.render.call(this);
+			self._getDomInfo();
+			self._initSticky();
+			var size = self[self.nameHeight];
+			var lastItem = self.domInfo[self.domInfo.length - 1];
+			var containerSize = (lastItem && lastItem[self._nameTop] !== undefined) ? lastItem[self._nameTop] + lastItem[self._nameHeight] : self[self.nameHeight];
+			if (containerSize < size) {
+				containerSize = size;
+			}
+			self[self.nameContainerHeight] = containerSize;
+			self.container.style[self.nameHeight] = containerSize + "px";
+			self.renderScrollBars();
+			//渲染非回收元素
+			self._renderNoRecycledEl();
+			//强制刷新
+			self._update(self.isY ? self.getOffsetTop() : self.getOffsetLeft(), true);
+		},
+		_update: function(offset, force) {
+			var self = this;
+			var translateZ = self.userConfig.gpuAcceleration ? " translateZ(0) " : "";
+			var offset = offset === undefined ? ( self.isY ? self.getOffsetTop() : self.getOffsetLeft()) : offset;
+			var elementsPos = self._getElementsPos(offset);
+			var changedRows = self._getChangedRows(elementsPos, force);
+			var el = null;
+			//若强制刷新 则重新初始化dom
+			if (force) {
+				for (var i = 0; i < self.infiniteLength; i++) {
+					self.infiniteElementsCache[i]._visible = false;
+					self.infiniteElements[i].style.visibility = "hidden";
+					delete self.infiniteElementsCache[i][self._nameRow];
+				}
+			}
+			//获取可用的节点
+			var getElIndex = function() {
+					for (var i = 0; i < self.infiniteLength; i++) {
+						if (!self.infiniteElementsCache[i]._visible) {
+							self.infiniteElementsCache[i]._visible = true;
+							return i;
+						}
+					}
+				}
+				//回收已使用的节点
+			var setEl = function(row) {
+				for (var i = 0; i < self.infiniteLength; i++) {
+					if (self.infiniteElementsCache[i][self._nameRow] == row) {
+						self.infiniteElementsCache[i]._visible = false;
+						self.infiniteElements[i].style.visibility = "hidden";
+						delete self.infiniteElementsCache[i][self._nameRow];
+					}
+				}
+			}
+
+			for (var i in changedRows) {
+				if (changedRows[i] == "delete") {
+					setEl(i);
+				}
+				if (changedRows[i] == "add") {
+					var index = getElIndex(elementsPos[i][self._nameRow]);
+					el = self.infiniteElements[index];
+					if (el) {
+						self.infiniteElementsCache[index][self._nameRow] = elementsPos[i][self._nameRow];
+						for (var attrName in elementsPos[i].style) {
+							if (attrName != self.nameHeight && attrName != "display" && attrName != "position") {
+								el.style[attrName] = elementsPos[i].style[attrName];
+							}
+						}
+						el.style.visibility = "visible";
+						el.style[self.nameHeight] = elementsPos[i][self._nameHeight] + "px";
+						el.style[transform] = self.nameTranslate +"(" + elementsPos[i][self._nameTop] + "px) " + translateZ;
+						self.userConfig.renderHook.call(self, el, elementsPos[i]);
+					}
+				}
+			}
+		},
+		//非可回收元素渲染
+		_renderNoRecycledEl: function() {
+			var self = this;
+			var translateZ = self.userConfig.gpuAcceleration ? " translateZ(0) " : "";
+			for (var i in self.domInfo) {
+				if (self.domInfo[i]['recycled'] === false) {
+					var el = self.domInfo[i].id && document.getElementById(self.domInfo[i].id.replace("#", "")) || document.createElement("div");
+					var randomId = "xs-row-" + Date.now()
+					el.id = self.domInfo[i].id || randomId;
+					self.domInfo[i].id = el.id;
+					self.content.appendChild(el);
+					for (var attrName in self.domInfo[i].style) {
+						if (attrName != self.nameHeight && attrName != "display" && attrName != "position") {
+							el.style[attrName] = self.domInfo[i].style[attrName];
+						}
+					}
+					el.style[self.nameTop] = 0;
+					el.style.position = "absolute";
+					el.style.display = "block";
+					el.style[self.nameHeight] = self.domInfo[i][self._nameHeight] + "px";
+					el.style[transform] = self.nameTranslate +"(" + self.domInfo[i][self._nameTop] + "px) " + translateZ;
+					if (self.domInfo[i].className) {
+						el.className = self.domInfo[i].className;
+					}
+					self.userConfig.renderHook.call(self, el, self.domInfo[i]);
+				}
+			}
+		},
+		_initSticky: function() {
+			var self = this;
+			if (!self.hasSticky) return;
+			//create sticky element
+			if(!self._isStickyRendered){
+				var sticky = document.createElement("div");
+				sticky.style.position = "absolute";
+				sticky.style[self.nameTop] = "0";
+				sticky.style.display = "none";
+				self.renderTo.appendChild(sticky);
+				self.stickyElement = sticky;
+				self._isStickyRendered = true;
+			}
+			self.stickyDomInfo = [];
+			for (var i = 0, l = self.domInfo.length; i < l; i++) {
+				if (self.domInfo[i] && self.domInfo[i].style && "sticky" == self.domInfo[i].style.position) {
+					self.stickyDomInfo.push(self.domInfo[i]);
+				}
+			}
+			self.stickyDomInfoLength = self.stickyDomInfo.length;
+		},
+		_stickyHandler: function(_offset) {
+			var self = this;
+
+			if (!self.stickyDomInfoLength) return;
+			var offset = Math.abs(_offset);
+			//视区上方的sticky索引
+			var index = [];
+			//所有sticky的top值
+			var allTops = [];
+			for (var i = 0; i < self.stickyDomInfoLength; i++) {
+				allTops.push(self.stickyDomInfo[i][self._nameTop]);
+				if (offset >= self.stickyDomInfo[i][self._nameTop]) {
+					index.push(i);
+				}
+			}
+			if (!index.length) {
+				self.stickyElement.style.display = "none";
+				self.curStickyIndex = undefined;
+				return;
+			}
+			var curStickyIndex = Math.max.apply(null, index);
+			if (self.curStickyIndex !== curStickyIndex) {
+				self.curStickyIndex = curStickyIndex;
+				self.userConfig.renderHook.call(self, self.stickyElement, self.stickyDomInfo[self.curStickyIndex]);
+				self.stickyElement.style.display = "block";
+				self.stickyElement.style[self.nameHeight] = self.stickyDomInfo[self.curStickyIndex].style[self.nameHeight] + "px";
+				self.stickyElement.className = self.stickyDomInfo[self.curStickyIndex].className || "";
+				for (var attrName in self.stickyDomInfo[self.curStickyIndex].style) {
+					if (attrName != self.nameHeight && attrName != "display" && attrName != "position") {
+						self.stickyElement.style[attrName] = self.stickyDomInfo[self.curStickyIndex].style[attrName];
+					}
+				}
+			}
+
+			//如果超过第一个sticky则隐藏
+			if (-_offset < Math.min.apply(null, allTops)) {
+				self.stickyElement.style.display = "none";
+				self.curStickyIndex = undefined;
+				return;
+			}
+
+		},
+		enableGPUAcceleration: function() {
+			var self = this;
+			XList.superclass.enableGPUAcceleration.call(self);
+			for (var i = 0; i < self.infiniteLength; i++) {
+				if (!/translateZ/.test(self.infiniteElements[i].style[transform])) {
+					self.infiniteElements[i].style[transform] += " translateZ(0)";
+				}
+			}
+		},
+		disableGPUAcceleration: function() {
+			var self = this;
+			XList.superclass.disableGPUAcceleration.call(self);
+			for (var i = 0; i < self.infiniteLength; i++) {
+				self.infiniteElements[i].style[transform] = self.infiniteElements[i].style[transform].replace(/translateZ\(0px\)/, "");
+			}
+		},
+		_initInfinite: function() {
+			var self = this;
+			var el = self.userConfig.infiniteElements;
+			self.datasets = [];
+			if (self.userConfig.data && self.userConfig.data.length) {
+				self.datasets.push(new DataSet({
+					data: self.userConfig.data
+				}));
+			}
+			self.infiniteElements = self.renderTo.querySelectorAll(el);
+			self.infiniteLength = self.infiniteElements.length;
+			self.infiniteElementsCache = (function() {
+				var tmp = []
+				for (var i = 0; i < self.infiniteLength; i++) {
+					tmp.push({});
+					self.infiniteElements[i].style.position = "absolute";
+					self.infiniteElements[i].style[self.nameTop] = 0;
+					self.infiniteElements[i].style.visibility = "hidden";
+					self.infiniteElements[i].style.display = "block";
+				}
+				return tmp;
+			})()
+			self.elementsPos = {};
+			self.on("scroll", function(e) {
+				self._update(e.offset[self.nameY]);
+				self._stickyHandler(e.offset[self.nameY]);
+			})
+		}
+	});
+	return XList;
+}, {
+	requires: ['./util', './core', './dataset', './swipeedit', './pullup', './pulldown']
+});

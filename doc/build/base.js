@@ -1,1 +1,75 @@
-define('kg/xscroll/2.3.0/base',["./util"],function(require, exports, module) {var n=require("./util"),e=function(){this.__events={}};n.mix(e.prototype,{plug:function(n){var e=this;n&&n.pluginId&&(e.__plugins||(e.__plugins=[]),n.pluginInitializer(e),e.__plugins.push(n))},unplug:function(n){var e=this;if(n){var i="string"==typeof n?e.getPlugin(n):n;i.pluginDestructor(e);for(var t in e.__plugins)if(e.__plugins[t]==i)return e.__plugins.splice(t,1)}},getPlugin:function(n){var e=this,i=[];for(var t in e.__plugins)e.__plugins[t]&&e.__plugins[t].pluginId==n&&i.push(e.__plugins[t]);return i.length>1?i:i[0]||null},fire:function(n){var e=this;if(e.__events&&e.__events[n]&&e.__events[n].length)for(var i in e.__events[n])e.__events[n][i].apply(this,[].slice.call(arguments,1))},on:function(n,e){this.__events||(this.__events={}),this.__events[n]||(this.__events[n]=[]),this.__events[n].push(e)},detach:function(n,e){var i=this;if(n&&this.__events&&this.__events[n]){var t=this.__events[n].indexOf(e);t>-1?this.__events[n].splice(t,1):i.__events&&i.__events[n]&&void 0===e&&delete i.__events[n]}}}),module.exports=e;});
+KISSY.add('kg/xscroll/2.3.1/base',function(S, Util) {
+
+	var Base = function() {
+		this.__events = {};
+	}
+
+	Util.mix(Base.prototype, {
+		plug: function(plugin) {
+			var self = this;
+			if (!plugin || !plugin.pluginId) return;
+			if (!self.__plugins) {
+				self.__plugins = [];
+			}
+			plugin.pluginInitializer(self);
+			self.__plugins.push(plugin);
+		},
+		unplug: function(plugin) {
+			var self = this;
+			if (!plugin) return;
+			var _plugin = typeof plugin == "string" ? self.getPlugin(plugin) : plugin;
+			_plugin.pluginDestructor(self);
+			for (var i in self.__plugins) {
+				if (self.__plugins[i] == _plugin) {
+					return self.__plugins.splice(i, 1);
+				}
+			}
+		},
+		getPlugin: function(pluginId) {
+			var self = this;
+			var plugins = [];
+			for (var i in self.__plugins) {
+				if (self.__plugins[i] && self.__plugins[i].pluginId == pluginId) {
+					plugins.push(self.__plugins[i])
+				}
+			}
+			return plugins.length > 1 ? plugins : plugins[0] || null;
+		},
+		fire: function(evt) {
+			var self = this;
+			if (self.__events && self.__events[evt] && self.__events[evt].length) {
+				for (var i in self.__events[evt]) {
+					self.__events[evt][i].apply(this, [].slice.call(arguments, 1));
+				}
+			}
+		},
+		on: function(evt, fn) {
+			var self = this;
+			if (!this.__events) {
+				this.__events = {};
+			}
+			if (!this.__events[evt]) {
+				this.__events[evt] = [];
+			}
+			this.__events[evt].push(fn);
+		},
+		detach: function(evt, fn) {
+			var self = this;
+			if (!evt || !this.__events || !this.__events[evt]) return;
+			var index = this.__events[evt].indexOf(fn);
+			if (index > -1) {
+				//remove only fn
+				this.__events[evt].splice(index, 1);
+			} else if (self.__events && self.__events[evt] && undefined === fn) {
+				//remove all events
+				delete self.__events[evt];
+			}
+		}
+	});
+
+
+	return Base;
+
+}, {
+	requires: ['./util']
+});

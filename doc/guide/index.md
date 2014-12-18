@@ -7,9 +7,7 @@ XScroll
 
 弹性动画、滚动动画、手势无限接近IOS的native滚动体验
 
-支持KISSY 5 / SeaJS 
-
-[原生JS无依赖版本](http://huxiaoqi567.github.io/demos.html)
+[原生JS无依赖版本](http://xscroll.github.io/demos.html)
 
 ### Demo
 
@@ -19,4 +17,4 @@ XScroll
 
 * [xlist-xscroll](../demo/xlist-xscroll.html)
 
-* [更多DEMO](http://huxiaoqi567.github.io/demos.html)
+* [更多DEMO](http://xscroll.github.io/demos.html)
