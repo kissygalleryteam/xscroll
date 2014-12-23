@@ -1,2 +1,0 @@
-/*!build time : 2014-12-18 5:12:53 PM*/
-KISSY.add("kg/xscroll/2.3.1/event",function(a,b){var c={on:function(a,b,c){return a.addEventListener(b,c),this.target=a,this},detach:function(a,b,c){return this.target=null,a.removeEventListener(b,c),this},dispatchEvent:function(a,c,d){var e=document.createEvent("Event");e.initEvent(c,!0,!0),b.mix(e,d),a.dispatchEvent(e)},GESTURE_PREFIX:"xs",prefix:function(a){return this.GESTURE_PREFIX+a[0].toUpperCase()+a.slice(1)}};return c},{requires:["./util"]});

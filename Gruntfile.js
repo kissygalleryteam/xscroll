@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 	var task = grunt.task;
-    var SRC = 'src/';
+    var SRC = './';
     grunt.initConfig({
         // 配置文件，参考package.json配置方式，必须设置项是
         // name, version, author
@@ -22,20 +22,21 @@ module.exports = function(grunt) {
             options: {
                 packages: [
                     {
-                        name: '<%= pkg.name %>',
-                        path: '../'
+                        name: 'kg/<%= pkg.name %>/<%= pkg.version %>/',
+                        path: 'build/',
+                        ignorePackageNameInUri:true
                     }
                 ],
-                depFilePath: 'mods.js',
+                comboOnly: true,
                 fixModuleName:true,
-                map: [["<%= pkg.name %>/src/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
+                // map: [["<%= pkg.name %>/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
             },
             main: {
                 files: [
                     {
                         expand: true,
-                        cwd: SRC,
-                        src: [ './*.js','./plugin/*.js' ],
+                        cwd: 'build/',
+                        src: [ '**/*.js','!map.js'],
                         dest: 'build/'
                     }
                 ]
@@ -91,13 +92,20 @@ module.exports = function(grunt) {
 		copy : {
 			main: {
 				files:[
-					{
+					{  
 						expand:true,
 						cwd:SRC,
+
 						src: [
+                            '**/*.js',
 							'**/*.css',
+                            '!meta/**/*',
+                            '!test/**/*',
 							'!build/**/*.css',
-							'!demo/**/*.css'
+							'!demo/**/*.css',
+                            '!node_modules/**/*',
+                            '!node_modules/**/*.css',
+                            '!Gruntfile.js'
 						], 
 						dest: './build/', 
 						filter: 'isFile'
@@ -132,7 +140,8 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: './build',
-                        src: ['**/*.less.css', '!**/*.less-min.css'],
+                        src: ['**/*.less.css', '!**/*.less-min.css','!build/**/*.less',   
+                            '!demo/**/*.less','!node_modules/**/*.less'],
                         dest: './build',
                         ext: '.less-min.css'
                     }
@@ -163,7 +172,7 @@ module.exports = function(grunt) {
 
 
 	grunt.registerTask('build', '默认构建任务', function() {
-		task.run(['clean:build', 'kmc','uglify', 'copy','less','cssmin']);
+		task.run(['clean:build', 'copy','kmc','uglify']);
 	});
 
     return grunt.registerTask('default', '',function(type){

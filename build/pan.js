@@ -1,29 +1,19 @@
-/*
-combined files : 
-
-kg/xscroll/1.1.10/pan
-
-*/
-/*
-	Pan Event for KISSY MINI 
-	@author xiaoqi.huxq@alibaba-inc.com
-*/
-;KISSY.add('kg/xscroll/1.1.10/pan',function(S, Node,Event) {
+KISSY.add('kg/xscroll/2.3.1/pan',function(S, Util, Event) {
 	var doc = window.document;
-	var PAN_START = 'gesturePanStart',
-		PAN_END = 'gesturePanEnd',
-		PAN = 'gesturePan',
+	var PAN_START = Event.prefix('panstart'),
+		PAN_END = Event.prefix('panend'),
+		PAN = Event.prefix('pan'),
 		MIN_SPEED = 0.35,
 		MAX_SPEED = 8;
-	var $ = S.all;
-	var touch = {}, record = [];
+	var touch = {},
+		record = [];
 	var startX = 0;
 	var startY = 0;
 
 	function touchMoveHandler(e) {
 		if (e.touches.length > 1) return;
 		if (this.gestureType && this.gestureType != "pan") return;
-		if(this.gestureType == ""){
+		if (this.gestureType == "") {
 			record = [];
 		}
 		if (!record.length) {
@@ -44,13 +34,13 @@ kg/xscroll/1.1.10/pan
 			e.deltaX = touch.deltaX;
 			e.deltaY = touch.deltaY;
 			this.gestureType = "pan";
-			$(e.target).fire(PAN_START, e);
+			Event.dispatchEvent(e.target, PAN_START, e);
 		} else {
-			if(this.gestureType != "pan") return;
+			if (this.gestureType != "pan") return;
 			touch.deltaX = e.touches[0].clientX - touch.startX;
 			touch.deltaY = e.touches[0].clientY - touch.startY;
-			touch.directionX = e.touches[0].clientX - touch.prevX > 0 ? "right":"left";
-			touch.directionY = e.touches[0].clientY - touch.prevY > 0 ? "bottom":"top";
+			touch.directionX = e.touches[0].clientX - touch.prevX > 0 ? "right" : "left";
+			touch.directionY = e.touches[0].clientY - touch.prevY > 0 ? "bottom" : "top";
 			touch.prevX = e.touches[0].clientX;
 			touch.prevY = e.touches[0].clientY;
 			e.touch = touch;
@@ -66,9 +56,9 @@ kg/xscroll/1.1.10/pan
 			e.velocityY = 0;
 			e.directionX = touch.directionX;
 			e.directionY = touch.directionY;
-			if (!e.isPropagationStopped()) {
-				$(e.target).fire(PAN, e);
-			}
+			// if (!e.isPropagationStopped()) {
+			Event.dispatchEvent(e.target, PAN, e);
+			// }
 		}
 
 
@@ -134,31 +124,14 @@ kg/xscroll/1.1.10/pan
 		var flickStartRecord = record[flickStartIndex];
 		//移除前面没有用的点
 		e.touch.record = e.touch.record.splice(flickStartIndex - 1);
-
-
-		//去除NaN的点
-		for(var i =0,l = e.touch.record.length;i<l;i++){
-			if(isNaN(e.touch.record[i].velocity)){
-				e.touch.record.splice(i,1);
-			}
-		}
-
-		var str = ""
-		for(var i in e.touch.record){
-			str += e.touch.record[i].velocityY.toFixed(2)+" "
-		}
-
-
-
-
 		var velocityObj = getSpeed(e.touch.record);
 		e.velocityX = Math.abs(velocityObj.velocityX) > MAX_SPEED ? velocityObj.velocityX / Math.abs(velocityObj.velocityX) * MAX_SPEED : velocityObj.velocityX;
 		e.velocityY = Math.abs(velocityObj.velocityY) > MAX_SPEED ? velocityObj.velocityY / Math.abs(velocityObj.velocityY) * MAX_SPEED : velocityObj.velocityY;
 		e.velocity = Math.sqrt(Math.pow(e.velocityX, 2) + Math.pow(e.velocityY, 2))
 		touch = {};
 		record = [];
-		if(this.gestureType == "pan"){
-			$(e.target).fire(PAN_END, e);
+		if (this.gestureType == "pan") {
+			Event.dispatchEvent(e.target, PAN_END, e)
 			this.gestureType = ""
 		}
 	}
@@ -179,35 +152,21 @@ kg/xscroll/1.1.10/pan
 		velocityX /= len;
 		//手指反弹的误差处理
 		return {
-			// velocityY: Math.abs(record[len - 1]['velocityY']) > MIN_SPEED ? velocityY : 0,
-			// velocityX: Math.abs(record[len - 1]['velocityX']) > MIN_SPEED ? velocityX : 0
-			velocityY:velocityY,
-			velocityX:velocityX
+			velocityY: Math.abs(record[len - 1]['velocityY']) > MIN_SPEED ? velocityY : 0,
+			velocityX: Math.abs(record[len - 1]['velocityX']) > MIN_SPEED ? velocityX : 0
 		}
 	}
 
-	S.each([PAN], function(evt) {
-		S.Event.Special[evt] = {
-			setup: function() {
-				$(this).on('touchmove', touchMoveHandler);
-				$(this).on('touchend', touchEndHandler);
-			},
-			teardown: function() {
-				$(this).detach('touchmove', touchMoveHandler);
-				$(this).detach('touchend', touchEndHandler);
-			}
-		}
-	});
+	document.addEventListener("touchmove", touchMoveHandler);
+	document.addEventListener("touchend", touchEndHandler);
 
-
-
-	//枚举
-	return {
+	var Pan = {
 		PAN_START: PAN_START,
-		PAN: PAN,
-		PAN_END: PAN_END
+		PAN_END: PAN_END,
+		PAN: PAN
 	};
 
+	return Pan;
 }, {
-	requires: ['node','event']
+	requires: ['./util', './event']
 });
