@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Xscroll : 移动端滚动解决方案">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Xscroll</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/kissygalleryteam/xscroll">View on GitHub</a>
+
+          <h1 id="project_title">Xscroll</h1>
+          <h2 id="project_tagline">移动端滚动解决方案</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/kissygalleryteam/xscroll/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/kissygalleryteam/xscroll/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><img src="http://gtms01.alicdn.com/tps/i1/TB1Pmu9FVXXXXaZXFXXEBpbZpXX-1720-1162.png_600x600.jpg" alt="XScroll结构图"></p>
+
+<h1>
+<a id="xscroll" class="anchor" href="#xscroll" aria-hidden="true"><span class="octicon octicon-link"></span></a>XScroll</h1>
+
+<p>移动端的模拟滚动方案</p>
+
+<p>弹性动画、滚动动画、手势无限接近IOS的native滚动体验</p>
+
+<h3>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span class="octicon octicon-link"></span></a>changelog</h3>
+
+<h4>
+<a id="v110" class="anchor" href="#v110" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.0</h4>
+
+<ul>
+<li>新增boundry、bounce接口</li>
+</ul>
+
+<h4>
+<a id="v111" class="anchor" href="#v111" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.1</h4>
+
+<ul>
+<li>修复2d滚动结束事件回调相互干扰的问题</li>
+<li>pan事件调整，panstart区分touchstart</li>
+</ul>
+
+<h4>
+<a id="v112" class="anchor" href="#v112" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.2</h4>
+
+<ul>
+<li>pulldown插件允许自定义刷新（异步刷新）通过autoRefresh配置开关</li>
+</ul>
+
+<h4>
+<a id="v113" class="anchor" href="#v113" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.3</h4>
+
+<ul>
+<li>修复1.1.2包名错误导致无法使用组件的问题</li>
+</ul>
+
+<h4>
+<a id="v114" class="anchor" href="#v114" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.4</h4>
+
+<ul>
+<li>修复超链接误点的问题</li>
+<li>修复isScrollingX,isScrollingY和scrollEnd的判断逻辑错误问题</li>
+<li>content高度100%限制去除</li>
+<li>修复滚动条定位问题</li>
+</ul>
+
+<h4>
+<a id="v115" class="anchor" href="#v115" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.5</h4>
+
+<ul>
+<li>修复2D滚动时的滚动条、边界碰撞问题</li>
+</ul>
+
+<h4>
+<a id="v116" class="anchor" href="#v116" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.6</h4>
+
+<ul>
+<li>修复中心点缩放问题</li>
+<li>优化安卓事件</li>
+<li>修复滚动重绘问题</li>
+</ul>
+
+<h4>
+<a id="v117" class="anchor" href="#v117" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.7</h4>
+
+<ul>
+<li>transition替代帧动画提高滚动条流畅度</li>
+<li>修复边界拓展后pan事件跳动的问题</li>
+<li>transitionEnd替代RAF方案进行高精度滚动回调</li>
+</ul>
+
+<h4>
+<a id="v118" class="anchor" href="#v118" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.8</h4>
+
+<ul>
+<li>修复缩放事件问题</li>
+</ul>
+
+<h4>
+<a id="v119" class="anchor" href="#v119" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.9</h4>
+
+<ul>
+<li>新增gpuAcceleration开关是否启用GPU加速</li>
+<li>修复超出边缘点击不进行回弹的Bug</li>
+</ul>
+
+<h4>
+<a id="v1110" class="anchor" href="#v1110" aria-hidden="true"><span class="octicon octicon-link"></span></a>v1.1.10</h4>
+
+<ul>
+<li>修复duration为0时scrollTo方法不触发scroll、scrollTo事件</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Xscroll maintained by <a href="https://github.com/kissygalleryteam">kissygalleryteam</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
