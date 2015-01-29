@@ -41,7 +41,7 @@ gulp.task('kmc', function() {
     .pipe(gulp.dest(dest))
     .pipe(uglify())
     .pipe(rename({
-      suffix: "-min.js"
+      suffix: "-min"
     }))
     .pipe(gulp.dest(dest));
 
