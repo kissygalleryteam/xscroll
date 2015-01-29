@@ -22,8 +22,10 @@ kmc.config({
 
 gulp.task('kmc', function() {
 
-  gulp.src(src + "/**/*.js")
+  gulp.src(dest + "/**/*.js")
   .pipe(clean())
+
+  gulp.src(src + "/**/*.js")
     //转换cmd模块为kissy模块 
     .pipe(kmc.convert({
       kissy: true, // modulex: true , define: true 
