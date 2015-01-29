@@ -76,4 +76,8 @@ Util.extend(Boundry, Base, {
     }
 });
 
-module.exports = Boundry;
+if (typeof module == 'object' && module.exports) {
+    module.exports = Boundry;
+} else {
+    return Boundry;
+}

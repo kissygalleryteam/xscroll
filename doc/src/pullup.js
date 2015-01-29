@@ -151,4 +151,8 @@
 		}
 	})
 
-	module.exports = PullUp;
+	if (typeof module == 'object' && module.exports) {
+		module.exports = PullUp;
+	} else {
+		return PullUp;
+	}

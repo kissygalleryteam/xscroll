@@ -166,6 +166,8 @@
         DOUBLE_TAP:DOUBLE_TAP
     };
 
-     module.exports = Tap;
-
-
+    if(typeof module == 'object' && module.exports){
+        module.exports = Tap;
+    }else{
+        return Tap;
+    }

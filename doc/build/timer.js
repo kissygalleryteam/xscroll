@@ -1,5 +1,8 @@
-
-KISSY.add('kg/xscroll/2.3.1/timer',function(S, Util, Base,Easing,Bezier) {
+KISSY.add('kg/xscroll/2.3.2/timer',["./util","./base","./easing","./bezier"],function(S ,require, exports, module) {
+ var Util = require('./util');
+var Base = require('./base');
+var Easing = require('./easing');
+var Bezier = require('./bezier');
 
 var RAF = window.requestAnimationFrame ||
 	window.webkitRequestAnimationFrame ||
@@ -97,8 +100,9 @@ Util.extend(Timer, Base, {
 });
 
 
-return Timer;
-
-}, {
-    requires: ['./util', './base','./easing','./bezier']
+if (typeof module == 'object' && module.exports) {
+	module.exports = Timer;
+} else {
+	return Timer;
+}
 });

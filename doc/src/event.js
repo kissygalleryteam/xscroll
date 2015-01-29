@@ -23,5 +23,8 @@
 		}
 	};
 
-	module.exports = Gesture;
-	
+	if(typeof module == 'object' && module.exports){
+		module.exports = Gesture;
+	}else{
+		return Gesture;
+	}

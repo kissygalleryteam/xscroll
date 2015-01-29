@@ -89,7 +89,17 @@ var Util = {
 	},
 	guid: function() {
 		return Math.round(Math.random() * 100000000);
+	},
+	isAndroid:function(){
+		return /Android /.test(window.navigator.appVersion);
+	},
+	isBadAndroid :function(){
+		return /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion))
 	}
 }
 
-module.exports = Util;
+if (typeof module == 'object' && module.exports) {
+	module.exports = Util;
+} else {
+	return Util;
+}

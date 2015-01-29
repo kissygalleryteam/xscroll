@@ -62,5 +62,8 @@
 		PINCH_END: PINCH_END
 	};
 
-	module.exports = Pinch;
-	
+	if(typeof module == 'object' && module.exports){
+		module.exports = Pinch;
+	}else{
+		return Pinch;
+	}

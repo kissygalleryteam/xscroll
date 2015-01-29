@@ -452,6 +452,11 @@
 		}
 	});
 
-	module.exports = XList;
-	window.XList = XList;
-
+	// commonjs export
+	if (typeof module == 'object' && module.exports) {
+		module.exports = XList;
+	}
+	// browser export
+	else {
+		window.XList = XList;
+	}

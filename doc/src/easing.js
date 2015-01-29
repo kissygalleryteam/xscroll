@@ -19,4 +19,8 @@ var Easing = {
 }
 
 
-module.exports = Easing;
+if (typeof module == 'object' && module.exports) {
+	module.exports = Easing;
+} else {
+	return Easing;
+}

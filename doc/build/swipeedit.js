@@ -1,4 +1,6 @@
-KISSY.add('kg/xscroll/2.3.1/swipeedit',function(S, Util, Base) {
+KISSY.add('kg/xscroll/2.3.2/swipeedit',["./util","./base"],function(S ,require, exports, module) {
+ 	var Util = require('./util');
+	var Base = require('./base');
 	//transform
 	var transform = Util.prefixStyle("transform");
 	//transition webkitTransition MozTransition OTransition msTtransition
@@ -143,7 +145,9 @@ KISSY.add('kg/xscroll/2.3.1/swipeedit',function(S, Util, Base) {
 		}
 	});
 
-	return SwipeEdit;
-}, {
-	requires: ['./util', './base']
+	if (typeof module == 'object' && module.exports) {
+		module.exports = SwipeEdit;
+	} else {
+		return SwipeEdit;
+	}
 });

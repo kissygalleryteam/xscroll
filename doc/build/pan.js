@@ -1,4 +1,6 @@
-KISSY.add('kg/xscroll/2.3.1/pan',function(S, Util, Event) {
+KISSY.add('kg/xscroll/2.3.2/pan',["./util","./event"],function(S ,require, exports, module) {
+ 	var Util = require('./util');
+	var Event = require("./event");
 	var doc = window.document;
 	var PAN_START = Event.prefix('panstart'),
 		PAN_END = Event.prefix('panend'),
@@ -163,10 +165,15 @@ KISSY.add('kg/xscroll/2.3.1/pan',function(S, Util, Event) {
 	var Pan = {
 		PAN_START: PAN_START,
 		PAN_END: PAN_END,
-		PAN: PAN
+		PAN: PAN,
+		reset:function(){
+			record = [];
+		}
 	};
 
-	return Pan;
-}, {
-	requires: ['./util', './event']
+	if (typeof module == 'object' && module.exports) {
+		module.exports = Pan;
+	} else {
+		return Pan;
+	}
 });

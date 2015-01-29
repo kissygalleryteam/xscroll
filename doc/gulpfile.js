@@ -1,52 +1,54 @@
 var gulp = require('gulp');
+
+var PACKAGE = require('./package.json');
+
+
 var kmc = require('gulp-kmc');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
+var clean = require('gulp-clean');
+
+
 var src = "./src",
-  dest = "./build/";
-var pkg = require('./package.json');
+  dest = "./build";
+
+
 kmc.config({
-  depFilePath: dest + 'mods-dep.js', //全局依赖文件关系，此处配置后下面的各个模块将不会再生成
   packages: [{
-    name: 'kg/xscroll/'+pkg.version+'/',
-    // combine: true,
-    base: './src/' 
+    name: 'kg/xscroll/' + PACKAGE.version + "/",
+    base: src
   }]
 });
 
-
-
 gulp.task('kmc', function() {
 
+  gulp.src(dest + "/**/*.js")
+  .pipe(clean())
+
   gulp.src(src + "/**/*.js")
-  //转换cmd模块为kissy模块
-  .pipe(kmc.convert({
-    seajs:true,
-    fixModuleName:true,
-    minify: true, //是否压缩
-    //ext:"-min.js",//转换后文件扩展名，如果minify 为true则是压缩文件扩展名,同时也支持下面这种配置
-    ext: {
-      src: "-debug.js", //kissy1.5后添加debug参数会默认加载-debug.js
-      min: ".js"
-    },
-    exclude: [], //忽略该目录
-    ignoreFiles: ['.combo.js', '-min.js'], //忽略该类文件
-  }))
-  //合并文件
-  // .pipe(kmc.combo({
-  //   minify: true,
-  //   ext: "-min.js",
-  //   files: [{
-  //     // src: src + '/index.js',
-  //     // dest: dest + '/core.js'
-  //   }]
-  // }))
+    //转换cmd模块为kissy模块 
+    .pipe(kmc.convert({
+      kissy: true, // modulex: true , define: true 
+      // exclude: ['tasks'],//忽略该目录 
+      ignoreFiles: ['.combo.js', '-min.js'], //忽略该类文件, 
+      requireCss: false //是否保留js源码中的require('./xxx.css) 默认true 
+    }))
+    //合并文件 
+    // .pipe(kmc.combo({
+    //      files:[{
+    //                src: src+'/index.js',
+    //                dest: dest+'/core.js'
+    //            }]
+    //  }))
+    .pipe(gulp.dest(dest))
+    .pipe(uglify())
+    .pipe(rename({
+      suffix: "-min"
+    }))
     .pipe(gulp.dest(dest));
 
 
 
 });
-
-gulp.task('watch',function(){
-  gulp.watch('src/**/*.js', ['kmc'])
-})
 
 gulp.task('default', ['kmc']);

@@ -50,4 +50,8 @@ function Bezier(x1, y1, x2, y2, epsilon) {
 
 };
 
-module.exports = Bezier;
+if (typeof module == 'object' && module.exports) {
+	module.exports = Bezier;
+}else{
+	return Bezier;
+}

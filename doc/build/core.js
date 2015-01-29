@@ -1,17 +1,34 @@
-KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch, Timer, ScrollBar, PullDown, PullUp, Boundry, Easing) {
+KISSY.add('kg/xscroll/2.3.2/core',["./base","./util","./event","./pan","./tap","./pinch","./timer","./scrollbar","./pulldown","./pullup","./boundry","./easing"],function(S ,require, exports, module) {
+     var Base = require('./base');
+    var Util = require('./util');
+    var Event = require('./event');
+    var Pan = require('./pan');
+    var Tap = require('./tap');
+    var Pinch = require('./pinch');
+    var Timer = require('./timer');
+    var ScrollBar = require('./scrollbar');
+    var PullDown = require('./pulldown');
+    var PullUp = require('./pullup');
+    var Boundry = require('./boundry');
+    var Easing = require('./easing');
     var XScroll = function(cfg) {
         XScroll.superclass.constructor.call(this);
         this.userConfig = cfg;
         this.init();
     };
-
     XScroll.Util = Util;
     //namespace for plugins
     XScroll.Plugin = {
         PullDown: PullDown,
         PullUp: PullUp
     };
-    //event names
+    //namespace for gesture
+    XScroll.Gesture = {
+            Pan: Pan,
+            Tap: Tap,
+            Pinch: Pinch
+        }
+        //event names
     var SCROLL_END = "scrollend";
     var SCROLL = "scroll";
     var PAN_END = "panend";
@@ -28,11 +45,11 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
     var SNAP = "snap";
     var SNAP_END = "snapend";
     var AFTER_RENDER = "afterrender";
-    var REFRESH = "refresh";
+    var BOUNDRY_OUT = "boundryout";
     //constant acceleration for scrolling
     var SROLL_ACCELERATION = 0.001;
     //boundry checked bounce effect
-    var BOUNDRY_CHECK_DURATION = 400;
+    var BOUNDRY_CHECK_DURATION = 500;
     var BOUNDRY_CHECK_EASING = "ease";
     var BOUNDRY_CHECK_ACCELERATION = 0.1;
     //reduced boundry pan distance
@@ -76,10 +93,11 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
          */
 
     Util.extend(XScroll, Base, {
-        version: "2.3.1",
+        version: "2.3.2",
         init: function() {
             var self = this;
             var userConfig = self.userConfig = Util.mix({
+                preventDefault: true,
                 snap: false,
                 snapWidth: 100,
                 snapHeight: 100,
@@ -115,20 +133,6 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
             self.contentClsName = clsPrefix + "content";
             self.boundry = new Boundry();
             self.boundry.refresh();
-        },
-        /*
-            render & scroll to top
-        */
-        refresh: function() {
-            var self = this;
-            self.render();
-            self.scrollTo({
-                x: 0,
-                y: 0
-            });
-            self.fire(REFRESH, {
-                type: REFRESH
-            })
         },
         render: function() {
             var self = this;
@@ -361,8 +365,8 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
             this.userConfig.gpuAcceleration = false;
         },
         _transform: function() {
-            var translateZ = this.userConfig.gpuAcceleration ? " translateZ(0) " : "";
             var scale = this.userConfig.scalable ? " scale(" + this.scale + ") " : "";
+            var translateZ = this.userConfig.gpuAcceleration ? " translateZ(0) " : "";
             this.content.style[transform] = "translate(" + this.x + "px,0px) " + scale + translateZ;
             if (!this.userConfig.lockY) {
                 this.container.style[transform] = "translate(0px," + this.y + "px) " + translateZ;
@@ -430,102 +434,6 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
             var easing = easing || self.userConfig.easing;
             self._scrollHandler(-y, duration, callback, easing, "y");
         },
-        _scrollHandler: function(dest, duration, callback, easing, type) {
-            var self = this;
-            var offset = self.getOffset();
-            var directions = type == "x" ? ["left", "right"] : ["top", "bottom"];
-            var Type = type.toUpperCase();
-            var el = type == "x" ? self.content : self.container;
-            var transitionStr = "none";
-            var __scrollEndCallbackFn = function(e) {
-                self['isScrolling' + Type] = false;
-                var _offset = self.getOffset();
-                var boundryout;
-                if (_offset[e.type] == self.boundry.top && Math.abs(self['_bounce' + type]) > 0) {
-                    boundryout = type == "x" ? "left" : "top";
-                } else if (_offset[e.type] + self.containerHeight == self.boundry.bottom && Math.abs(self['_bounce' + type]) > 0) {
-                    boundryout = type == "x" ? "right" : "bottom";
-                }
-                var params = {
-                    offset: _offset,
-                    zoomType: e.type,
-                    type: SCROLL_END
-                };
-                if (boundryout) {
-                    params.boundryout = boundryout;
-                }
-                params['direction' + e.type.toUpperCase()] = dest - offset[e.type] < 0 ? directions[1] : directions[0];
-                self.fire(SCROLL_END, params);
-                callback && callback(e);
-            }
-
-            if (self.userConfig.useTransition) {
-                //transition
-                transitionStr = duration > 0 ? [transformStr, " ", duration / 1000, "s ", Easing.format(easing), " 0s"].join("") : "none";
-                el.style[transition] = transitionStr;
-                type == "x" ? self.translateX(dest) : self.translateY(dest);
-            }
-
-            self.timer[type] = self.timer[type] || new Timer();
-            self.timer[type].reset({
-                duration: duration,
-                easing: easing
-            });
-            self.timer[type].detach("run");
-            self.timer[type].on("run", function(e) {
-                var params = {
-                    zoomType: type,
-                    offset: self.getOffset(),
-                    type: SCROLL
-                };
-                params['direction' + type.toUpperCase()] = dest - offset[type] < 0 ? directions[1] : directions[0];
-                if (!self.userConfig.useTransition) {
-                    type == "x" ? self.translateX(e.percent * (dest - offset[type]) + offset[type]) : self.translateY(e.percent * (dest - offset[type]) + offset[type]);
-                }
-                self.fire(SCROLL, params);
-            });
-            self.timer[type].detach("end");
-            self.timer[type].on("end", function(e) {
-                if (!self.userConfig.useTransition) {
-                    __scrollEndCallbackFn({
-                        type: type
-                    });
-                }
-            })
-            self.timer[type].stop();
-            self.timer[type].run();
-            //if dest value is equal to current value then return.
-            if (duration <= 0 || dest == offset[type]) {
-                self.fire(SCROLL, {
-                    zoomType: type,
-                    offset: offset,
-                    type: SCROLL
-                });
-                self.fire(SCROLL_END, {
-                    zoomType: type,
-                    offset: offset,
-                    type: SCROLL_END
-                });
-                return;
-            }
-            self['isScrolling' + Type] = true;
-            //regist transitionEnd callback function
-            if (self.userConfig.useTransition) {
-                self['__scrollEndCallback' + Type] = __scrollEndCallbackFn;
-            }
-
-            self.fire(SCROLL_ANIMATE, {
-                transition: transitionStr,
-                offset: {
-                    x: self.x,
-                    y: self.y
-                },
-                type: SCROLL_ANIMATE,
-                duration: duration / 1000,
-                easing: Easing.format(easing),
-                zoomType: type
-            })
-        },
         boundryCheckX: function(callback) {
             var self = this;
             if (!self.boundryCheckEnabled || self.userConfig.lockX) return;
@@ -585,7 +493,9 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
         __handlers: {
             touchstart: function(e) {
                 var self = this;
-                e.preventDefault();
+                if (self.userConfig.preventDefault) {
+                    e.preventDefault();
+                }
                 self._fireTouchStart(e);
                 if (self.isScrollingX || self.isScrollingY) {
                     self.stop();
@@ -617,6 +527,7 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
                 var containerHeight = self.containerHeight;
                 var boundry = self.boundry;
                 self.translate(offset);
+                self.__panstarted = true;
                 self._firePanStart(Util.mix(e, {
                     offset: offset
                 }));
@@ -624,7 +535,13 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
             },
             pan: function(e) {
                 var self = this;
+                if (!self.__panstarted) {
+                    //reset pan gesture
+                    Pan.reset();
+                    return;
+                }
                 var boundry = self.boundry;
+                self.offset = self.offset || self.getOffset();
                 var posY = self.userConfig.lockY ? Number(self.offset.y) : Number(self.offset.y) + e.deltaY;
                 var posX = self.userConfig.lockX ? Number(self.offset.x) : Number(self.offset.x) + e.deltaX;
                 //enable bounce
@@ -632,7 +549,7 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
                 var containerWidth = self.containerWidth;
                 var containerHeight = self.containerHeight;
                 if (posY > boundry.top) { //overtop 
-                    posY = bounce || xscroll.getPlugin("xscroll/plugin/pulldown") ? (posY - boundry.top) * PAN_RATE + boundry.top : boundry.top;
+                    posY = bounce || self.getPlugin("xscroll/plugin/pulldown") ? (posY - boundry.top) * PAN_RATE + boundry.top : boundry.top;
                 }
                 if (posY < boundry.bottom - containerHeight) { //overbottom 
                     posY = bounce ? posY + (boundry.bottom - containerHeight - posY) * PAN_RATE : boundry.bottom - containerHeight;
@@ -677,7 +594,9 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
                 var self = this;
                 var offset = self.getOffset();
                 var boundry = self.boundry;
+                self.__panstarted = false;
                 self._firePanEnd(e);
+                if (e.defaultPrevented) return;
                 self.userConfig.snap ? self._snapAnimate(e) : self._scrollAnimate(e);
                 delete self.offset;
             }
@@ -713,6 +632,7 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
 
             if (self.userConfig.useTransition) {
                 Event.on(container, transitionEnd, function(e) {
+                    //prevent callback in bad android
                     if (e.elapsedTime.toFixed(3) <= 0.001) return;
                     if (e.target == content && !self.isScaling) {
                         self.__scrollEndCallbackX && self.__scrollEndCallbackX({
@@ -774,15 +694,18 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
                             y: originY
                         }
                     })
-                })
+                });
                 Event.on(renderTo, Tap.DOUBLE_TAP, function(e) {
                     originX = (e.pageX - self.x) / self.containerWidth;
                     originY = (e.pageY - self.y) / self.containerHeight;
                     self.scale > self.minScale ? self.scaleTo(self.minScale, originX, originY, 200) : self.scaleTo(self.maxScale, originX, originY, 200);
-                })
+                });
             }
             Event.on(window, "resize", function(e) {
-                self.refresh();
+                setTimeout(function() {
+                    self.render();
+                    self.boundryCheck()
+                }, 100)
             })
         },
         initSnap: function() {
@@ -866,10 +789,11 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
                 var param = {
                     zoomType: type,
                     velocityX: 0,
-                    velocityY: 0
+                    velocityY: 0,
+                    type: BOUNDRY_OUT
                 };
                 param["velocity" + TYPE] = self[_bounce];
-                self.fire("boundryout", param);
+                self.fire(BOUNDRY_OUT, param);
                 if (self.userConfig.bounce) {
                     var v = self[_bounce];
                     var a = 0.01 * v / Math.abs(v);
@@ -982,51 +906,153 @@ KISSY.add('kg/xscroll/2.3.1/core',function(S, Base, Util, Event, Pan, Tap, Pinch
             return transition;
 
         },
-        addView: function(view) {
+        _scrollHandler: function(dest, duration, callback, easing, type) {
             var self = this;
+            var offset = self.getOffset();
+            var directions = type == "x" ? ["left", "right"] : ["top", "bottom"];
+            var Type = type.toUpperCase();
+            var el = type == "x" ? self.content : self.container;
+            var transitionStr = "none";
+            var __scrollEndCallbackFn = function(e) {
+                self['isScrolling' + Type] = false;
+                var _offset = self.getOffset();
+                var boundryout;
+                if (_offset[e.type] == self.boundry.top && Math.abs(self['_bounce' + type]) > 0) {
+                    boundryout = type == "x" ? "left" : "top";
+                } else if (_offset[e.type] + self.containerHeight == self.boundry.bottom && Math.abs(self['_bounce' + type]) > 0) {
+                    boundryout = type == "x" ? "right" : "bottom";
+                }
+                var params = {
+                    offset: _offset,
+                    zoomType: e.type,
+                    type: SCROLL_END
+                };
+                if (boundryout) {
+                    params.boundryout = boundryout;
+                }
+                params['direction' + e.type.toUpperCase()] = dest - offset[e.type] < 0 ? directions[1] : directions[0];
+                self.fire(SCROLL_END, params);
+                callback && callback(e);
+            }
+
+            if (self.userConfig.useTransition) {
+                //transition
+                transitionStr = duration > 0 ? [transformStr, " ", duration / 1000, "s ", Easing.format(easing), " 0s"].join("") : "none";
+                el.style[transition] = transitionStr;
+                type == "x" ? self.translateX(dest) : self.translateY(dest);
+            }
+
+            self.timer[type] = self.timer[type] || new Timer();
+            self.timer[type].reset({
+                duration: duration,
+                easing: easing
+            });
+            self.timer[type].detach("run");
+            self.timer[type].on("run", function(e) {
+                var params = {
+                    zoomType: type,
+                    offset: self.getOffset(),
+                    type: SCROLL
+                };
+                params['direction' + type.toUpperCase()] = dest - offset[type] < 0 ? directions[1] : directions[0];
+                if (!self.userConfig.useTransition) {
+                    type == "x" ? self.translateX(e.percent * (dest - offset[type]) + offset[type]) : self.translateY(e.percent * (dest - offset[type]) + offset[type]);
+                }
+                self.fire(SCROLL, params);
+            });
+            self.timer[type].detach("end");
+            self.timer[type].on("end", function(e) {
+                if (!self.userConfig.useTransition) {
+                    __scrollEndCallbackFn({
+                        type: type
+                    });
+                }
+            })
+            self.timer[type].stop();
+            self.timer[type].run();
+            //if dest value is equal to current value then return.
+            if (duration <= 0 || dest == offset[type]) {
+                self.fire(SCROLL, {
+                    zoomType: type,
+                    offset: offset,
+                    type: SCROLL
+                });
+                self.fire(SCROLL_END, {
+                    zoomType: type,
+                    offset: offset,
+                    type: SCROLL_END
+                });
+                return;
+            }
+            self['isScrolling' + Type] = true;
+            //regist transitionEnd callback function
+            if (self.userConfig.useTransition) {
+                self['__scrollEndCallback' + Type] = __scrollEndCallbackFn;
+            }
+
+            self.fire(SCROLL_ANIMATE, {
+                transition: transitionStr,
+                offset: {
+                    x: self.x,
+                    y: self.y
+                },
+                type: SCROLL_ANIMATE,
+                duration: duration / 1000,
+                easing: Easing.format(easing),
+                zoomType: type
+            })
+        },
+        addView: function(view, viewCfg) {
+            var self = this;
+            //config for view
+            viewCfg = Util.mix({
+                captureBounce: false,
+                stopPropagation: true
+            }, viewCfg)
             if (!view || !view instanceof XScroll) return;
             if (!self.__subViews) {
-                self.__subViews = [];
+                self.__subViews = {};
             }
-            if (view.guid && !self.getViewById(view.guid)) {
+            if (view.guid && !self.__subViews[view.guid]) {
+                view.__viewControllers = view.__viewControllers || {};
                 //set parent scrollview
                 view.parentView = {
                     instance: self
                 };
-                //bounce
-                view.on("boundryout", function(e) {
+                view.__viewControllers.boundryout = function(e) {
                     self._scrollAnimate(e);
-                });
-                return self.__subViews.push(view);
-            }
-            return;
-        },
-        getViewById: function(id) {
-            var self = this;
-            if (!self.__subViews) return;
-            for (var i = 0, l = self.__subViews.length; i < l; i++) {
-                if (id && id == self.__subViews[i].guid) {
-                    return self.__subViews[i];
                 }
+                viewCfg.captureBounce && view.on("boundryout", view.__viewControllers.boundryout);
+                return self.__subViews[view.guid] = view;
             }
             return;
         },
-        getViews: function() {
+        removeView: function(view) {
+            var self = this;
+            if (!view || !view.guid) return;
+            var subview = self.__subViews[view.guid];
+            if (subview) {
+                delete subview.parentView;
+                for (var i in subview.__viewControllers) {
+                    //remove events
+                    subview.detach(i, subview.__viewControllers[i]);
+                }
+                //clear
+                subview.__viewControllers = {};
+                delete subview;
+            }
+        },
+        getViews: function(guid) {
+            if (guid) {
+                return this.__subViews[guid];
+            }
             return this.__subViews;
-        },
-        removeView: function(id) {
-            var self = this;
-            for (var i = 0, l = self.__subViews.length; i < l; i++) {
-                if (id && id == self.__subViews[i].guid) {
-                    delete self.__subViews[i].parentView;
-                    return self.__subViews.splice(i, 1);
-                }
-            }
         }
     });
 
-    return XScroll;
-
-}, {
-    requires: ['./base', './util', './event', './pan', './tap', './pinch', './timer', './scrollbar', './pulldown', './pullup', './boundry', './easing']
+    if (typeof module == 'object' && module.exports) {
+        module.exports = XScroll;
+    } else {
+        return window.XScroll = XScroll;
+    }
 });

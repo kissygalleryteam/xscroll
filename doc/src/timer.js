@@ -99,4 +99,8 @@ Util.extend(Timer, Base, {
 });
 
 
-module.exports = Timer;
+if (typeof module == 'object' && module.exports) {
+	module.exports = Timer;
+} else {
+	return Timer;
+}

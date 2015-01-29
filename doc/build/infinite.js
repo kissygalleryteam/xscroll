@@ -1,9 +1,15 @@
-KISSY.add('kg/xscroll/2.3.1/infinite',function(S, Util, XScroll, DataSet, SwipeEdit, PullUp, PullDown) {
+KISSY.add('kg/xscroll/2.3.2/infinite',["./util","./core","./dataset","./swipeedit","./pullup","./pulldown"],function(S ,require, exports, module) {
+ 	var Util = require('./util');
+	var XScroll = require('./core');
+	var DataSet = require('./dataset');
+	var SwipeEdit = require('./swipeedit');
+	var PullUp = require('./pullup');
+	var PullDown = require('./pulldown');
 	var transform = Util.prefixStyle("transform");
 	var PAN_END = "panend";
-	var PAN_START = "panstart";
-	var PAN = "pan";
-		var XList = function(cfg) {
+    var PAN_START = "panstart";
+    var PAN = "pan";
+	var XList = function(cfg) {
 		XList.superclass.constructor.call(this, cfg);
 	}
 	XList.Util = Util;
@@ -33,6 +39,7 @@ KISSY.add('kg/xscroll/2.3.1/infinite',function(S, Util, XScroll, DataSet, SwipeE
 				self.userConfig.lockX = true;
 				self.userConfig.scrollbarX = false;
 			}
+
 			self.isY = !!(self.userConfig.zoomType == "y");
 			self._nameTop = self.isY ? "_top" : "_left";
 			self._nameHeight = self.isY ? "_height" : "_width";
@@ -445,7 +452,13 @@ KISSY.add('kg/xscroll/2.3.1/infinite',function(S, Util, XScroll, DataSet, SwipeE
 			})
 		}
 	});
-	return XList;
-}, {
-	requires: ['./util', './core', './dataset', './swipeedit', './pullup', './pulldown']
+
+	// commonjs export
+	if (typeof module == 'object' && module.exports) {
+		module.exports = XList;
+	}
+	// browser export
+	else {
+		window.XList = XList;
+	}
 });

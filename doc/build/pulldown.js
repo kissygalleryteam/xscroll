@@ -1,4 +1,6 @@
-KISSY.add('kg/xscroll/2.3.1/pulldown',function(S, Util, Base) {
+KISSY.add('kg/xscroll/2.3.2/pulldown',["./util","./base"],function(S ,require, exports, module) {
+ 	var Util = require('./util');
+	var Base = require('./base');
 	var prefix;
 	var containerCls;
 	var content = "Pull Down To Refresh";
@@ -107,6 +109,8 @@ KISSY.add('kg/xscroll/2.3.1/pulldown',function(S, Util, Base) {
 			var height = self.userConfig.height || 60;
 			var offsetTop = xscroll.getOffsetTop();
 			if (offsetTop > height) {
+				//prevent default bounce
+				e.preventDefault();
 				xscroll.boundry.resetTop();
 				xscroll.boundry.expandTop(height);
 				xscroll.bounce(true,function(){
@@ -131,7 +135,9 @@ KISSY.add('kg/xscroll/2.3.1/pulldown',function(S, Util, Base) {
 		}
 	});
 
-	return PullDown;
-}, {
-	requires: ['./util', './base']
+	if(typeof module == 'object' && module.exports){
+		module.exports = PullDown;
+	}else{
+		return PullDown;
+	}
 });

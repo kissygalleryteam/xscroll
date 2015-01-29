@@ -1,4 +1,6 @@
-KISSY.add('kg/xscroll/2.3.1/pullup',function(S, Util, Base) {
+KISSY.add('kg/xscroll/2.3.2/pullup',["./util","./base"],function(S ,require, exports, module) {
+ 	var Util = require('./util');
+	var Base = require('./base');
 	var prefix;
 	var containerCls;
 	var loadingContent = "Loading...";
@@ -150,8 +152,9 @@ KISSY.add('kg/xscroll/2.3.1/pullup',function(S, Util, Base) {
 		}
 	})
 
-	return PullUp;
-}, {
-	requires: ['./util', './base']
+	if (typeof module == 'object' && module.exports) {
+		module.exports = PullUp;
+	} else {
+		return PullUp;
+	}
 });
-

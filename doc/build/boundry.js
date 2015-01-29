@@ -1,4 +1,6 @@
-KISSY.add('kg/xscroll/2.3.1/boundry',function(S,Util,Base){
+KISSY.add('kg/xscroll/2.3.2/boundry',["./util","./base"],function(S ,require, exports, module) {
+ var Util = require('./util');
+var Base = require('./base');
 var Boundry = function(cfg) {
     this.cfg = Util.mix({
         width:0,
@@ -75,6 +77,9 @@ Util.extend(Boundry, Base, {
     }
 });
 
-return Boundry;
-
-},{requires:['./util','./base']});
+if (typeof module == 'object' && module.exports) {
+    module.exports = Boundry;
+} else {
+    return Boundry;
+}
+});

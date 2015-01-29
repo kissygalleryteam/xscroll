@@ -1,4 +1,5 @@
-KISSY.add('kg/xscroll/2.3.1/dataset',function(S,Util){
+KISSY.add('kg/xscroll/2.3.2/dataset',["./util"],function(S ,require, exports, module) {
+ 	var Util = require('./util');
 
 	var DataSet = function(cfg){
 
@@ -43,6 +44,10 @@ KISSY.add('kg/xscroll/2.3.1/dataset',function(S,Util){
 		return this.id;
 	};
 	
-	return DataSet;
+	if(typeof module == 'object' && module.exports){
+		module.exports = DataSet;
+	}else{
+		return DataSet;
+	}
 	
-},{requires:['./util']})
+});

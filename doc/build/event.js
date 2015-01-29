@@ -1,15 +1,15 @@
-KISSY.add('kg/xscroll/2.3.1/event',function(S, Util) {
-
+KISSY.add('kg/xscroll/2.3.2/event',["./util"],function(S ,require, exports, module) {
+ 	var Util = require('./util');
 	var gestures = {};
 	var Gesture = {
-		on: function(el, type, handler) {
-			el.addEventListener(type, handler);
+		on:function(el,type,handler){
+			el.addEventListener(type,handler);
 			this.target = el;
 			return this;
 		},
-		detach: function(el, type, handler) {
+		detach:function(el,type,handler){
 			this.target = null;
-			el.removeEventListener(type, handler);
+			el.removeEventListener(type,handler);
 			return this;
 		},
 		dispatchEvent: function(tgt, type, args) {
@@ -18,14 +18,16 @@ KISSY.add('kg/xscroll/2.3.1/event',function(S, Util) {
 			Util.mix(event, args);
 			tgt.dispatchEvent(event);
 		},
-		GESTURE_PREFIX: "xs",
-		prefix: function(evt) {
+		GESTURE_PREFIX:"xs",
+		prefix:function(evt){
 			return this.GESTURE_PREFIX + evt[0].toUpperCase() + evt.slice(1);
 		}
 	};
 
-	return Gesture;
+	if(typeof module == 'object' && module.exports){
+		module.exports = Gesture;
+	}else{
+		return Gesture;
+	}
 
-}, {
-	requires: ['./util']
-})
+});

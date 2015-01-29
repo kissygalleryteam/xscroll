@@ -1,4 +1,6 @@
-KISSY.add('kg/xscroll/2.3.1/tap',function(S, Util, Event) {
+KISSY.add('kg/xscroll/2.3.2/tap',["./util","./event"],function(S ,require, exports, module) {
+     var Util = require('./util');
+    var Event = require("./event");
     var TAP = Event.prefix("tap");
     var TAP_HOLD = Event.prefix("tapHold");
     var SINGLE_TAP = Event.prefix("singleTap");
@@ -165,9 +167,9 @@ KISSY.add('kg/xscroll/2.3.1/tap',function(S, Util, Event) {
         DOUBLE_TAP:DOUBLE_TAP
     };
 
-     return Tap;
-
-}, {
-    requires: ['./util', './event']
+    if(typeof module == 'object' && module.exports){
+        module.exports = Tap;
+    }else{
+        return Tap;
+    }
 });
-

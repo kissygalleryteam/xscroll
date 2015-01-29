@@ -67,4 +67,8 @@ Util.mix(Base.prototype, {
 	}
 });
 
-module.exports = Base;
+if (typeof module == 'object' && module.exports) {
+	module.exports = Base;
+}else{
+	return Base;
+}

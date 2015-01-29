@@ -164,7 +164,14 @@
 	var Pan = {
 		PAN_START: PAN_START,
 		PAN_END: PAN_END,
-		PAN: PAN
+		PAN: PAN,
+		reset:function(){
+			record = [];
+		}
 	};
 
-	module.exports = Pan;
+	if (typeof module == 'object' && module.exports) {
+		module.exports = Pan;
+	} else {
+		return Pan;
+	}
