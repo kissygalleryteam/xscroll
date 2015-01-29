@@ -6,7 +6,7 @@ var PACKAGE = require('./package.json');
 var kmc = require('gulp-kmc');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
-
+var clean = require('gulp-clean');
 
 
 var src = "./src",
@@ -23,6 +23,7 @@ kmc.config({
 gulp.task('kmc', function() {
 
   gulp.src(src + "/**/*.js")
+  .pipe(clean())
     //转换cmd模块为kissy模块 
     .pipe(kmc.convert({
       kissy: true, // modulex: true , define: true 

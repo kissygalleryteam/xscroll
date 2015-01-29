@@ -312,5 +312,7 @@ xlist.render();
 - 新增boundryout api
 - scrollanimate和panend触发顺序调整
 
-
+### v2.3.2
+- 修复bounce为false后报错的问题
+- 改回kmd规范
 
