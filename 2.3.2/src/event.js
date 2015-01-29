@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/event',["./util"],function(S ,require, exports, module) {
- 	var Util = require('./util');
+	var Util = require('./util');
 	var gestures = {};
 	var Gesture = {
 		on:function(el,type,handler){
@@ -29,5 +28,3 @@ KISSY.add('kg/xscroll/2.3.2/event',["./util"],function(S ,require, exports, modu
 	}else{
 		return Gesture;
 	}
-
-});

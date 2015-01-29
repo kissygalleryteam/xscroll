@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/easing',[],function(S ,require, exports, module) {
- var Easing = {
+var Easing = {
 	"linear": [0, 0, 1, 1],
 	"ease":[.25,.1,.25,1],
 	"ease-out":[0,0,.58,1],
@@ -25,4 +24,3 @@ if (typeof module == 'object' && module.exports) {
 } else {
 	return Easing;
 }
-});

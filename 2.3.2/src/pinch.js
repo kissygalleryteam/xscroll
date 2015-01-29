@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/pinch',["./util","./event"],function(S ,require, exports, module) {
- 	var Util = require('./util');
+	var Util = require('./util');
 	var Event = require("./event");
 	var doc = window.document;
 	var PINCH_START = Event.prefix('pinchStart'),
@@ -68,4 +67,3 @@ KISSY.add('kg/xscroll/2.3.2/pinch',["./util","./event"],function(S ,require, exp
 	}else{
 		return Pinch;
 	}
-});

@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/swipeedit',["./util","./base"],function(S ,require, exports, module) {
- 	var Util = require('./util');
+	var Util = require('./util');
 	var Base = require('./base');
 	//transform
 	var transform = Util.prefixStyle("transform");
@@ -150,4 +149,3 @@ KISSY.add('kg/xscroll/2.3.2/swipeedit',["./util","./base"],function(S ,require, 
 	} else {
 		return SwipeEdit;
 	}
-});

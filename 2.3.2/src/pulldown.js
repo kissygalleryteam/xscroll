@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/pulldown',["./util","./base"],function(S ,require, exports, module) {
- 	var Util = require('./util');
+	var Util = require('./util');
 	var Base = require('./base');
 	var prefix;
 	var containerCls;
@@ -140,4 +139,3 @@ KISSY.add('kg/xscroll/2.3.2/pulldown',["./util","./base"],function(S ,require, e
 	}else{
 		return PullDown;
 	}
-});

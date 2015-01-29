@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/bezier',[],function(S ,require, exports, module) {
- function Bezier(x1, y1, x2, y2, epsilon) {
+function Bezier(x1, y1, x2, y2, epsilon) {
 
 	var curveX = function(t) {
 		var v = 1 - t;
@@ -56,4 +55,3 @@ if (typeof module == 'object' && module.exports) {
 }else{
 	return Bezier;
 }
-});

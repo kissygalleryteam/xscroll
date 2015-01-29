@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/timer',["./util","./base","./easing","./bezier"],function(S ,require, exports, module) {
- var Util = require('./util');
+var Util = require('./util');
 var Base = require('./base');
 var Easing = require('./easing');
 var Bezier = require('./bezier');
@@ -105,4 +104,3 @@ if (typeof module == 'object' && module.exports) {
 } else {
 	return Timer;
 }
-});

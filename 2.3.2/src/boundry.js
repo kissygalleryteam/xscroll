@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/boundry',["./util","./base"],function(S ,require, exports, module) {
- var Util = require('./util');
+var Util = require('./util');
 var Base = require('./base');
 var Boundry = function(cfg) {
     this.cfg = Util.mix({
@@ -82,4 +81,3 @@ if (typeof module == 'object' && module.exports) {
 } else {
     return Boundry;
 }
-});

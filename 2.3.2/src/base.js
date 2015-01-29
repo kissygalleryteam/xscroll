@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/base',["./util"],function(S ,require, exports, module) {
- var Util = require('./util');
+var Util = require('./util');
 
 var Base = function() {
 	this.__events = {};
@@ -73,4 +72,3 @@ if (typeof module == 'object' && module.exports) {
 }else{
 	return Base;
 }
-});

@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/util',[],function(S ,require, exports, module) {
- function Empty() {}
+function Empty() {}
 
 function createObject(proto, constructor) {
 	var newProto;
@@ -104,4 +103,3 @@ if (typeof module == 'object' && module.exports) {
 } else {
 	return Util;
 }
-});

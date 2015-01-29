@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/core',["./base","./util","./event","./pan","./tap","./pinch","./timer","./scrollbar","./pulldown","./pullup","./boundry","./easing"],function(S ,require, exports, module) {
-     var Base = require('./base');
+    var Base = require('./base');
     var Util = require('./util');
     var Event = require('./event');
     var Pan = require('./pan');
@@ -1055,4 +1054,3 @@ KISSY.add('kg/xscroll/2.3.2/core',["./base","./util","./event","./pan","./tap","
     } else {
         return window.XScroll = XScroll;
     }
-});

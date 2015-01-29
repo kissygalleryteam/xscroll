@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/infinite',["./util","./core","./dataset","./swipeedit","./pullup","./pulldown"],function(S ,require, exports, module) {
- 	var Util = require('./util');
+	var Util = require('./util');
 	var XScroll = require('./core');
 	var DataSet = require('./dataset');
 	var SwipeEdit = require('./swipeedit');
@@ -461,4 +460,3 @@ KISSY.add('kg/xscroll/2.3.2/infinite',["./util","./core","./dataset","./swipeedi
 	else {
 		window.XList = XList;
 	}
-});

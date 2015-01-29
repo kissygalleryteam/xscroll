@@ -1,5 +1,4 @@
-KISSY.add('kg/xscroll/2.3.2/scrollbar',["./util"],function(S ,require, exports, module) {
- 
+
 	var Util = require('./util');
 	//最短滚动条高度
 	var MIN_SCROLLBAR_SIZE = 60;
@@ -194,5 +193,3 @@ KISSY.add('kg/xscroll/2.3.2/scrollbar',["./util"],function(S ,require, exports, 
 		return ScrollBar;
 	}
 
-
-});
