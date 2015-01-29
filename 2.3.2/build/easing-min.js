@@ -1,0 +1,2 @@
+/*!build time : 2014-12-18 5:12:53 PM*/
+KISSY.add("kg/xscroll/2.3.1/easing",function(){var a={linear:[0,0,1,1],ease:[.25,.1,.25,1],"ease-out":[0,0,.58,1],"ease-in-out":[.42,0,.58,1],quadratic:[.33,.66,.66,1],circular:[.1,.57,.1,1],bounce:[.71,1.35,.47,1.41],format:function(a){return a?"string"==typeof a&&this[a]?this[a]instanceof Array?[" cubic-bezier(",this[a],") "].join(""):this[a]:a instanceof Array?[" cubic-bezier(",a,") "].join(""):a:void 0}};return a});
