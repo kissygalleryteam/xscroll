@@ -1,0 +1,1 @@
+KISSY.add("kg/xscroll/3.0.0/xscroll",["./util","./simulate-scroll","./origin-scroll"],function(l,r,o,i){var t=r("./util"),n=r("./simulate-scroll"),s=r("./origin-scroll"),c=function(l){var r=l&&l.useOriginScroll?s:n;return new r(l)};return c.Util=t,c.Plugins={},"object"==typeof i&&i.exports?void(i.exports=c):window.XScroll=c});

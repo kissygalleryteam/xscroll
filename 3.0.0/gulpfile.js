@@ -52,3 +52,7 @@ gulp.task('kmc', function() {
 });
 
 gulp.task('default', ['kmc']);
+
+gulp.task('watch', function() {
+  gulp.watch('src/**/*.js', ['default'])
+})

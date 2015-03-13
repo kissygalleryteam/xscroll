@@ -28,6 +28,7 @@
      }
     #J_Scroll ul{
         width: 100%;
+        background: #fff;
     }
     #J_Scroll ul li.xs-row{
         width: 100%;
@@ -39,7 +40,7 @@
         width: 100%;
     }
     </style>
-    <div id="header">XList</div>
+    <div id="header">Infinite List</div>
     <div id="J_Scroll">
         <div class="xs-container">
             <ul class="xs-content">
@@ -115,33 +116,41 @@
     KISSY.config({
         packages: {
             "kg":{
-                tag: "20140918",
+                tag: "20150312",
                 base: "http://g.tbcdn.cn/"
             }
         }
     });
-    KISSY.use("ajax,kg/xscroll/2.3.2/infinite",function(S,IO,XList){
+    KISSY.use("ajax,kg/xscroll/3.0.0/xscroll,kg/xscroll/3.0.0/plugins/infinite,kg/xscroll/3.0.0/plugins/pullup",function(S,IO,XScroll,Infinite,PullUp){
 
-
-        var pageCache ={};
-
-        var xlist = new XList({
+        var xscroll = new XScroll({
             renderTo: "#J_Scroll",
-            itemHeight: 80 ,
-            // useTransition:false,
+            lockY:false
+        });
+
+        var infinite = new Infinite({
             infiniteElements:"#J_Scroll .xs-row",
-            renderHook:function(el,data){
-                el.innerText = data.data.num;
+            renderHook:function(el,row){
+                el.innerText = row.data.num;
             }
         });
 
-        var ds = new XList.DataSet();
+        xscroll.plug(infinite)
 
-        xlist.appendDataSet(ds);
 
-        var page = 1;
+        var pullup = new PullUp({
+            upContent:"上拉加载更多",
+            downContent:"释放加载更多",
+            loadingContent:"加载中...",
+            bufferHeight:100,
+        });
 
-        var totalPage = 2;
+        xscroll.plug(pullup);
+
+
+        var pageCache ={},
+            page = 1,
+            totalPage = 4;
 
         var getData = function(){
             if(!pageCache[page]){
@@ -151,14 +160,12 @@
                     dataType:"json",
                     success:function(data){
                         if(page > totalPage) {
-                            //last page
-                            pullup.reset();
                             //destroy plugin
-                            xlist.unplug(pullup);
+                            infinite.unplug(pullup);
                             return; 
                         };
-                        ds.appendData(data);
-                        xlist.render();
+                        infinite.append(page,data);
+                        xscroll.render();
                          //loading complete
                         pullup.complete();
                         page++;
@@ -167,22 +174,13 @@
             }
         }
 
-        var pullup = new XList.Plugin.PullUp({
-            upContent:"上拉加载更多",
-            downContent:"释放加载更多",
-            loadingContent:"加载中...",
-            bufferHeight:100,
-        });
-
-        xlist.plug(pullup);
-
         pullup.on("loading",function(){
             getData();
         });
 
         getData();
 
-        xlist.render();
+        xscroll.render();
 
     });
 

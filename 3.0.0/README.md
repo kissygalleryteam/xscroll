@@ -1,318 +1,91 @@
-# XScroll
 
-> A Javascript Scrolling Framework For Mobile Web
+## xscroll 3.0 
 
-## HomePage
+##### 文档
 
-[http://xscroll.github.io/](http://xscroll.github.io/)
+[文档](http://gitlab.alibaba-inc.com/xiaoqi.huxq/xscroll/raw/master/doc/XScroll.html)
 
-## Version
-
-2.3.0
-
-## Build
-
-```
-npm install bower -g
-bower install xscroll
-
-```
-
-## Doc
-
-### XScroll
-
-* `config`：
-    * `renderTo` 渲染节点，内部需要包含class为xs-container，xs-content两个容器
-    * `height` 外容器视窗高度
-    * `width` 外容器视窗宽度
-    * `containerHeight` 内容器高度
-    * `containerWidth` 内容器宽度
-    * `scrollbarX` 是否开启横向滚动条
-    * `scrollbarY` 是否开启纵向滚动条
-    * `lockX` 是否锁定横向滚动
-    * `lockY` 是否锁定纵向滚动
-    * `gpuAcceleration` 是否开启GPU硬件加速（在性能提升的同时需要注意内存控制）
-    * `snap` 是否开启折段滚动效果 
-    * `snapWidth` 段落宽度
-    * `snapHeight` 段落高度
-    * `snapEasing` 动画效果
-    * `snapDuration` 动画周期
-    * `snapColsNum` 段落列数
-    * `snapRowsNum` 段落行数
-* `enableGPUAcceleration()` 开启硬件加速
-* `disableGPUAcceleration()` 关闭硬件加速
-* `getOffset()` 获取水平和垂直偏移量，如:{x:0,y:100}
-* `getOffsetTop()` 获取垂直偏移量
-* `getOffsetLeft()` 获取水平偏移量
-* `scrollTo(offset, duration, easing, callback)` 滚动到某处 offset必须为{x:a,y:b}格式。
-* `scrollX(x, duration, easing, callback)` 水平滚动到某处
-* `scrollY(y, duration, easing, callback)` 垂直滚动到某处
-* `bounce(enable,callback)` 手动触发边缘回弹
-* `on(event,handler)` 监听某个事件
-* `fire(event)` 触发某个事件
-* `detach(event,[handler])` 移除某个事件
-* `plug(plugin)` 绑定插件
-* `unplug(pluginId|plugin)` 移除某插件
-* `getPlugin(pluginId)` 获取某个插件
-* `addView(xscroll)` 新增子view
-* `removeView(id)` 删除子view
-* `getViewById()` 获取子view
-* `getViews()` 获取所有子view
-
-### XList
-
-- extand XScroll
-
-* `config`：
-    * `renderHook` 逐行渲染的function，和传入的data相关联
-    * `itemHeight` 默认每行行高,如果data中有定义，则该属性被覆盖
-    * `data` 页面的数据，为一个Array,数组中每个对象必须为{data:{},style:{},recycled:false} 的格式，其中data代表真实数据，style代表样式，recycled代表当前行dom是否需要回收
-
-* `appendDataSet(dataset)` 添加一个数据集合
-* `removeDataSet(datasetId)` 移除一个数据集合 
-* `getDataSets()` 获取所有数据集合
-* `getDataSetById(datasetId)` 根据集合ID获取数据集合
-* `getCellByPageY(pageY)` 根据视图坐标位置获取当前行单元 
-* `getCellByRow(row)` 根据行号获取当前单元 
-* `getCellByOffsetY(offsetY)` 根据当前滚动容器的offsetTop值获取当前单元 
-* `insertData(datasetIndex,rowIndex,data)` 插入某组数据，插入位置为第datasetIndex组，第rowIndex行
-* `getData(datasetIndex,rowIndex)`
-* `updateData(datasetIndex,rowIndex,data)`
-* `removeData(datasetIndex,rowIndex)`
+![结构图](http://gtms04.alicdn.com/tps/i4/TB13LoRGVXXXXXmXpXX7yy27VXX-1414-1128.png_600x600.jpg)
 
 
-#### Private Methods
+### 概要：
 
-* `_getDomInfo()` 获取当前xlist文档流内所有元素的位置、样式、数据信息
+##### 手势 gesture
 
-### XList.DataSet
+直接基于目前成熟的hammer.js，包含 Pan(平移)、Pinch(缩放)、Press(按下)、Rotate(旋转)、Swipe(轻滑)、Tap(点触)。
+hammerjs http://hammerjs.github.io/
 
-#####Example:
+##### 核心 core
 
-```
-var xlist = new XList({
-   //set configs here
-})
+拆分core-origin/core-simulate两个模块，分别处理原生和模拟滚动方式，支持无缝切换。该种切换支持手动、自动两种方式，且部分功能 （如 scale） 可能会不可用。
 
-var dataset = new XList.DataSet({
-    id:"section1",
-    data:[
-    {
-        data:{
-            name:"Jack"
-        }
-    },
-    {
-        data:{
-            name:"Tom"
-        }
-    }
-    ]
-});
+##### 工具类 util
 
-//appendTo Xlist
-xlist.appendDataSet(dataset);
+常用工具方法封装。
 
-//reflow
-xlist.render();
+##### 基类 base 
 
-```
+类似于kissy.base 支持自定义事件(event)、插件(plugin)可拔插机制。event可参考
+Backbone.Events
 
-* `config`
-    * `id` 唯一ID，可省略 
-    * `data` 传入数据
-* `appendData(data)` 追加数据
-* `insertData(index,data)` 插入数据至某处
-* `removeData(index)` 删除数据
-* `getData(index)` 获取数据，参数为空则所有数据
-* `setId(datasetId)` 设置ID
-* `getId()` 获取ID
+##### 非核心组件 components
 
-### Plugins
+将常用的非核心部分组件，作为components的方式集成至core。
 
-#### PullDown
+##### 插件 plugins
 
--  pull down to refresh or reload.
-  
-##### Example
-
-```
-    var xlist = new XList();
-    // or XScroll.Plugin.PullDown
-    var pulldown = new XList.Plugin.PullDown();
-    //plug
-    xlist.plug(pulldown);
-    
-    xlist.render();
-
-```
-
-* `config`
-    * `content` 内容，若需要使用动画进行如上下箭头切换，则配置此项
-    * `downContent` 下拉前展示的内容，默认为'Pull Down To Refresh'
-    * `upContent` 松手展示内容，默认为'Release To Refresh'
-    * `loadingContent` 加载中展示内容，默认为'Loading...'
-    * `prefix` class前缀，默认为'xs-plugin-pulldown-'
-    * `height` 进行下拉和松手以及加载状态切换的高度，默认60
-* `setContent(html)` 改变数据
-* `reset(callback)` 数据加载完毕后，通知控件进行回弹
-* `on("loading",fn)` 监听loading事件，进行异步请求等逻辑
+可拔插、按需加载的插件体系。
 
 
-#### PullUp
+##### xlist变更：
 
--  pull up to reload.
-  
-##### Example
+- 插件化infinite
+- 废弃dataset，新接口拟为：
+    - finite.insertBefore(section,index,data);
+    - infinite.insertAfter(section,index,data);
+    - infinite.replace(section,index,data);  // update
+    - inifinite.append(section,data);
+    - infinite.remove(section,from,[number]);
+- 支持局部更新渲染，dom重排可带动画
 
-```
-    var xlist = new XList();
-    
-    var pullup = new XList.Plugin.PullUp();
-    //plug
-    xlist.plug(pullup);
-    
-    xlist.render();
-    
-    pullup.on("loading",function(){
-        // get remote data
-        getData();
-    });
-    
-    var page = 1,
-        totalPage = 10;
-    
-    function getData(){
-      //  $.ajax({
-            url:"demo.php",
-            dataType:"json",
-            callback:function(data){
-                if(page > totalPage) {
-                    //last page
-                    pullup.reset();
-                    //destroy plugin
-                    xlist.unplug(pullup);
-                    return; 
-                };
-                ds.appendData(data);
-                xlist.render();
-                 //loading complate
-                pullup.complete();
-                page++;
-            }
-        
-      })
-    }
+### 计划安排
 
-```
+##### core优先进行开发，主要通过xscroll对原生和模拟滚动的进行接口统一。
 
-* `config`
-    * `content` 内容，同PullDown
-    * `upContent` 下拉前展示的内容，默认为'Pull Up To Refresh'
-    * `downContent` 松手展示内容，默认为'Release To Refresh'
-    * `loadingContent` 加载中展示内容，默认为'Loading...'
-    * `prefix` class前缀，默认为'xs-plugin-pullup-'
-    * `height` 加载状态时底部被拓展的边界高度，默认40
-    * `pullUpHeight` up和down切换的高度，默认80
-* `setContent(html)` 改变数据
-* `reset(callback)` 数据加载完毕后，通知控件进行回弹
-* `on("loading",fn)` 监听loading事件，进行异步请求等逻辑
-* `complete()` 加载结束后恢复上拉控件的状态至'up'
+- util 工具
+- base 基类
+- event 事件 移植Backbone.Events
+- hammer 手势接入 pan tap pinch
+- core 作为滚动核心基类
+- core-simulate   模拟滚动
+- core-origin 原生滚动
+- xscroll 作为一个router实例化simulate/origin
+- animate 
+- timer
+- controller 滚动嵌套控制器
+- xscrollmaster 掌管页面上多个xscroll实例的事件交互
 
-#### SwipeEdit
+##### plugin开发
 
--  swipe left to delete or favourite etc.
-  
-##### Example
+- pulldown  下拉刷新
+- pullup  继承pull
+- infinite 无尽列表
+- snap 带有截断效果的滚动，可直接用作非旋转木马的slider
+- lazyload 图片懒加载
+- scale 缩放插件
+- indicator 缩略图
+- swipeedit 侧滑编辑
+- fastscroll 滚动加速
 
-```
-var xlist = new XList({
-    renderTo: "#J_Scroll",
-    data: data,
-    itemHeight: 62 ,
-    infiniteElements:"#J_Scroll .xs-row",
-    renderHook:function(el,row){
-        el.innerHTML = '<div class="lbl">'+row.data.text+'</div>'+
-                        '<div class="control"><div class="btn btn-mark">mark</div>'+
-                        '<div class="btn btn-delete">delete</div></div>';
-    }
-});
+##### applications上层应用型组件
 
-var swipeEditPlugin = new XList.Plugin.SwipeEdit({
-    labelSelector:".lbl",
-    width:maxWidth
-});
-
-xlist.plug(swipeEditPlugin);
-
-xlist.on("click",function(e){
-    //delete
-    if(e.target.className.match("btn-delete")){
-       xlist.removeData(0,e.cell._row)
-       xlist.render();
-    }
-    //mark
-    if(e.target.className.match("btn-mark") && !e.target.className.match("btn-marked")){
-        var data = xlist.getData(0,e.cell._row)
-        data.data.marked = true;
-        e.target.className += " btn-marked";
-    }
-})
-
-xlist.on("click", function(e) {
-    //hide the buttons
-    if(!e.target.parentNode.className.match('control')){
-        swipeEditPlugin.slideAllExceptRow();
-    }
-});
-
-xlist.render();
-
-```
-
-* `config`
-    * `labelSelector` 操作栏的类选择器，如'.lbl'
-    * `width` 操作栏总宽度
+- tab   
+- slider
+- tablist
+- slider
+- navigationview
 
 
-## Questions?
-
- - Email：<huxiaoqi567@gmail.com>
 
 
-## ChangeLog    
-
-### v2.1.1
-- pinch缩放优化
-- 滚动条计算问题
-- 去除mouse事件
-
-### v2.2.0
-- 优化边界反弹动画效果
-- 支持水平方向无尽滚动
-- 修复滚动停止时重绘、闪烁的问题
-- 新增useTransition配置，支持帧动画
-- 新增easing配置 如：ease ease-out easeq-in
-- API调整 
-    - getCellByRow -> getCellByRowOrCol
-    - getCellByOffsetTop -> getCellByOffset
-    - getCellByPageY -> getCellByPagePos
-
-
-### v2.3.0
-- 新增snap功能
-- 新增多个xscroll相互嵌套的管理机制
-
-### v2.3.1
-- DataSet guid重复问题
-- 修复部分安卓设备无法点停的问题
-- 修复执行stop()后定时器仍然执行的问题
-- 滚动条默认隐藏
-- 新增boundryout api
-- scrollanimate和panend触发顺序调整
-
-### v2.3.2
-- 修复bounce为false后报错的问题
-- 改回kmd规范
 
