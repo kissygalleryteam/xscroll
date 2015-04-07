@@ -1,11 +1,9 @@
-![XScroll结构图](http://gtms01.alicdn.com/tps/i1/TB1Pmu9FVXXXXaZXFXXEBpbZpXX-1720-1162.png_600x600.jpg)
 
-XScroll
-=======
+## xscroll 3.0 
 
-移动端的模拟滚动方案
+##### 文档
 
-弹性动画、滚动动画、手势无限接近IOS的native滚动体验
+[http://gitlab.alibaba-inc.com/kg/xscroll/raw/daily/3.0.0/doc/index.html](http://gitlab.alibaba-inc.com/kg/xscroll/raw/daily/3.0.0/doc/index.html)
 
 [原生JS无依赖版本](http://xscroll.github.io/demos.html)
 

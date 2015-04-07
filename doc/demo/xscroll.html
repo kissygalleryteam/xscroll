@@ -69,7 +69,6 @@ body {
     bottom: 48px;
     left: 0;
     width: 100%;
-    overflow: hidden;
 }
 #J_Scroll li{
     width: 100%;
@@ -165,28 +164,16 @@ body {
     KISSY.config({
         packages: {
             "kg":{
-                tag: "20140918",
+                tag: "20150312",
                 base: "http://g.tbcdn.cn/"
             }
         }
     });
-    KISSY.use("kg/xscroll/2.3.2/core",function(S,XScroll){
+    KISSY.use("kg/xscroll/3.0.0/xscroll",function(S,XScroll){
         var xscroll = new XScroll({
-            renderTo:"#J_Scroll",
-            scrollbarX:false,
-            lockX:true
+            renderTo:"#J_Scroll"
         });
         xscroll.render();
-
-        xscroll.on("scroll",function(e){
-            console.log("scroll")
-        })
-
-        xscroll.on("scrollend",function(e){
-            console.log("scrollend")
-        })
-
-        xscroll.scrollY(100);
     });
     </script>
 </body>

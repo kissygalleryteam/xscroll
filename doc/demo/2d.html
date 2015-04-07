@@ -24,7 +24,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow: scroll;
   }
   </style>
   <div id="demo">
@@ -34,24 +34,20 @@
   </div>
   <script type="text/javascript" src="http://g.tbcdn.cn/??kissy/k/1.4.8/seed-min.js"></script>
     <script type="text/javascript">
-    
     KISSY.config({
         packages: {
             "kg":{
-                tag: "20140918",
+                tag: "20150312",
                 base: "http://g.tbcdn.cn/"
             }
         }
     });
-    KISSY.use("kg/xscroll/2.3.2/core",function(S,XScroll){
+    KISSY.use("kg/xscroll/3.0.0/xscroll",function(S,XScroll){
     var xscroll = new XScroll({
-      renderTo:"#demo",
-      scalable:true
+      renderTo:"#demo"
     });
+
     xscroll.render();
-    var minScale = xscroll.minScale
-    var maxScale = xscroll.maxScale
-    xscroll.scaleTo(minScale,0,0);
   });
   </script>
 </body>
