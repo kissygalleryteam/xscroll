@@ -88,6 +88,7 @@ KISSY.add('kg/xscroll/3.0.0/plugins/pullup',["../util","../base"],function(S ,re
 			pullup.style.bottom = -height + "px";
 			self.xscroll.container.appendChild(pullup);
 			self.xscroll.boundry.expandBottom(self.userConfig.height);
+      self.status = 'up';
 			Util.addClass(pullup, clsPrefix + self.status);
 			pullup.innerHTML = self.userConfig[self.status + "Content"] || self.userConfig.content;
 			self._bindEvt();

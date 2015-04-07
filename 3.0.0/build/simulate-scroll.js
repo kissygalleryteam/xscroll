@@ -467,6 +467,7 @@ KISSY.add('kg/xscroll/3.0.0/simulate-scroll',["./util","./base","./core","./anim
      **/
     boundryCheckX: function(duration, easing, callback) {
       var self = this;
+      if(!self.userConfig.boundryCheck) return;
       if (typeof arguments[0] == "function") {
         callback = arguments[0];
         duration = self.userConfig.BOUNDRY_CHECK_DURATION;
@@ -493,6 +494,7 @@ KISSY.add('kg/xscroll/3.0.0/simulate-scroll',["./util","./base","./core","./anim
      **/
     boundryCheckY: function(duration, easing, callback) {
       var self = this;
+      if(!self.userConfig.boundryCheck) return;
       if (typeof arguments[0] == "function") {
         callback = arguments[0];
         duration = self.userConfig.BOUNDRY_CHECK_DURATION;
