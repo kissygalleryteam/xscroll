@@ -1,65 +1,92 @@
-![XScroll结构图](http://gtms01.alicdn.com/tps/i1/TB1Pmu9FVXXXXaZXFXXEBpbZpXX-1720-1162.png_600x600.jpg)
 
-XScroll
-=======
+## xscroll 3.0 
 
-移动端的模拟滚动方案
+##### 文档
 
-弹性动画、滚动动画、手势无限接近IOS的native滚动体验
+[http://gitlab.alibaba-inc.com/kg/xscroll/raw/daily/3.0.0/doc/index.html](http://gitlab.alibaba-inc.com/kg/xscroll/raw/daily/3.0.0/doc/index.html)
 
-### changelog
 
-#### v1.1.0
+![结构图](http://gtms04.alicdn.com/tps/i4/TB13LoRGVXXXXXmXpXX7yy27VXX-1414-1128.png_600x600.jpg)
 
-- 新增boundry、bounce接口
 
-#### v1.1.1
+### 概要：
 
-- 修复2d滚动结束事件回调相互干扰的问题
-- pan事件调整，panstart区分touchstart
+##### 手势 gesture
 
-#### v1.1.2
+直接基于目前成熟的hammer.js，包含 Pan(平移)、Pinch(缩放)、Press(按下)、Rotate(旋转)、Swipe(轻滑)、Tap(点触)。
+hammerjs http://hammerjs.github.io/
 
-- pulldown插件允许自定义刷新（异步刷新）通过autoRefresh配置开关
+##### 核心 core
 
-#### v1.1.3
+拆分core-origin/core-simulate两个模块，分别处理原生和模拟滚动方式，支持无缝切换。该种切换支持手动、自动两种方式，且部分功能 （如 scale） 可能会不可用。
 
-- 修复1.1.2包名错误导致无法使用组件的问题
+##### 工具类 util
 
-#### v1.1.4
+常用工具方法封装。
 
-- 修复超链接误点的问题
-- 修复isScrollingX,isScrollingY和scrollEnd的判断逻辑错误问题
-- content高度100%限制去除
-- 修复滚动条定位问题
+##### 基类 base 
 
-#### v1.1.5
+类似于kissy.base 支持自定义事件(event)、插件(plugin)可拔插机制。event可参考
+Backbone.Events
 
-- 修复2D滚动时的滚动条、边界碰撞问题
+##### 非核心组件 components
 
-#### v1.1.6
+将常用的非核心部分组件，作为components的方式集成至core。
 
-- 修复中心点缩放问题
-- 优化安卓事件
-- 修复滚动重绘问题
+##### 插件 plugins
 
-#### v1.1.7
+可拔插、按需加载的插件体系。
 
-- transition替代帧动画提高滚动条流畅度
-- 修复边界拓展后pan事件跳动的问题
-- transitionEnd替代RAF方案进行高精度滚动回调
 
-#### v1.1.8
+##### xlist变更：
 
-- 修复缩放事件问题
+- 插件化infinite
+- 废弃dataset，新接口拟为：
+    - finite.insertBefore(section,index,data);
+    - infinite.insertAfter(section,index,data);
+    - infinite.replace(section,index,data);  // update
+    - inifinite.append(section,data);
+    - infinite.remove(section,from,[number]);
+- 支持局部更新渲染，dom重排可带动画
 
-#### v1.1.9
+### 计划安排
 
-- 新增gpuAcceleration开关是否启用GPU加速
-- 修复超出边缘点击不进行回弹的Bug
+##### core优先进行开发，主要通过xscroll对原生和模拟滚动的进行接口统一。
 
-#### v1.1.10
+- util 工具
+- base 基类
+- event 事件 移植Backbone.Events
+- hammer 手势接入 pan tap pinch
+- core 作为滚动核心基类
+- core-simulate   模拟滚动
+- core-origin 原生滚动
+- xscroll 作为一个router实例化simulate/origin
+- animate 
+- timer
+- controller 滚动嵌套控制器
+- xscrollmaster 掌管页面上多个xscroll实例的事件交互
 
-- 修复duration为0时scrollTo方法不触发scroll、scrollTo事件
+##### plugin开发
+
+- pulldown  下拉刷新
+- pullup  继承pull
+- infinite 无尽列表
+- snap 带有截断效果的滚动，可直接用作非旋转木马的slider
+- lazyload 图片懒加载
+- scale 缩放插件
+- indicator 缩略图
+- swipeedit 侧滑编辑
+- fastscroll 滚动加速
+
+##### applications上层应用型组件
+
+- tab   
+- slider
+- tablist
+- slider
+- navigationview
+
+
+
 
 
