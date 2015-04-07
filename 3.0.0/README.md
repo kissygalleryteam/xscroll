@@ -3,7 +3,8 @@
 
 ##### 文档
 
-[文档](http://gitlab.alibaba-inc.com/xiaoqi.huxq/xscroll/raw/master/doc/XScroll.html)
+[http://gitlab.alibaba-inc.com/xiaoqi.huxq/xscroll/raw/master/doc/XScroll.html](http://gitlab.alibaba-inc.com/xiaoqi.huxq/xscroll/raw/master/doc/XScroll.html)
+
 
 ![结构图](http://gtms04.alicdn.com/tps/i4/TB13LoRGVXXXXXmXpXX7yy27VXX-1414-1128.png_600x600.jpg)
 
