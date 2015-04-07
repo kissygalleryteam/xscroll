@@ -56,16 +56,15 @@
 		_bind: function(sub) {
 			var self = this,
 				xscroll = self.xscroll;
-
 			xscroll.renderTo.addEventListener("touchstart", function() {
 				xscroll._resetLockConfig();
 			});
-
 			sub.renderTo.addEventListener("touchstart", function() {
 				sub._resetLockConfig();
 			});
-
-			sub.mc.on("panstart", function(e) {
+			xscroll.on("panend",xscroll._resetLockConfig);
+			sub.on("panend",sub._resetLockConfig);
+			sub.on("panstart", function(e) {
 				//vertical scroll enabled
 				if (!sub.userConfig.lockY && !xscroll.userConfig.lockY) {
 					//outside of boundry
@@ -75,12 +74,12 @@
 					}
 					if (e.direction == 16 && sub.getBoundryOutTop() >= 0) {
 						sub.userConfig.lockY = true;
-					} else if (e.direction == 8 && sub.getBoundryOutTop() >= 0) {
+					} else if (e.direction == 8 && sub.getBoundryOutTop() >= 0 && sub.getBoundryOutBottom() < 0) {
 						xscroll.userConfig.lockY = true;
 					}
 					if (e.direction == 8 && sub.getBoundryOutBottom() >= 0) {
 						sub.userConfig.lockY = true;
-					} else if (e.direction == 16 && sub.getBoundryOutBottom() >= 0) {
+					} else if (e.direction == 16 && sub.getBoundryOutBottom() >= 0 && sub.getBoundryOutTop() < 0) {
 						xscroll.userConfig.lockY = true;
 					}
 					if (sub.getBoundryOutTop() < 0 && sub.getBoundryOutBottom() < 0) {
@@ -95,19 +94,18 @@
 					}
 					if (e.direction == 4 && sub.getBoundryOutLeft() >= 0) {
 						sub.userConfig.lockX = true;
-					} else if (e.direction == 2 && sub.getBoundryOutLeft() >= 0) {
+					} else if (e.direction == 2 && sub.getBoundryOutLeft() >= 0 && sub.getBoundryOutRight() < 0) {
 						xscroll.userConfig.lockX = true;
 					}
 					if (e.direction == 2 && sub.getBoundryOutRight() >= 0) {
 						sub.userConfig.lockX = true;
-					} else if (e.direction == 4 && sub.getBoundryOutRight() >= 0) {
+					} else if (e.direction == 4 && sub.getBoundryOutRight() >= 0 && sub.getBoundryOutLeft() < 0) {
 						xscroll.userConfig.lockX = true;
 					}
 					if (sub.getBoundryOutLeft() < 0 && sub.getBoundryOutRight() < 0) {
 						xscroll.userConfig.lockX = true;
 					}
 				}
-
 
 				if (!sub.userConfig.lockX && xscroll.userConfig.lockX) {
 					//pan x
@@ -126,11 +124,7 @@
 						sub.userConfig.lockY = true;
 					}
 				}
-
 			});
-
-
-
 		}
 	});
 

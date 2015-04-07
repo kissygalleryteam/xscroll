@@ -171,6 +171,6 @@ KISSY.add('kg/xscroll/3.0.0/plugins/pullup',["../util","../base"],function(S ,re
 	if (typeof module == 'object' && module.exports) {
 		module.exports = PullUp;
 	}else if(window.XScroll && window.XScroll.Plugins){
-		XScroll.Plugins.PullUp = PullUp;
+		return XScroll.Plugins.PullUp = PullUp;
 	}
 });

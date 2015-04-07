@@ -58,6 +58,6 @@ KISSY.add('kg/xscroll/3.0.0/plugins/fastscroll',["../util","../base"],function(S
 	if (typeof module == 'object' && module.exports) {
 		module.exports = FastScroll;
 	} else if (window.XScroll && window.XScroll.Plugins) {
-		XScroll.Plugins.FastScroll = FastScroll;
+		return XScroll.Plugins.FastScroll = FastScroll;
 	} 
 });

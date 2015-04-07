@@ -26,7 +26,10 @@ KISSY.add('kg/xscroll/3.0.0/core',["./util","./base","./animate","./boundry","./
      * @param {boolean} cfg.scrollbarX config if the scrollbar-x is visible
      * @param {boolean} cfg.scrollbarY config if the scrollbar-y is visible
      * @param {boolean} cfg.useTransition config if use css3 transition or raf for scroll animation
-     * @param {boolean} cfg.simulateScroll config if use animation or origin scroll
+     * @param {boolean} cfg.useOriginScroll config if use simulate or origin scroll
+     * @param {boolean} cfg.bounce config if use has the bounce effect when scrolling outside of the boundry
+     * @param {boolean} cfg.boundryCheck config if scrolling inside of the boundry
+     * @param {boolean} cfg.preventDefault config if prevent the browser default behavior
      * @param {string}  cfg.clsPrefix config the class prefix which default value is "xs-"
      * @extends XScroll
      * @example
@@ -62,15 +65,16 @@ KISSY.add('kg/xscroll/3.0.0/core',["./util","./base","./animate","./boundry","./
         init: function() {
             var self = this;
             var defaultCfg = {
-                preventDefault: true, //prevent touchstart 
-                bounce: true,
+                preventDefault: true, 
+                bounce: true, 
+                boundryCheck:true,
                 useTransition: true,
                 gpuAcceleration: true,
                 BOUNDRY_CHECK_EASING: BOUNDRY_CHECK_EASING,
                 BOUNDRY_CHECK_DURATION: BOUNDRY_CHECK_DURATION,
                 BOUNDRY_CHECK_ACCELERATION: BOUNDRY_CHECK_ACCELERATION,
                 clsPrefix: "xs-",
-                simulateScroll: false
+                useOriginScroll: false
             };
             //generate guid
             self.guid = Util.guid();
@@ -223,6 +227,28 @@ KISSY.add('kg/xscroll/3.0.0/core',["./util","./base","./animate","./boundry","./
             self.resetSize();
             self.trigger("afterrender");
             self._bindEvt();
+            //update touch-action 
+            self.initTouchAction();
+            return self;
+        },
+        /**
+         * init touch action
+         * @memberof XScroll
+         * @return {XScroll}
+         */
+        initTouchAction: function() {
+            var self = this;
+            var touchAction = 'none';
+            if (!self.userConfig.lockX && self.userConfig.lockY) {
+                touchAction = 'pan-y';
+            } else if (!self.userConfig.lockY && self.userConfig.lockX) {
+                touchAction = 'pan-x';
+            } else if (self.userConfig.lockX && self.userConfig.lockY) {
+                touchAction = 'auto';
+            }
+            self.mc.set({
+                touchAction: touchAction
+            });
             return self;
         },
         _triggerClick: function(e) {
@@ -262,7 +288,7 @@ KISSY.add('kg/xscroll/3.0.0/core',["./util","./base","./animate","./boundry","./
         },
         _bindEvt: function() {
             var self = this;
-            if(self.___isEvtBind) return;
+            if (self.___isEvtBind) return;
             self.___isEvtBind = true;
             var mc = self.mc = new Hammer.Manager(self.renderTo);
             var tap = new Hammer.Tap();
@@ -272,22 +298,24 @@ KISSY.add('kg/xscroll/3.0.0/core',["./util","./base","./animate","./boundry","./
             self.mc.on("panstart pan panend pinchstart pinch pinchend", function(e) {
                 self.trigger(e.type, e);
             });
-            self.mc.on("tap",function(e){
-                if(e.tapCount == 1){
+            self.mc.on("tap", function(e) {
+                if (e.tapCount == 1) {
                     e.type = "tap";
-                    self.trigger(e.type,e);
-                }else if(e.tapCount == 2){
+                    self.trigger(e.type, e);
+                } else if (e.tapCount == 2) {
                     e.type = "doubletap";
-                    self.trigger("doubletap",e);
+                    self.trigger("doubletap", e);
                 }
             });
             return self;
-        }
+        },
+        _resetLockConfig: function() {},
+        stop: function() {}
     });
 
     if (typeof module == 'object' && module.exports) {
         module.exports = XScroll;
-    }else{
+    } else {
         return XScroll;
     }
 });

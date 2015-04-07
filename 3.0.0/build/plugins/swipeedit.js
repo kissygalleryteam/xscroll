@@ -152,6 +152,6 @@ KISSY.add('kg/xscroll/3.0.0/plugins/swipeedit',["../util","../base"],function(S 
 	if (typeof module == 'object' && module.exports) {
 		module.exports = SwipeEdit;
 	} else if (window.XScroll && window.XScroll.Plugins) {
-       XScroll.Plugins.SwipeEdit = SwipeEdit;
+       return XScroll.Plugins.SwipeEdit = SwipeEdit;
      }
 });

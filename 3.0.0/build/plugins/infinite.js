@@ -37,6 +37,12 @@ KISSY.add('kg/xscroll/3.0.0/plugins/infinite',["../util","../base"],function(S ,
 		 */
 		visibleElements: {},
 		/**
+		 * store all elements data.
+		 * @memberOf Infinite
+		 * @type {object}
+		 */
+		sections:{},
+		/**
 		 * plugin initializer
 		 * @memberOf Infinite
 		 * @override Base
@@ -70,15 +76,13 @@ KISSY.add('kg/xscroll/3.0.0/plugins/infinite',["../util","../base"],function(S ,
 		 */
 		pluginDestructor: function() {
 			var self = this;
-			self.xscroll.off("scroll", self._updateByScroll, self);
+			
 			for (var i = 0; i < self.infiniteLength; i++) {
-				self.infiniteElements[i].style.position = "inherit";
-				self.infiniteElements[i].style.visibility = "inherit";
-				self.infiniteElements[i].style.display = "inherit";
 				self.infiniteElements[i].style[self.nameTop] = "auto";
 				self.infiniteElements[i].style[transform] = "none";
 			}
-			self.xscroll.off("tap panstart pan panend", self._cellEventsHandler, self);
+			self.xscroll && self.xscroll.off("scroll", self._updateByScroll, self);
+			self.xscroll && self.xscroll.off("tap panstart pan panend", self._cellEventsHandler, self);
 			self._destroySticky();
 			return self;
 		},
@@ -254,7 +258,7 @@ KISSY.add('kg/xscroll/3.0.0/plugins/infinite',["../util","../base"],function(S ,
 						}
 					} else {
 						// paint
-						if (self.__serializedData[newEl.guid].__infiniteIndex === undefined) {
+						if (self.__serializedData[newEl.guid].recycled && self.__serializedData[newEl.guid].__infiniteIndex === undefined) {
 							var elObj = self._popEl();
 							self.__serializedData[newEl.guid].__infiniteIndex = elObj.index;
 							self._renderData(elObj.el, newEl);
@@ -368,20 +372,16 @@ KISSY.add('kg/xscroll/3.0.0/plugins/infinite',["../util","../base"],function(S ,
 			var self = this;
 			var xscroll = self.xscroll;
 			var pos = pos === undefined ? (self.isY ? xscroll.getScrollTop() : xscroll.getScrollLeft()) : pos;
-			var itemSize = 50;
-			var elementsPerPage = Math.ceil(xscroll[self.nameHeight] / itemSize);
-			var maxBufferedNum = self.userConfig.maxBufferedNum === undefined ? Math.max(Math.ceil(elementsPerPage / 3), 1) : self.userConfig.maxBufferedNum;
-			var pos = Math.max(pos - maxBufferedNum * itemSize, 0);
+			var threshold = self.userConfig.threshold >= 0 ? self.userConfig.threshold : xscroll[self.nameHeight] / 3;
 			var tmp = {},
 				item;
 			var data = self.__serializedData;
 			for (var i in data) {
 				item = data[i];
-				if (item[self._nameTop] >= pos - itemSize && item[self._nameTop] <= pos + 2 * maxBufferedNum * itemSize + xscroll[self.nameHeight]) {
+				if (item[self._nameTop] >= pos - threshold && item[self._nameTop] <= pos + xscroll[self.nameHeight] + threshold) {
 					tmp[item.guid] = item;
 				}
 			}
-			// return tmp;
 			return JSON.parse(JSON.stringify(tmp));
 		},
 		_popEl: function() {
@@ -415,20 +415,6 @@ KISSY.add('kg/xscroll/3.0.0/plugins/infinite',["../util","../base"],function(S ,
 			var self = this;
 			if (!el) return;
 			var translateZ = self.xscroll.userConfig.gpuAcceleration ? " translateZ(0) " : "";
-			//default style
-			var defaultStyle = {
-				color: "inherit",
-				background: "inherit",
-				margin: "inherit",
-				padding: "inherit",
-				opacity: "inherit",
-				textIndent: "inherit",
-				overflow: "inherit"
-			};
-
-			for (var attrName in defaultStyle) {
-				el.style[attrName] = defaultStyle[attrName];
-			}
 			//update style
 			for (var attrName in elementObj.style) {
 				if (attrName != self.nameHeight && attrName != "display" && attrName != "position") {
@@ -613,6 +599,6 @@ KISSY.add('kg/xscroll/3.0.0/plugins/infinite',["../util","../base"],function(S ,
 	if (typeof module == 'object' && module.exports) {
 		module.exports = Infinite;
 	} else if (window.XScroll && window.XScroll.Plugins) {
-		XScroll.Plugins.Infinite = Infinite;
+		return XScroll.Plugins.Infinite = Infinite;
 	}
 });

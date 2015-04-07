@@ -165,6 +165,6 @@ KISSY.add('kg/xscroll/3.0.0/plugins/pulldown',["../util","../base"],function(S ,
 	if(typeof module == 'object' && module.exports){
 		module.exports = PullDown;
 	}else if(window.XScroll && window.XScroll.Plugins){
-		XScroll.Plugins.PullDown = PullDown;
+		return XScroll.Plugins.PullDown = PullDown;
 	}
 });
